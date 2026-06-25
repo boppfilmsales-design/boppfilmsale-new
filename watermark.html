@@ -5,11 +5,11 @@
 <title>Image Watermark Tool</title>
 <style>
 body { font-family: Arial, sans-serif; margin: 20px; background: #f8f9fa; color: #fff; text-align: center; }
-canvas { border: 2px solid #0066cc; margin: 20px auto; max-width: 100%; display: block; }
+canvas { border: 2px solid #2e7d32; margin: 20px auto; max-width: 100%; display: block; }
 .controls { margin: 20px 0; }
-button { padding: 12px 24px; background: #0066cc; color: #fff; border: none; cursor: pointer; font-size: 14px; margin: 5px; border-radius: 4px; }
-button:hover { background: #3399ff; }
-.info { color: #555555; font-size: 12px; margin: 10px 0; }
+button { padding: 12px 24px; background: #2e7d32; color: #fff; border: none; cursor: pointer; font-size: 14px; margin: 5px; border-radius: 4px; }
+button:hover { background: #43a047; }
+.info { color: #2e7d32; font-size: 12px; margin: 10px 0; }
 </style>
 </head>
 <body>
@@ -38,37 +38,37 @@ function generate() {
     canvas.height = canvasHeight;
 
     // Outer frame
-    ctx.strokeStyle = '#0066cc';
+    ctx.strokeStyle = '#2e7d32';
     ctx.lineWidth = borderWidth;
     ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
 
     // Header background
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#1b5e20';
     ctx.fillRect(borderWidth, borderWidth, canvasWidth - borderWidth * 2, headerHeight);
 
     // Header - Website (left)
-    ctx.fillStyle = '#0066cc';
+    ctx.fillStyle = '#2e7d32';
     ctx.font = 'bold 13px Arial';
     ctx.textAlign = 'left';
     ctx.fillText('Website: www.boppfilmsale.com', borderWidth + 15, borderWidth + 22);
 
     // Header - Email (left)
-    ctx.fillStyle = '#555555';
+    ctx.fillStyle = '#2e7d32';
     ctx.font = '11px Arial';
     ctx.fillText('Email: sale@boppfilmsale.com', borderWidth + 15, borderWidth + 40);
 
     // Header - Title (center)
-    ctx.fillStyle = '#0066cc';
+    ctx.fillStyle = '#2e7d32';
     ctx.font = 'bold 18px Arial';
     ctx.textAlign = 'center';
     ctx.fillText('AEC GROUP', canvasWidth / 2, borderHeight + 30);
 
     // Footer background
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#1b5e20';
     ctx.fillRect(borderWidth, headerHeight + borderWidth + imgSize, canvasWidth - borderWidth * 2, footerHeight);
 
     // Footer text
-    ctx.fillStyle = '#555555';
+    ctx.fillStyle = '#2e7d32';
     ctx.font = '9px Arial';
     ctx.textAlign = 'center';
     ctx.fillText('Address: No.1158, Huizhou Ave., Bache Dist., 230051, Hefei, Anhui, China', canvasWidth / 2, headerHeight + borderWidth + imgSize + 18);
@@ -85,7 +85,7 @@ function generate() {
         ctx.translate(canvasWidth / 2, headerHeight + borderWidth + imgSize / 2);
         ctx.rotate(-Math.PI / 4);
         ctx.globalAlpha = 0.25;
-        ctx.fillStyle = '#0066cc';
+        ctx.fillStyle = '#2e7d32';
         ctx.font = 'bold 28px Arial';
         ctx.textAlign = 'center';
         ctx.fillText('AEC Group', 0, -15);
