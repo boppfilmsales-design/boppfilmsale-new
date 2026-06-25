@@ -309,12 +309,14 @@ header.nav-open .mobile-menu-toggle span:nth-child(3){transform:translateY(-7px)
 .company-introduce-content.expanded {
   max-height: 3000px;
 }
-.ci-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
-.ci-4col{grid-template-columns:repeat(4,1fr);gap:28px}
-.ci-col p{color:var(--slate);margin-bottom:14px;line-height:1.8}
-.ci-col p strong{color:var(--ice)}
-@media(max-width:1100px){.ci-4col{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:768px){.ci-grid{grid-template-columns:1fr}}
+.ci-section{display:flex;flex-direction:column;gap:32px}
+.ci-en,.ci-zh{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:24px 28px}
+.ci-heading{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--gold);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(232,196,106,0.2)}
+.ci-en p,.ci-zh p{color:var(--slate);margin-bottom:14px;line-height:1.85}
+.ci-en p strong,.ci-zh p strong{color:var(--ice)}
+.ci-annotation{margin-top:20px;padding-top:16px;border-top:1px solid rgba(232,196,106,0.15);color:var(--slate);font-size:11px;line-height:1.7;text-align:justify}
+.ci-annotation strong{color:var(--gold)}
+@media(max-width:768px){.ci-en,.ci-zh{padding:18px 20px}}
 .read-more-btn {
   display: inline-block;
   margin-top: 15px;
@@ -648,8 +650,9 @@ header.nav-open .mobile-menu-toggle span:nth-child(3){transform:translateY(-7px)
   <div class="sec-label">Company Introduce · 公司介绍</div>
   <h2 class="sec-title">Anhui Eastern Communication Imp. &amp; Exp. Co., Ltd.</h2>
   <div class="sec-zh">安徽东渐进出口有限公司 / AEC GROUP</div>
-  <div class="ci-grid ci-4col">
-    <div class="ci-col">
+  <div class="ci-section">
+    <div class="ci-en">
+      <h3 class="ci-heading">Company Profile · 公司简介</h3>
       <p><strong>Anhui Eastern Communication Imp. &amp; Exp. Co., Ltd.</strong> is an integrated companies approved by China National Ministry of Foreign Trade and General Administration of Customs. The company has its own independent import and export rights. Registered in Hefei City, Anhui Province, P.R. China.</p>
       <p>Anhui Eastern Communication Imp. &amp; Exp. Co., Ltd. combines production, research, development, sales and service, company focus on exporting oriented business. Company started from flexible plastic packaging film and after years of operation, grew as the one which mainly focuses on the flexible packaging films.</p>
       <p>Anhui Eastern Communication Group mainly focus on flexible plastic BOPP, BOPET, CPP, BOPS, POF packaging film industry, BOPP thermal lamination EVA coating films, adhesive tape jumbo rolls, BOPS windows envelope film, office paper products and printing supplies series industry, machinery equipments and parts industry, etc.</p>
@@ -664,26 +667,11 @@ header.nav-open .mobile-menu-toggle span:nth-child(3){transform:translateY(-7px)
       <p>5.) BOPS film including BOPS window envelop film and BOPS shrinkage film.</p>
       <p>6.) POF shrinkage cling film; PVC cling film; PE cling film for food wrapping, PE stretch film for pallets packaging with machine/hand use, PE bags and so on.</p>
     </div>
-    <div class="ci-col">
-      <p><strong>2. Adhesive Packing Tape Industry</strong></p>
-      <p>1.) BOPP adhesive tape clear and color (jumbo rolls and slit smaller rolls); 2.) Masking tapes, double side tape 3.) Color logo printing film 4.) Aluminum tape 5.) All kinds of bags 6.) PP sheets and sleeves and so on.</p>
-      <p><strong>3. Coating film</strong></p>
-      <p>1.) BOPP thermal lamination film with EVA coated, &amp; BOPET/BOPA thermal lamination film with EVA coated 2.) PVDC coating film of BOPP/BOPET/BOPA 3.) Acrylic coating film</p>
-      <p><strong>4. Printing inkjet supplies Series:</strong> Wax, resin Ribbon (jumbo rolls and small finished rolls), color Ribbon (jumbo rolls and small finished rolls), date tape (jumbo rolls and small finished rolls), self adhesive labels (including roll and pages), the Mexican round, printers, etc.</p>
-      <p><strong>5. Wrap wire, tear clips and tear tape:</strong> plastic PP tear clips, self-adhesive tear tape, PP belt, and so on.</p>
-      <p><strong>6. Paper products series and packaging paper, printing supplies series</strong></p>
-      <p>1.) Office paper (a. Copy paper in reams and rolls b. LWC paper (lower/light weight coated paper) and Coated paper c. Offset paper &amp; coated paper. 2.) Printing supplies (a. Photo paper series and printing supplies series b. Outdoor advertising supplies series</p>
-    </div>
-    <div class="ci-col">
-      <p>The size of the Group's total investment (the sum of all branches) nearly 208 billion yuan (RMB, CNY), built 4 modern production plants, with a total area of 300 acres. Enter into industrial lines in the film (BOPP, BOPET, CPP, BOPA, BOPS, POF, PE, PVC and so on), glues, tapes, chemical coating, machinery &amp; equipment, paper and other industries. The total number of employees reached 1,200, nearly 68 high-tech technician talents.</p>
-      <p>Today, company has iron strength in finance and economics and acts as critical role in exporting business. Additionally, company also has a unique advantage in further processing industrial products.</p>
-      <p>Anhui Eastern Communication adopts "national industries as cornerstone, global market-oriented as platform, and scientific development as road". As products crossed over the world, service known around the world, and benefit spreaded to all corners of the world.</p>
-      <p>After many years of business practice and continuous development, Anhui Eastern Communication Imp.&amp; Exp. Co., Ltd have a huge number of customers, steelbof strength of finance, outstanding performance, superior reputation, efficient teams, obvious benefits.</p>
-      <p>Looking backward, senseful struggle experience; Looking ahead, endless career development!</p>
-    </div>
-    <div class="ci-col">
-      <p><strong>安徽东渐进出口有限公司</strong>是一家经工商管理局批准具有自主进出口经营权的企业。注册于中国安徽省合肥市。企业沐浴在浓浓的徽风皖韵之中，徜徉在雄雄的江淮走廊之下。南枕黄山曼妙尖新的天然胜景，东接沪宁繁华鼎盛的工商辐射，西望武汉北依蚌淮。</p>
-      <p>安徽东渐是集生产，研发，销售和服务为一体的综合性对外经贸企业，公司从软塑料包装薄膜及制品业起步，经过多年的经营，成长为一家，在包装薄膜（BOPP聚丙烯薄膜，BOPET聚酯薄膜，POF聚烯烃热收缩膜，BOPS聚苯乙烯薄膜，PE聚乙烯薄膜），薄膜及其制品的深加工（镀铝、彩印、涂布、分切等）。</p>
+        </div>
+    <div class="ci-zh">
+      <h3 class="ci-heading">公司概况</h3>
+      <p><strong>安徽东渐进出口有限公司</strong>是一家经工商管理局批准具有自主进出口经营权的企业。注册于中国安徽省合肥市。企业沐浴在浓浓的徽风皖韵之中，徜徉在雄雄的江淮走廊之下。南枕黄山曼妙尖新的天然胜景，东接沪宁繁华鼎盛的工商辐射，西望武汉北依蚌淮。长江水运得天独厚，省会优势日渐凸显。</p>
+      <p>安徽东渐是集生产，研发，销售和服务为一体的综合性对外经贸企业，公司从软塑料包装薄膜及制品业起步，经过多年的经营，成长为一家，在包装薄膜（BOPP聚丙烯薄膜，BOPET聚酯薄膜，POF聚烯烃热收缩膜，BOPS聚苯乙烯薄膜，PE聚乙烯薄膜），薄膜及其制品的深加工（镀铝、彩印、涂布、分切等），薄膜电子材料 (电容膜，碳带膜，新能源电池膜），胶粘带，拆封拉线，袋子、塑料包扎制品和部分自动化机器设备及配件；在办公用打印碳带，标签，复印纸，相纸，打印耗材等行业，具有独特的优势。另外，公司对加工贸易工业产品更具优势。</p>
       <p>安徽东渐主营产品覆盖软塑料包装薄膜工业，薄膜深加工系列工业，薄膜涂布工业，胶水、纸制品（包括：办公、包装用纸用品和相纸、打印耗材系列）等。</p>
       <p>软塑料包装薄膜工业主要包括：双拉BOPP薄膜（包装膜和电工膜），BOPET薄膜（包装膜和电工膜），CPP薄膜，BOPA薄膜，BOPS薄膜，PE薄膜，PVC/POF薄膜，PET热转印基膜等，以及上述薄膜的深加工产品，如：彩印、镀铝、涂布、分切、再包装等。</p>
       <p>薄膜涂布工业主要包括：涂布胶黏带母卷（半成品）如：BOPP胶带母卷，美纹纸胶带母卷，双面胶带母卷；PVDC涂布膜，EVA涂布膜和丙烯酸涂布膜等。</p>
@@ -697,7 +685,7 @@ header.nav-open .mobile-menu-toggle span:nth-child(3){transform:translateY(-7px)
       <p>回顾过去，奋斗历程感天动地。展望未来，事业发展永无止境。</p>
       <p>今天的安徽东渐进出口有限公司正以她无比自信的微笑迎接新的明天。</p>
       <p>地址：中国安徽省合肥市包河工业区徽州大道1158号，邮编230051</p>
-      <p style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(232,196,106,0.15);color:var(--slate);font-size:11px;line-height:1.7;text-align:justify;"><strong style="color:var(--gold)">注：东渐公司</strong>——其中"东渐"取自中西方经济文化交流中的"东学西渐，西学东渐"之意。现在中国是全球制造业大国，需要继续承载和深化全球制造业大国的市场己任和影响。在此，"东渐"有两个方面意思，一方面指中国出口企业自强繁荣，强劲发展并不断深化；另一方面，在此过程中，实现国内企业走向世界，更好参与国际工业产业链分工，为全球经济健康发展做出积极贡献，以更高姿态屹立世界民族之林，"渐"即汇通。</p>
+      <p class="ci-annotation"><strong>注：东渐公司</strong>——其中"东渐"取自中西方经济文化交流中的"东学西渐，西学东渐"之意。现在中国是全球制造业大国，需要继续承载和深化全球制造业大国的市场己任和影响。在此，"东渐"有两个方面意思，一方面指中国出口企业自强繁荣，强劲发展并不断深化；另一方面，在此过程中，实现国内企业走向世界，更好参与国际工业产业链分工，为全球经济健康发展做出积极贡献，以更高姿态屹立世界民族之林，"渐"即汇通。</p>
     </div>
   </div>
 </div>
