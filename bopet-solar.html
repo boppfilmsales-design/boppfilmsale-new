@@ -10,11 +10,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --bg:#1e0808;--bg-mid:#2d1010;--bg-card:rgba(50,15,15,0.88);--bg-light:#3d1a1a;
-  --red:#c0392b;--red-light:#e74c3c;--red-pale:#ff8a80;
-  --gold:#e8c46a;--gold-light:#f5d98a;
-  --ice:#fff5f5;--slate:#c8a8a8;--white:#ffffff;
-  --border:rgba(232,196,106,0.2);--border-r:rgba(192,57,43,0.28);
+  --bg:#0a0f1a;--bg-mid:#111827;--bg-card:rgba(17,24,39,0.92);--bg-light:#1a2332;
+  --red:#00d4aa;--red-light:#00f0c0;--red-pale:#66ffdd;
+  --gold:#00d4aa;--gold-light:#00f0c0;
+  --ice:#f0f4f8;--slate:#8899aa;--white:#ffffff;
+  --border:rgba(0,212,170,0.2);--border-r:rgba(0,212,170,0.28);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -50,7 +50,7 @@ h1.p-title{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;c
 .p-item-code{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--slate);margin-bottom:18px}
 .p-item-code b{color:var(--gold)}
 .spec-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
-.spec-pill{font-size:11px;background:rgba(232,196,106,.08);border:1px solid rgba(232,196,106,.2);color:var(--ice);padding:5px 13px;border-radius:20px}
+.spec-pill{font-size:11px;background:rgba(232,196,106,.08);border:1px solid rgba(0,212,170,.2);color:var(--ice);padding:5px 13px;border-radius:20px}
 .cta-row{display:flex;gap:12px;flex-wrap:wrap}
 .btn-r{background:linear-gradient(135deg,var(--red),var(--red-light));color:#fff;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:11px 24px;border-radius:5px;display:inline-block}
 .btn-o{border:1px solid rgba(232,196,106,.3);color:var(--ice);font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:11px 24px;border-radius:5px;display:inline-block}
@@ -304,7 +304,7 @@ footer a{color:var(--gold);text-decoration:none}
   align-items:center;
   gap:8px;
   padding:12px 20px;
-  background:linear-gradient(135deg,#c0392b,#e74c3c);
+  background:linear-gradient(135deg,#00d4aa,#00f0c0);
   border:none;
   border-radius:30px;
   color:#fff;
@@ -334,7 +334,7 @@ footer a{color:var(--gold);text-decoration:none}
   right:0;
   width:360px;
   max-height:500px;
-  background:#2d1010;
+  background:#111827;
   border:1px solid rgba(232,196,106,0.3);
   border-radius:16px;
   box-shadow:0 10px 40px rgba(0,0,0,0.5);
@@ -435,7 +435,7 @@ footer a{color:var(--gold);text-decoration:none}
   padding:6px 12px;
   margin:3px;
   background:rgba(232,196,106,0.08);
-  border:1px solid rgba(232,196,106,0.2);
+  border:1px solid rgba(0,212,170,0.2);
   border-radius:16px;
   color:var(--ice);
   font-size:11px;
@@ -459,7 +459,7 @@ footer a{color:var(--gold);text-decoration:none}
   flex:1;
   padding:10px 14px;
   background:rgba(30,8,8,0.8);
-  border:1px solid rgba(232,196,106,0.2);
+  border:1px solid rgba(0,212,170,0.2);
   border-radius:20px;
   color:var(--ice);
   font-size:13px;
