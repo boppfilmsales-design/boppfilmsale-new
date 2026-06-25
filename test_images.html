@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <title>图片加载测试</title>
 <style>
-body { font-family: Arial; padding: 20px; background: #f8f9fa; color: #fff; }
-.test-item { margin: 10px 0; padding: 10px; border: 1px solid #333; border-radius: 4px; }
+body { font-family: Arial; padding: 20px; background: #1a202c; color: #1a202c; }
+.test-item { margin: 10px 0; padding: 10px; border: 1px solid #1a202c; border-radius: 4px; }
 .test-item img { max-width: 100px; max-height: 100px; vertical-align: middle; margin-right: 10px; }
 .test-item .status { font-weight: bold; }
 .ok { color: #4caf50; }
@@ -38,7 +38,7 @@ images.forEach((src, i) => {
     div.innerHTML = `<img src="${src}" alt=""/><span class="status ok">✓ 加载成功</span> - ${src.split('/').pop()}`;
   };
   img.onerror = () => {
-    div.innerHTML = `<span class="status fail">✗ 加载失败</span> - ${src.split('/').pop()}<br><small style="color:#999">路径: ${src}</small>`;
+    div.innerHTML = `<span class="status fail">✗ 加载失败</span> - ${src.split('/').pop()}<br><small style="color:#4a5568">路径: ${src}</small>`;
   };
   img.src = src;
   results.appendChild(div);
