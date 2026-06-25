@@ -18,24 +18,24 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ice);font-family:'Inter',sans-serif;font-size:15px;line-height:1.7}
+body{background:var(--bg);color:var(--ice);font-family:'Inter',sans-serif;font-size:16px;line-height:1.7}
 .filmstrip{height:24px;background:var(--bg-mid);display:flex;align-items:center;overflow:hidden;border-bottom:1px solid var(--border)}
 .fs-track{display:flex;animation:filmroll 20s linear infinite;white-space:nowrap}
 .fs-hole{width:14px;height:10px;border:1.5px solid var(--gold);border-radius:2px;margin:0 9px;flex-shrink:0;opacity:.45;display:inline-block}
-.fs-txt{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--gold);letter-spacing:.15em;opacity:.65;padding:0 16px;flex-shrink:0}
+.fs-txt{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--gold);letter-spacing:.15em;opacity:.65;padding:0 16px;flex-shrink:0}
 @keyframes filmroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 header{background:rgba(30,8,8,0.97);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
 .header-inner{max-width:1100px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:60px;gap:20px}
 .logo{text-decoration:none}
 .logo-main{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#fff;letter-spacing:.03em}
 .logo-main span{color:var(--gold)}
-.logo-sub{font-size:8px;color:var(--slate);letter-spacing:.16em;text-transform:uppercase;display:block;margin-top:-2px}
+.logo-sub{font-size:9px;color:var(--slate);letter-spacing:.16em;text-transform:uppercase;display:block;margin-top:-2px}
 .hdr-nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
-.hdr-nav a{color:var(--slate);text-decoration:none;font-size:12px;font-weight:500;padding:6px 12px;border-radius:4px;transition:all .2s}
+.hdr-nav a{color:var(--slate);text-decoration:none;font-size:13px;font-weight:500;padding:6px 12px;border-radius:4px;transition:all .2s}
 .hdr-nav a:hover{color:#fff;background:rgba(255,255,255,.07)}
-.btn-gold{background:linear-gradient(135deg,var(--red),var(--red-light));color:#fff;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:8px 18px;border-radius:4px;white-space:nowrap}
+.btn-gold{background:linear-gradient(135deg,var(--red),var(--red-light));color:#fff;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:8px 18px;border-radius:4px;white-space:nowrap}
 
-.breadcrumb{max-width:1100px;margin:0 auto;padding:18px 28px 0;font-size:12px;color:var(--slate)}
+.breadcrumb{max-width:1100px;margin:0 auto;padding:18px 28px 0;font-size:13px;color:var(--slate)}
 .breadcrumb a{color:var(--slate);text-decoration:none}
 .breadcrumb a:hover{color:var(--gold)}
 .breadcrumb span{color:var(--gold)}
@@ -44,52 +44,52 @@ header{background:rgba(30,8,8,0.97);border-bottom:1px solid var(--border);positi
 .hero-img-box{background:linear-gradient(135deg,var(--bg-light),var(--bg-mid));border:1px solid var(--border-r);border-radius:12px;height:340px;display:flex;align-items:center;justify-content:center;font-size:96px;position:relative;overflow:hidden}
 .hero-img-box::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(192,57,43,.12),rgba(232,196,106,.05))}
 .hero-img-box img{width:100%;height:100%;object-fit:cover;position:relative;z-index:1}
-.cat-tag{display:inline-block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--red-pale);background:rgba(192,57,43,.12);border:1px solid rgba(192,57,43,.25);border-radius:4px;padding:4px 12px;margin-bottom:14px}
+.cat-tag{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--red-pale);background:rgba(192,57,43,.12);border:1px solid rgba(192,57,43,.25);border-radius:4px;padding:4px 12px;margin-bottom:14px}
 h1.p-title{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:4px}
 .p-title-zh{font-size:16px;color:var(--gold);margin-bottom:6px;font-weight:400}
-.p-item-code{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--slate);margin-bottom:18px}
+.p-item-code{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--slate);margin-bottom:18px}
 .p-item-code b{color:var(--gold)}
 .spec-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
-.spec-pill{font-size:11px;background:rgba(232,196,106,.08);border:1px solid rgba(0,102,204,.15);color:var(--ice);padding:5px 13px;border-radius:20px}
+.spec-pill{font-size:12px;background:rgba(232,196,106,.08);border:1px solid rgba(0,102,204,.15);color:var(--ice);padding:5px 13px;border-radius:20px}
 .cta-row{display:flex;gap:12px;flex-wrap:wrap}
-.btn-r{background:linear-gradient(135deg,var(--red),var(--red-light));color:#fff;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:11px 24px;border-radius:5px;display:inline-block}
-.btn-o{border:1px solid rgba(232,196,106,.3);color:var(--ice);font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:11px 24px;border-radius:5px;display:inline-block}
+.btn-r{background:linear-gradient(135deg,var(--red),var(--red-light));color:#fff;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:11px 24px;border-radius:5px;display:inline-block}
+.btn-o{border:1px solid rgba(232,196,106,.3);color:var(--ice);font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:11px 24px;border-radius:5px;display:inline-block}
 
 section.p-section{max-width:1100px;margin:0 auto;padding:40px 28px}
-.sec-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+.sec-label{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
 .sec-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#fff;margin-bottom:18px}
 .desc-block{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:26px 28px}
-.desc-en{color:var(--ice);line-height:1.85;margin-bottom:16px;font-size:14px}
-.desc-zh{color:var(--gold-light);line-height:1.9;font-size:14px}
+.desc-en{color:var(--ice);line-height:1.85;margin-bottom:16px;font-size:15px}
+.desc-zh{color:var(--gold-light);line-height:1.9;font-size:15px}
 
-table.spec-table{width:100%;border-collapse:collapse;font-size:13px;background:var(--bg-card);border-radius:10px;overflow:hidden}
+table.spec-table{width:100%;border-collapse:collapse;font-size:14px;background:var(--bg-card);border-radius:10px;overflow:hidden}
 table.spec-table th{background:rgba(192,57,43,.16);color:var(--gold);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:12px 16px;text-align:left}
 table.spec-table td{padding:11px 16px;color:var(--slate);border-bottom:1px solid rgba(232,196,106,.07)}
 table.spec-table td:first-child{color:var(--ice);font-weight:500;width:42%}
 table.spec-table tr:last-child td{border-bottom:none}
 table.spec-table tr:hover td{background:rgba(255,255,255,.02)}
-.no-specs{color:var(--slate);font-size:13px;padding:20px;text-align:center;background:var(--bg-card);border-radius:10px;border:1px solid var(--border)}
+.no-specs{color:var(--slate);font-size:14px;padding:20px;text-align:center;background:var(--bg-card);border-radius:10px;border:1px solid var(--border)}
 
 .app-grid{display:flex;flex-wrap:wrap;gap:10px}
-.app-pill{font-size:12.5px;background:rgba(232,196,106,.07);border:1px solid rgba(232,196,106,.18);color:var(--ice);padding:9px 16px;border-radius:8px}
+.app-pill{font-size:14.5px;background:rgba(232,196,106,.07);border:1px solid rgba(232,196,106,.18);color:var(--ice);padding:9px 16px;border-radius:8px}
 
 .related{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
-.related a{display:block;background:var(--bg-card);border:1px solid var(--border-r);border-radius:8px;padding:16px;text-decoration:none;color:var(--ice);font-size:12.5px;font-weight:500;transition:all .2s}
+.related a{display:block;background:var(--bg-card);border:1px solid var(--border-r);border-radius:8px;padding:16px;text-decoration:none;color:var(--ice);font-size:14.5px;font-weight:500;transition:all .2s}
 .related a:hover{border-color:var(--gold);transform:translateY(-2px)}
 
 .contact-strip{background:var(--bg-mid);border-top:1px solid var(--border);padding:36px 28px}
 .contact-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
-.contact-text{font-size:14px;color:var(--ice)}
+.contact-text{font-size:15px;color:var(--ice)}
 .contact-text b{color:var(--gold)}
-.contact-links{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--slate)}
+.contact-links{display:flex;gap:18px;flex-wrap:wrap;font-size:14.5px;color:var(--slate)}
 .contact-links a{color:var(--slate);text-decoration:none}
 .contact-links a:hover{color:var(--gold)}
 
-footer{padding:24px 28px;text-align:center;font-size:11px;color:var(--slate)}
+footer{padding:24px 28px;text-align:center;font-size:12px;color:var(--slate)}
 footer a{color:var(--gold);text-decoration:none}
 .contact-box{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:24px;margin-top:30px;text-align:center;max-width:1200px;margin-left:auto;margin-right:auto}
-.contact-box .ct-title{color:var(--gold);font-size:15px;font-weight:600;margin-bottom:16px}
-.contact-box .ct-items{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;font-size:13px;color:var(--slate)}
+.contact-box .ct-title{color:var(--gold);font-size:16px;font-weight:600;margin-bottom:16px}
+.contact-box .ct-items{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;font-size:14px;color:var(--slate)}
 .contact-box .ct-items a{color:var(--ice);text-decoration:none}
 
 @media(max-width:760px){
@@ -97,7 +97,7 @@ footer a{color:var(--gold);text-decoration:none}
   .hero-img-box{height:220px;font-size:64px}
   .contact-inner{flex-direction:column;text-align:center}
 }
-/* Floating Contact Sidebar */.floating-contact{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:999;display:flex;flex-direction:column;gap:1px;box-shadow:-2px 0 10px rgba(0,0,0,.5)}.fc-item{display:flex;align-items:center;justify-content:center;width:48px;height:48px;background:var(--bg-card);border:1px solid var(--border);transition:all .2s;text-decoration:none;position:relative}.fc-item:first-child{border-radius:8px 0 0 0}.fc-item:last-child{border-radius:0 0 0 8px}.fc-item:hover{width:120px;border-color:var(--gold);background:var(--red)}.fc-icon{font-size:20px;flex-shrink:0}.fc-label{position:absolute;right:55px;white-space:nowrap;font-size:11px;color:var(--ice);opacity:0;transition:opacity .2s;pointer-events:none}.fc-item:hover .fc-label{opacity:1}@media(max-width:680px){.floating-contact{display:none}}
+/* Floating Contact Sidebar */.floating-contact{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:999;display:flex;flex-direction:column;gap:1px;box-shadow:-2px 0 10px rgba(0,0,0,.5)}.fc-item{display:flex;align-items:center;justify-content:center;width:48px;height:48px;background:var(--bg-card);border:1px solid var(--border);transition:all .2s;text-decoration:none;position:relative}.fc-item:first-child{border-radius:8px 0 0 0}.fc-item:last-child{border-radius:0 0 0 8px}.fc-item:hover{width:120px;border-color:var(--gold);background:var(--red)}.fc-icon{font-size:20px;flex-shrink:0}.fc-label{position:absolute;right:55px;white-space:nowrap;font-size:12px;color:var(--ice);opacity:0;transition:opacity .2s;pointer-events:none}.fc-item:hover .fc-label{opacity:1}@media(max-width:680px){.floating-contact{display:none}}
 </style>
 </head>
 <body>
@@ -258,465 +258,7 @@ footer a{color:var(--gold);text-decoration:none}
 </div>
 </footer>
 
-<script src="translations.js"></script><script>var currentLang=localStorage.getItem('aec-lang')||'zh';function setLang(l){currentLang=l;localStorage.setItem('aec-lang',l);document.documentElement.lang=l;if(l==='ar'){document.documentElement.dir='rtl'}else{document.documentElement.dir='ltr'}var s=document.getElementById('langSelect');if(s)s.value=l}setLang(currentLang);</script><!-- Floating Chatbot Widget -->
-<div id="chatbot-widget">
-  <!-- Chat Button -->
-  <button id="chatbot-toggle" onclick="toggleChat()" title="在线聊天 / Online Chat">
-    <span id="chatbot-icon">💬</span>
-    <span id="chatbot-label">在线客服</span>
-  </button>
-
-  <!-- Chat Panel -->
-  <div id="chatbot-panel" style="display:none">
-    <!-- Header -->
-    <div id="chatbot-header">
-      <span>🤖 智能客服 / AI Assistant</span>
-      <button onclick="toggleChat()" id="chatbot-close">✕</button>
-    </div>
-
-    <!-- Messages -->
-    <div id="chatbot-messages">
-      <div class="chat-msg bot">
-        <div class="chat-avatar">🤖</div>
-        <div class="chat-bubble">您好！我是AEC GROUP智能客服。有什么可以帮助您的吗？</div>
-      </div>
-      <div class="chat-msg bot">
-        <div class="chat-avatar">🤖</div>
-        <div class="chat-bubble">Hello! I'm AEC GROUP AI assistant. How can I help you today?</div>
-      </div>
-    </div>
-
-    <!-- Quick Questions -->
-    <div id="chatbot-quick">
-      <div class="quick-title">常见问题 / FAQ</div>
-      <button onclick="askQuestion('product')">📦 产品咨询</button>
-      <button onclick="askQuestion('price')">💰 价格报价</button>
-      <button onclick="askQuestion('spec')">📊 技术参数</button>
-      <button onclick="askQuestion('order')">🚚 订购交货</button>
-      <button onclick="askQuestion('contact')">📞 联系方式</button>
-    </div>
-
-    <!-- Input -->
-    <div id="chatbot-input">
-      <input type="text" id="chatbot-text" placeholder="输入问题... / Type your question..." onkeypress="handleKeyPress(event)">
-      <button onclick="sendMessage()">➤</button>
-    </div>
-  </div>
-</div>
-
-<style>
-#chatbot-widget{
-  position:fixed;
-  right:20px;
-  bottom:80px;
-  z-index:10000;
-  font-family:'Inter',sans-serif;
-}
-
-/* Toggle Button */
-#chatbot-toggle{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:12px 20px;
-  background:linear-gradient(135deg,#e0e0e0,#f5f5f5);
-  border:none;
-  border-radius:30px;
-  color:#fff;
-  font-size:14px;
-  font-weight:600;
-  cursor:pointer;
-  box-shadow:0 4px 15px rgba(0,0,0,0.15);
-  transition:all .3s;
-}
-#chatbot-toggle:hover{
-  transform:translateY(-2px);
-  box-shadow:0 6px 20px rgba(192,57,43,0.5);
-}
-#chatbot-icon{
-  font-size:20px;
-  animation:pulse 2s infinite;
-}
-@keyframes pulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.1)}
-}
-
-/* Chat Panel */
-#chatbot-panel{
-  position:absolute;
-  bottom:70px;
-  right:0;
-  width:360px;
-  max-height:500px;
-  background:#ffffff;
-  border:1px solid rgba(232,196,106,0.3);
-  border-radius:16px;
-  box-shadow:0 10px 40px rgba(0,0,0,0.5);
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-
-/* Header */
-#chatbot-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:14px 18px;
-  background:rgba(0,0,0,0.04);
-  border-bottom:1px solid rgba(232,196,106,0.15);
-  color:var(--gold);
-  font-size:14px;
-  font-weight:600;
-}
-#chatbot-close{
-  background:none;
-  border:none;
-  color:var(--slate);
-  font-size:16px;
-  cursor:pointer;
-  padding:4px 8px;
-  border-radius:4px;
-}
-#chatbot-close:hover{
-  background:rgba(255,255,255,0.1);
-  color:#fff;
-}
-
-/* Messages */
-#chatbot-messages{
-  flex:1;
-  padding:14px;
-  overflow-y:auto;
-  max-height:240px;
-}
-.chat-msg{
-  display:flex;
-  gap:8px;
-  margin-bottom:12px;
-}
-.chat-msg.user{
-  flex-direction:row-reverse;
-}
-.chat-avatar{
-  width:32px;
-  height:32px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:16px;
-  flex-shrink:0;
-}
-.chat-msg.bot .chat-avatar{
-  background:rgba(232,196,106,0.15);
-}
-.chat-msg.user .chat-avatar{
-  background:rgba(192,57,43,0.3);
-}
-.chat-bubble{
-  max-width:240px;
-  padding:10px 14px;
-  border-radius:12px;
-  font-size:13px;
-  line-height:1.5;
-}
-.chat-msg.bot .chat-bubble{
-  background:rgba(232,196,106,0.1);
-  color:var(--ice);
-  border-bottom-left-radius:4px;
-}
-.chat-msg.user .chat-bubble{
-  background:rgba(192,57,43,0.3);
-  color:#fff;
-  border-bottom-right-radius:4px;
-}
-
-/* Quick Questions */
-#chatbot-quick{
-  padding:10px 14px;
-  border-top:1px solid rgba(232,196,106,0.1);
-}
-.quick-title{
-  font-size:10px;
-  color:var(--slate);
-  margin-bottom:8px;
-  text-transform:uppercase;
-  letter-spacing:0.05em;
-}
-#chatbot-quick button{
-  display:inline-block;
-  padding:6px 12px;
-  margin:3px;
-  background:rgba(232,196,106,0.08);
-  border:1px solid rgba(0,0,0,0.06);
-  border-radius:16px;
-  color:var(--ice);
-  font-size:11px;
-  cursor:pointer;
-  transition:all .2s;
-}
-#chatbot-quick button:hover{
-  background:rgba(0,0,0,0.04);
-  border-color:var(--gold);
-  color:var(--gold);
-}
-
-/* Input */
-#chatbot-input{
-  display:flex;
-  gap:8px;
-  padding:12px 14px;
-  border-top:1px solid rgba(232,196,106,0.1);
-}
-#chatbot-input input{
-  flex:1;
-  padding:10px 14px;
-  background:rgba(255,255,255,0.9);
-  border:1px solid rgba(0,0,0,0.06);
-  border-radius:20px;
-  color:var(--ice);
-  font-size:13px;
-  outline:none;
-}
-#chatbot-input input:focus{
-  border-color:var(--gold);
-}
-#chatbot-input input::placeholder{
-  color:var(--slate);
-}
-#chatbot-input button{
-  width:40px;
-  height:40px;
-  background:linear-gradient(135deg,var(--red),var(--red-light));
-  border:none;
-  border-radius:50%;
-  color:#fff;
-  font-size:16px;
-  cursor:pointer;
-  transition:all .2s;
-}
-#chatbot-input button:hover{
-  transform:scale(1.05);
-}
-
-/* Responsive */
-@media(max-width:680px){
-  #chatbot-widget{
-    right:10px;
-    bottom:70px;
-  }
-  #chatbot-panel{
-    width:300px;
-    right:-10px;
-  }
-  #chatbot-label{
-    display:none;
-  }
-  #chatbot-toggle{
-    padding:12px;
-  }
-}
-</style>
-
-<script>
-// Chatbot Knowledge Base
-const responses={
-  product:{
-    zh:`我们主营9大类包装薄膜产品：
-1. BOPP薄膜（普通、热封、光亮、哑光、珠光、镀铝等）
-2. BOPET薄膜（透明、镀铝、转移、电容器、光伏等）
-3. 涂层薄膜（PVDC/K膜、丙烯酸、PE涂层）
-4. 包装胶带（BOPP封箱胶带、双面胶带）
-5. CPP/BOPS/BOPA薄膜
-6. POF/PE/PVC收缩膜及袋类
-7. 纸制品（热敏纸、离型纸）
-8. 光伏组件及设备
-详细产品信息请访问产品目录页。`,
-    en:`We specialize in 9 categories of packaging films:
-1. BOPP Film (plain, heat seal, glossy, matte, pearlized, metallized)
-2. BOPET Film (clear, metallized, transfer, capacitor, solar)
-3. Coating Film (PVDC/K Film, Acrylic, PE Coating)
-4. Packing Tape (BOPP tape, double-sided tape)
-5. CPP/BOPS/BOPA Film
-6. POF/PE/PVC Shrink Film & Bags
-7. Paper Products (thermal paper, release paper)
-8. Solar Panels & Equipment
-Please visit our product catalog for details.`
-  },
-  price:{
-    zh:`产品价格取决于以下因素：
-• 薄膜类型和厚度
-• 订购数量（越大越优惠）
-• 宽度和长度规格
-• 表面处理要求
-
-我们提供工厂直销价格，极具竞争力。
-请发送您的具体需求到 sale@boppfilmsale.com 获取报价。`,
-    en:`Product pricing depends on:
-• Film type and thickness
-• Order quantity (bulk discounts available)
-• Width and length specifications
-• Surface treatment requirements
-
-We offer direct factory pricing.
-Please email sale@boppfilmsale.com with your requirements for a quote.`
-  },
-  spec:{
-    zh:`典型技术参数：
-• BOPP薄膜：厚度3-75μm，宽度250-10000mm
-• BOPET薄膜：厚度4.5-350μm，拉伸强度≥150MPa
-• CPP薄膜：厚度20-80μm，耐蒸煮121°C
-• POF收缩膜：收缩率30-50%
-
-所有产品均可按客户要求定制规格。
-详细技术规格请参见技术规格页面。`,
-    en:`Typical technical specifications:
-• BOPP Film: thickness 3-75μm, width 250-10000mm
-• BOPET Film: thickness 4.5-350μm, tensile strength ≥150MPa
-• CPP Film: thickness 20-80μm, retort resistant 121°C
-• POF Shrink: shrink ratio 30-50%
-
-All products available in custom specifications.
-See our Specifications page for details.`
-  },
-  order:{
-    zh:`订购流程：
-1. 发送询盘（邮件/微信/QQ）
-2. 确认规格和数量
-3. 收到报价和样品
-4. 确认订单并付款
-5. 安排生产和交货
-
-• 最小起订量：根据产品类型
-• 交货期：7-30天（根据订单量）
-• 包装：纸箱+托盘/木箱
-• 付款：T/T、L/C、PayPal`,
-    en:`Ordering Process:
-1. Send inquiry (email/WeChat/QQ)
-2. Confirm specifications and quantity
-3. Receive quotation and samples
-4. Confirm order and payment
-5. Production and delivery
-
-• MOQ: depends on product type
-• Lead time: 7-30 days (depending on order quantity)
-• Packing: carton + pallet/wooden case
-• Payment: T/T, L/C, PayPal`
-  },
-  contact:{
-    zh:`联系我们：
-📧 邮箱：sale@boppfilmsale.com
-📱 手机/微信/WhatsApp：+86 18919659471
-🐧 QQ：2538474128
-📍 地址：安徽省合肥市包河工业区徽州大道1158号银杏大厦
-🌐 网站：www.boppfilmsale.com`,
-    en:`Contact Us:
-📧 Email: sale@boppfilmsale.com
-📱 Mobile/WeChat/WhatsApp: +86 18919659471
-🐧 QQ: 2538474128
-📍 Address: No.1158 Huizhou Ave., Baohe Industrial Dist., Hefei, Anhui 230051
-🌐 Website: www.boppfilmsale.com`
-  },
-  default:{
-    zh:`感谢您的咨询！请选择一个常见问题，或直接输入您的问题。
-
-如需紧急联系，请发送邮件到 sale@boppfilmsale.com 或拨打 +86 18919659471。`,
-    en:`Thank you for your inquiry! Please select a common question or type your question directly.
-
-For urgent matters, please email sale@boppfilmsale.com or call +86 18919659471.`
-  },
-  greeting:{
-    zh:`您好！请问有什么可以帮您的？`,
-    en:`Hello! How can I help you today?`
-  },
-  thanks:{
-    zh:`不客气！如有其他问题，随时咨询。`,
-    en:`You're welcome! Feel free to ask if you have more questions.`
-  },
-  bye:{
-    zh:`再见！祝您生活愉快！👋`,
-    en:`Goodbye! Have a great day! 👋`
-  }
-};
-
-function toggleChat(){
-  const panel=document.getElementById('chatbot-panel');
-  const isVisible=panel.style.display!=='none';
-  panel.style.display=isVisible?'none':'flex';
-  if(!isVisible){
-    document.getElementById('chatbot-text').focus();
-  }
-}
-
-function addMessage(text,isUser){
-  const messagesDiv=document.getElementById('chatbot-messages');
-  const msgDiv=document.createElement('div');
-  msgDiv.className='chat-msg '+(isUser?'user':'bot');
-  msgDiv.innerHTML=`
-    <div class="chat-avatar">${isUser?'👤':'🤖'}</div>
-    <div class="chat-bubble">${text}</div>
-  `;
-  messagesDiv.appendChild(msgDiv);
-  messagesDiv.scrollTop=messagesDiv.scrollHeight;
-}
-
-function getResponse(input){
-  const lower=input.toLowerCase();
-  if(lower.includes('product')||lower.includes('产品')||lower.includes('什么')) return'product';
-  if(lower.includes('price')||lower.includes('价格')||lower.includes('报价')||lower.includes('多少钱')) return'price';
-  if(lower.includes('spec')||lower.includes('技术')||lower.includes('参数')||lower.includes('规格')) return'spec';
-  if(lower.includes('order')||lower.includes('订购')||lower.includes('买')||lower.includes('delivery')) return'order';
-  if(lower.includes('contact')||lower.includes('联系')||lower.includes('电话')||lower.includes('邮箱')) return'contact';
-  if(lower.includes('hello')||lower.includes('hi')||lower.includes('你好')) return'greeting';
-  if(lower.includes('thank')||lower.includes('谢谢')) return'thanks';
-  if(lower.includes('bye')||lower.includes('再见')) return'bye';
-  return'default';
-}
-
-function sendMessage(){
-  const input=document.getElementById('chatbot-text');
-  const text=input.value.trim();
-  if(!text)return;
-
-  addMessage(text,true);
-  input.value='';
-
-  setTimeout(()=>{
-    const responseKey=getResponse(text);
-    const lang=localStorage.getItem('aec-lang')||'zh';
-    const response=responses[responseKey];
-    const responseText=typeof response==='object'?response[lang]||response.en:response;
-    addMessage(responseText,false);
-  },500+Math.random()*1000);
-}
-
-function askQuestion(type){
-  const lang=localStorage.getItem('aec-lang')||'zh';
-  const question={
-    zh:{product:'我想了解产品',price:'请提供报价',spec:'查看技术参数',order:'如何订购',contact:'联系方式'},
-    en:{product:'I want to know about products',price:'Please provide a quote',spec:'View technical specs',order:'How to order',contact:'Contact information'}
-  };
-  document.getElementById('chatbot-text').value=question[type];
-  sendMessage();
-}
-
-function handleKeyPress(event){
-  if(event.key==='Enter'){
-    sendMessage();
-  }
-}
-
-// Auto-greeting after 30 seconds
-/*
-setTimeout(()=>{
-  if(document.getElementById('chatbot-panel').style.display==='none'){
-    toggleChat();
-  }
-},30000);
-*/
-</script>
+<script src="translations.js"></script><script>var currentLang=localStorage.getItem('aec-lang')||'zh';function setLang(l){currentLang=l;localStorage.setItem('aec-lang',l);document.documentElement.lang=l;if(l==='ar'){document.documentElement.dir='rtl'}else{document.documentElement.dir='ltr'}var s=document.getElementById('langSelect');if(s)s.value=l}setLang(currentLang);</script>
 
 </body>
 </html>
