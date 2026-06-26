@@ -1,0 +1,20 @@
+{
+  "name": "aec-group-website",
+  "version": "1.0.0",
+  "description": "AEC GROUP - BOPP, BOPET, CPP, POF Packaging Films Website",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "vercel build",
+    "start": "vercel start",
+    "lint": "eslint api lib admin"
+  },
+  "dependencies": {
+    "@vercel/postgres": "^0.5.0"
+  },
+  "devDependencies": {
+    "vercel": "^32.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

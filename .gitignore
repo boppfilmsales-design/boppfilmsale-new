@@ -13,3 +13,26 @@ Thumbs.db
 # OS files
 *.tmp
 *.log
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# Vercel
+.vercel/
+
+# Environment variables
+.env
+.env.local
+
+# Python scripts (development only)
+*.py
+!api/**/*.py
+
+# Test files
+test/
+tests/
+
+# Runtime
+*.pid
+*.seed
