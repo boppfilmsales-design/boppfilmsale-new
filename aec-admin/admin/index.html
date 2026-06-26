@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AEC Admin - Backend Management</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0A190F;
+      color: #FFFFFF;
+      min-height: 100vh;
+    }
+
+    /* Login */
+    .login-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .login-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(40,240,100,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 380px;
+      backdrop-filter: blur(20px);
+    }
+    .login-card h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #28F064;
+    }
+    .login-card .sub {
+      color: #A0AAB0;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      color: #A0AAB0;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: #28F064;
+      box-shadow: 0 0 0 3px rgba(40,240,100,0.1);
+    }
+    .btn {
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: #28F064;
+      color: #0A190F;
+      width: 100%;
+    }
+    .btn-primary:hover {
+      background: #3dff7a;
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+    .btn-danger {
+      background: rgba(255,50,50,0.8);
+      color: #fff;
+    }
+    .btn-sm { padding: 8px 14px; font-size: 12px; }
+    .btn:hover { transform: translateY(-1px); }
+
+    /* Dashboard */
+    .dashboard { display: none; }
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 240px;
+      background: rgba(255,255,255,0.02);
+      border-right: 1px solid rgba(255,255,255,0.05);
+      padding: 24px 0;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar h2 {
+      padding: 0 20px 20px;
+      font-size: 18px;
+      color: #28F064;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      margin-bottom: 16px;
+    }
+    .nav-item {
+      display: block;
+      padding: 12px 20px;
+      color: #A0AAB0;
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-item:hover, .nav-item.active {
+      background: rgba(40,240,100,0.1);
+      color: #28F064;
+    }
+    .main {
+      flex: 1;
+      margin-left: 240px;
+      padding: 24px 32px;
+    }
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .page-header h1 { font-size: 22px; }
+
+    /* Table */
+    .card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    th {
+      color: #A0AAB0;
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    td { color: #fff; font-size: 14px; }
+    tr:hover { background: rgba(255,255,255,0.02); }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      color: #0A190F;
+      background: #28F064;
+      font-weight: 600;
+      display: none;
+      z-index: 1000;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { width: 60px; }
+      .sidebar h2, .nav-item span { display: none; }
+      .main { margin-left: 60px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login -->
+<div class="login-wrap" id="loginPage">
+  <div class="login-card">
+    <h1>AEC GROUP</h1>
+    <p class="sub">Admin Panel</p>
+    <form id="loginForm">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="username" required>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="password" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div class="dashboard" id="dashboard">
+  <div class="layout">
+    <nav class="sidebar">
+      <h2>AEC ADMIN</h2>
+      <a class="nav-item active" onclick="showPage('products')">📦 Products</a>
+      <a class="nav-item" onclick="logout()">🚪 Logout</a>
+    </nav>
+    <main class="main">
+      <div class="page-header">
+        <h1>Products Management</h1>
+        <button class="btn btn-primary" onclick="openModal()">+ Add Product</button>
+      </div>
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Thickness</th>
+              <th>Price</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="productsTable"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="card" id="productModal" style="display:none;max-width:500px;margin:20px auto;">
+  <h2 style="margin-bottom:16px;color:#28F064" id="modalTitle">Add Product</h2>
+  <form id="productForm">
+    <input type="hidden" id="productId">
+    <div class="form-row">
+      <div class="form-group"><label>Title*</label><input id="title" required></div>
+      <div class="form-group"><label>Category</label><input id="category"></div>
+    </div>
+    <div class="form-group"><label>Description</label><textarea id="description" rows="3"></textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label>Thickness</label><input id="thickness"></div>
+      <div class="form-group"><label>Haze</label><input id="haze"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Gloss</label><input id="gloss"></div>
+      <div class="form-group"><label>Heat Seal</label><input id="heat_seal"></div>
+    </div>
+    <div class="form-group"><label>Image URL</label><input id="image_url"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;">
+      <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+  </form>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// Login
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const res = await fetch('/api/auth', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: username.value, password: password.value })
+  });
+  const data = await res.json();
+  if (data.success) {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadProducts();
+  } else {
+    showToast('Invalid credentials', 'error');
+  }
+});
+
+// Load products
+async function loadProducts() {
+  const res = await fetch('/api/products');
+  const data = await res.json();
+  const tbody = document.getElementById('productsTable');
+  tbody.innerHTML = data.products.map(p => `
+    <tr>
+      <td>${p.title}</td>
+      <td>${p.category||'-'}</td>
+      <td>${p.thickness||'-'}</td>
+      <td>${p.price||'-'}</td>
+      <td>
+        <button class="btn btn-sm btn-secondary" onclick="editProduct(${p.id})">Edit</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteProduct(${p.id})">Delete</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// Modal
+function openModal() {
+  document.getElementById('productModal').style.display = 'block';
+  document.getElementById('modalTitle').textContent = 'Add Product';
+  document.getElementById('productForm').reset();
+  document.getElementById('productId').value = '';
+}
+
+function closeModal() {
+  document.getElementById('productModal').style.display = 'none';
+}
+
+// Save product
+document.getElementById('productForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = document.getElementById('productId').value;
+  const body = {
+    title: document.getElementById('title').value,
+    category: document.getElementById('category').value,
+    description: document.getElementById('description').value,
+    thickness: document.getElementById('thickness').value,
+    haze: document.getElementById('haze').value,
+    gloss: document.getElementById('gloss').value,
+    heat_seal: document.getElementById('heat_seal').value,
+    image_url: document.getElementById('image_url').value
+  };
+
+  const url = id ? `/api/products?id=${id}` : '/api/products';
+  const method = id ? 'PUT' : 'POST';
+
+  const res = await fetch(url, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+
+  if (res.ok) {
+    showToast('Product saved!');
+    closeModal();
+    loadProducts();
+  } else {
+    showToast('Error saving product', 'error');
+  }
+});
+
+// Edit product
+async function editProduct(id) {
+  const res = await fetch(`/api/products?id=${id}`);
+  const data = await res.json();
+  const p = data.product;
+
+  document.getElementById('productModal').style.display = 'block';
+  document.getElementById('modalTitle').textContent = 'Edit Product';
+  document.getElementById('productId').value = p.id;
+  document.getElementById('title').value = p.title || '';
+  document.getElementById('category').value = p.category || '';
+  document.getElementById('description').value = p.description || '';
+  document.getElementById('thickness').value = p.thickness || '';
+  document.getElementById('haze').value = p.haze || '';
+  document.getElementById('gloss').value = p.gloss || '';
+  document.getElementById('heat_seal').value = p.heat_seal || '';
+  document.getElementById('image_url').value = p.image_url || '';
+}
+
+// Delete product
+async function deleteProduct(id) {
+  if (!confirm('Delete this product?')) return;
+  await fetch(`/api/products?id=${id}`, { method: 'DELETE' });
+  showToast('Product deleted!');
+  loadProducts();
+}
+
+// Logout
+function logout() {
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('loginPage').style.display = 'flex';
+}
+
+// Toast
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 3000);
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+  // Check if already logged in
+  const token = localStorage.getItem('aec_token');
+  if (token) {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadProducts();
+  }
+});
+</script>
+</body>
+</html>

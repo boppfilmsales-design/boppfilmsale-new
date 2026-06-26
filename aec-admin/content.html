@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details - AEC GROUP</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-primary: #0A190F;
+      --bg-secondary: #0D1F14;
+      --accent: #28F064;
+      --accent-glow: rgba(40,240,100,0.3);
+      --text-primary: #FFFFFF;
+      --text-secondary: #A0AAB0;
+      --glass-bg: rgba(255,255,255,0.03);
+      --glass-border: rgba(255,255,255,0.08);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10,25,15,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      margin-left: 32px;
+      font-size: 14px;
+      transition: color 0.3s;
+    }
+    .nav a:hover { color: var(--accent); }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 100px 60px;
+      max-width: 1400px;
+      margin: 0 auto;
+      gap: 60px;
+    }
+
+    /* Left - Image */
+    .hero-image {
+      flex: 1;
+      position: relative;
+    }
+    .image-frame {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 24px;
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 40px var(--accent-glow), inset 0 0 40px rgba(40,240,100,0.05);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-secondary);
+      transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.5s;
+    }
+    .image-frame:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 60px var(--accent-glow), inset 0 0 60px rgba(40,240,100,0.08);
+    }
+    .image-frame img {
+      width: 85%;
+      height: 85%;
+      object-fit: contain;
+      transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+      filter: drop-shadow(0 0 20px rgba(40,240,100,0.2));
+    }
+    .image-frame:hover img {
+      transform: scale(1.1);
+    }
+    .image-placeholder {
+      font-size: 80px;
+      opacity: 0.5;
+    }
+
+    /* Right - Content */
+    .hero-content {
+      flex: 1;
+    }
+    .category-tag {
+      display: inline-block;
+      padding: 6px 16px;
+      background: rgba(40,240,100,0.1);
+      border: 1px solid rgba(40,240,100,0.3);
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+    .hero-content h1 {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      letter-spacing: -1px;
+    }
+    .hero-content h1 span {
+      color: var(--accent);
+    }
+    .description {
+      font-size: 18px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 40px;
+      max-width: 500px;
+    }
+
+    /* Buttons */
+    .actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg-primary);
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px var(--accent-glow);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--glass-border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Specs Section */
+    .specs-section {
+      padding: 80px 60px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .specs-title {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .spec-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 28px;
+      backdrop-filter: blur(10px);
+      transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .spec-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(40,240,100,0.3);
+      box-shadow: 0 12px 40px rgba(40,240,100,0.1);
+    }
+    .spec-card .label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .spec-card .value {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* Loading */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-size: 18px;
+      color: var(--text-secondary);
+    }
+    .loading::after {
+      content: '';
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--accent);
+      border-top-color: transparent;
+      border-radius: 50%;
+      margin-left: 12px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero {
+        flex-direction: column;
+        padding: 100px 24px 60px;
+        gap: 40px;
+      }
+      .hero-content h1 { font-size: 32px; }
+      .specs-section { padding: 60px 24px; }
+      .header { padding: 16px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <a href="/" class="logo">AEC GROUP</a>
+  <nav class="nav">
+    <a href="/products.html">Products</a>
+    <a href="/about.html">About</a>
+    <a href="/contact.html">Contact</a>
+  </nav>
+</header>
+
+<!-- Hero -->
+<section class="hero" id="heroSection">
+  <div class="loading">Loading product data</div>
+</section>
+
+<!-- Specs -->
+<section class="specs-section" id="specsSection" style="display:none;">
+  <h2 class="specs-title">Technical Specifications</h2>
+  <div class="specs-grid" id="specsGrid"></div>
+</section>
+
+<script>
+// Fetch and render product data
+async function loadProduct() {
+  try {
+    const res = await fetch('/api/products');
+    const data = await res.json();
+
+    if (!data.products || data.products.length === 0) {
+      document.getElementById('heroSection').innerHTML = `
+        <div style="text-align:center;padding:100px 20px;">
+          <h2 style="color:#28F064;margin-bottom:16px;">Product Not Found</h2>
+          <p style="color:#A0AAB0;">No products available. Please add products via the admin panel.</p>
+          <a href="/admin/index.html" class="btn btn-primary" style="display:inline-block;margin-top:24px;">Go to Admin</a>
+        </div>
+      `;
+      return;
+    }
+
+    const product = data.products[0];
+    const heroSection = document.getElementById('heroSection');
+
+    heroSection.innerHTML = `
+      <div class="hero-image">
+        <div class="image-frame">
+          ${product.image_url
+            ? `<img src="${product.image_url}" alt="${product.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+            : ''}
+          <div class="image-placeholder" style="${product.image_url ? 'display:none' : ''}">📦</div>
+        </div>
+      </div>
+      <div class="hero-content">
+        <span class="category-tag">${product.category || 'Product'}</span>
+        <h1>${product.title}</h1>
+        <p class="description">${product.description || 'Premium quality packaging film for industrial applications.'}</p>
+        <div class="actions">
+          <a href="/contact.html" class="btn btn-primary">Request Quote</a>
+          <a href="mailto:sale@boppfilmsale.com" class="btn btn-secondary">Email Us</a>
+        </div>
+      </div>
+    `;
+
+    // Render specs
+    const specs = [
+      { label: 'Thickness', value: product.thickness || 'N/A' },
+      { label: 'Haze', value: product.haze || 'N/A' },
+      { label: 'Gloss', value: product.gloss || 'N/A' },
+      { label: 'Heat Seal', value: product.heat_seal || 'N/A' },
+    ];
+
+    const specsGrid = document.getElementById('specsGrid');
+    specsGrid.innerHTML = specs.map(s => `
+      <div class="spec-card">
+        <div class="label">${s.label}</div>
+        <div class="value">${s.value}</div>
+      </div>
+    `).join('');
+
+    document.getElementById('specsSection').style.display = 'block';
+
+  } catch (error) {
+    console.error('Error loading product:', error);
+    document.getElementById('heroSection').innerHTML = `
+      <div style="text-align:center;padding:100px 20px;">
+        <h2 style="color:#ff5252;margin-bottom:16px;">Error Loading Product</h2>
+        <p style="color:#A0AAB0;">${error.message}</p>
+      </div>
+    `;
+  }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', loadProduct);
+</script>
+</body>
+</html>
