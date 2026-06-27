@@ -284,6 +284,17 @@ section{padding:88px 0}
 .wl-more:hover{color:#2e7d32}
 .wl-detail{margin-top:12px;padding-top:12px;border-top:1px solid #e2e8f0;font-size:14px;color:#4a5568;line-height:1.8}
 
+/* Responsive */
+@media(max-width:1024px){
+  .wgrid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:768px){
+  .wgrid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:480px){
+  .wgrid{grid-template-columns:1fr}
+}
+
 /* EQUIPMENT */
 .equipment{background:transparent}
 .eq-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
@@ -372,7 +383,6 @@ footer{background:transparent;border-top:1px solid var(--border);padding:52px 0 
   .prod-nav{position:static;display:flex;flex-wrap:wrap;gap:5px;max-height:none}
   .pnt{display:none}
   .prod-nav a{padding:5px 9px;font-size:15px}
-  .wgrid{grid-template-columns:1fr 1fr}
   .eq-grid{grid-template-columns:1fr 1fr}
   .cgrid{grid-template-columns:1fr}
   .fgrid{grid-template-columns:1fr 1fr}
