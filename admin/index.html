@@ -253,14 +253,14 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const API_URL = '/api/db';
+const API_URL = 'http://localhost:3001/api/db';
 
-async function executeSQL(query, params) {
+async function dbAction(table, action, data, id, where) {
   try {
     const response = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query: query, params: params || [] })
+      body: JSON.stringify({ table, action, data: data || {}, id: id || 0, where: where || {} })
     });
     if (!response.ok) throw new Error('Database request failed');
     const result = await response.json();
@@ -270,6 +270,20 @@ async function executeSQL(query, params) {
     return null;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function showTab(targetId, menuElement) {
   document.querySelectorAll('.menu-item').forEach(function(el) { el.classList.remove('active'); });
@@ -286,14 +300,7 @@ window.onload = function() {
   loadCategories();
 };
 
-async function loadInitialData() {
-  var pageData = await executeSQL('SELECT * FROM page_settings LIMIT 1');
-  if (pageData && pageData.length > 0) {
-    document.getElementById('hero_title_en').value = pageData[0].hero_title_en || '';
-    document.getElementById('hero_title_zh').value = pageData[0].hero_title_zh || '';
-    document.getElementById('hero_desc').value = pageData[0].hero_desc || '';
-  }
-}
+
 
 function openProductModal() { document.getElementById('productFormCard').style.display = 'block'; }
 function closeProductModal() { document.getElementById('productFormCard').style.display = 'none'; }
