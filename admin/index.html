@@ -3,136 +3,133 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel - AEC GROUP</title>
-  <link rel="stylesheet" href="../styles.css">
+  <title>AEC Admin - Backend Management</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', sans-serif; background: #f5f7fa; min-height: 100vh; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0A190F;
+      color: #FFFFFF;
+      min-height: 100vh;
+    }
 
-    /* Login Page */
-    .login-container {
+    /* Login */
+    .login-wrap {
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+      padding: 20px;
     }
-    .login-box {
-      background: #fff;
+    .login-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(40,240,100,0.2);
       border-radius: 16px;
       padding: 40px;
       width: 100%;
-      max-width: 400px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 380px;
+      backdrop-filter: blur(20px);
     }
-    .login-box h1 {
-      text-align: center;
-      color: #1a202c;
-      margin-bottom: 8px;
+    .login-card h1 {
       font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #28F064;
     }
-    .login-box .subtitle {
-      text-align: center;
-      color: #718096;
-      margin-bottom: 24px;
+    .login-card .sub {
+      color: #A0AAB0;
       font-size: 14px;
+      margin-bottom: 24px;
     }
-    .form-group {
-      margin-bottom: 16px;
-    }
+    .form-group { margin-bottom: 16px; }
     .form-group label {
       display: block;
+      color: #A0AAB0;
+      font-size: 13px;
       margin-bottom: 6px;
-      color: #4a5568;
-      font-size: 14px;
-      font-weight: 500;
     }
-    .form-group input {
+    .form-group input, .form-group textarea, .form-group select {
       width: 100%;
       padding: 12px 16px;
-      border: 1px solid #e2e8f0;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: #28F064;
+      box-shadow: 0 0 0 3px rgba(40,240,100,0.1);
+    }
+    .btn {
+      padding: 12px 24px;
       border-radius: 8px;
       font-size: 14px;
-      transition: border-color 0.2s;
-    }
-    .form-group input:focus {
-      outline: none;
-      border-color: #1b5e20;
-      box-shadow: 0 0 0 3px rgba(27,94,32,0.1);
-    }
-    .btn-login {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(135deg, #1b5e20, #2e7d32);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
+      border: none;
+      transition: all 0.2s;
     }
-    .btn-login:hover {
+    .btn-primary {
+      background: #28F064;
+      color: #0A190F;
+      width: 100%;
+    }
+    .btn-primary:hover {
+      background: #3dff7a;
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(27,94,32,0.3);
     }
-    .login-error {
-      color: #e53e3e;
-      font-size: 14px;
-      text-align: center;
-      margin-top: 12px;
-      display: none;
+    .btn-secondary {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
     }
+    .btn-danger {
+      background: rgba(255,50,50,0.8);
+      color: #fff;
+    }
+    .btn-sm { padding: 8px 14px; font-size: 12px; }
+    .btn:hover { transform: translateY(-1px); }
 
-    /* Dashboard Layout */
-    .admin-dashboard { display: none; }
-    .dashboard-layout {
+    /* Dashboard */
+    .dashboard { display: none; }
+    .layout {
       display: flex;
       min-height: 100vh;
     }
     .sidebar {
-      width: 260px;
-      background: #1a202c;
-      color: #fff;
-      padding: 20px 0;
+      width: 240px;
+      background: rgba(255,255,255,0.02);
+      border-right: 1px solid rgba(255,255,255,0.05);
+      padding: 24px 0;
       position: fixed;
       height: 100vh;
       overflow-y: auto;
     }
-    .sidebar-header {
+    .sidebar h2 {
       padding: 0 20px 20px;
-      border-bottom: 1px solid #2d3748;
-      margin-bottom: 20px;
-    }
-    .sidebar-header h2 {
       font-size: 18px;
-      color: #fff;
-    }
-    .sidebar-header p {
-      font-size: 12px;
-      color: #a0aec0;
-      margin-top: 4px;
+      color: #28F064;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      margin-bottom: 16px;
     }
     .nav-item {
       display: block;
       padding: 12px 20px;
-      color: #a0aec0;
+      color: #A0AAB0;
       text-decoration: none;
       font-size: 14px;
-      transition: all 0.2s;
       cursor: pointer;
+      transition: all 0.2s;
     }
     .nav-item:hover, .nav-item.active {
-      background: #2d3748;
-      color: #fff;
+      background: rgba(40,240,100,0.1);
+      color: #28F064;
     }
-    .nav-item .icon {
-      margin-right: 10px;
-    }
-    .main-content {
+    .main {
       flex: 1;
-      margin-left: 260px;
-      padding: 20px 30px;
+      margin-left: 240px;
+      padding: 24px 32px;
     }
     .page-header {
       display: flex;
@@ -140,220 +137,30 @@
       align-items: center;
       margin-bottom: 24px;
     }
-    .page-header h1 {
-      font-size: 24px;
-      color: #1a202c;
-    }
-
-    /* Cards */
-    .card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-    .card-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #1a202c;
-    }
-
-    /* Stats Grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .stat-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .stat-card .value {
-      font-size: 28px;
-      font-weight: 700;
-      color: #1b5e20;
-    }
-    .stat-card .label {
-      font-size: 14px;
-      color: #718096;
-      margin-top: 4px;
-    }
+    .page-header h1 { font-size: 22px; }
 
     /* Table */
-    .table-container {
-      overflow-x: auto;
+    .card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+    table { width: 100%; border-collapse: collapse; }
     th, td {
       padding: 12px 16px;
       text-align: left;
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
     th {
-      background: #f7fafc;
-      font-weight: 600;
-      color: #4a5568;
-      font-size: 13px;
-      text-transform: uppercase;
-    }
-    td {
-      color: #2d3748;
-      font-size: 14px;
-    }
-    tr:hover {
-      background: #f7fafc;
-    }
-
-    /* Buttons */
-    .btn {
-      padding: 8px 16px;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s;
-    }
-    .btn-primary {
-      background: #1b5e20;
-      color: #fff;
-    }
-    .btn-primary:hover {
-      background: #2e7d32;
-    }
-    .btn-secondary {
-      background: #e2e8f0;
-      color: #4a5568;
-    }
-    .btn-secondary:hover {
-      background: #cbd5e0;
-    }
-    .btn-danger {
-      background: #e53e3e;
-      color: #fff;
-    }
-    .btn-danger:hover {
-      background: #c53030;
-    }
-    .btn-sm {
-      padding: 6px 12px;
+      color: #A0AAB0;
       font-size: 12px;
+      text-transform: uppercase;
+      font-weight: 600;
     }
-
-    /* Modal */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-    }
-    .modal-overlay.active {
-      display: flex;
-    }
-    .modal {
-      background: #fff;
-      border-radius: 16px;
-      padding: 24px;
-      width: 100%;
-      max-width: 600px;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .modal-header h2 {
-      font-size: 18px;
-      color: #1a202c;
-    }
-    .modal-close {
-      background: none;
-      border: none;
-      font-size: 24px;
-      cursor: pointer;
-      color: #718096;
-    }
-
-    /* Form */
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-    .form-group {
-      margin-bottom: 16px;
-    }
-    .form-group label {
-      display: block;
-      margin-bottom: 6px;
-      color: #4a5568;
-      font-size: 14px;
-      font-weight: 500;
-    }
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      font-size: 14px;
-      font-family: inherit;
-    }
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus {
-      outline: none;
-      border-color: #1b5e20;
-      box-shadow: 0 0 0 3px rgba(27,94,32,0.1);
-    }
-    .form-group textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    /* Tabs */
-    .tabs {
-      display: flex;
-      border-bottom: 1px solid #e2e8f0;
-      margin-bottom: 20px;
-    }
-    .tab {
-      padding: 12px 20px;
-      cursor: pointer;
-      color: #718096;
-      font-size: 14px;
-      font-weight: 500;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s;
-    }
-    .tab:hover, .tab.active {
-      color: #1b5e20;
-      border-bottom-color: #1b5e20;
-    }
+    td { color: #fff; font-size: 14px; }
+    tr:hover { background: rgba(255,255,255,0.02); }
 
     /* Toast */
     .toast {
@@ -362,396 +169,241 @@
       right: 20px;
       padding: 12px 20px;
       border-radius: 8px;
-      color: #fff;
-      font-size: 14px;
-      z-index: 2000;
+      color: #0A190F;
+      background: #28F064;
+      font-weight: 600;
       display: none;
+      z-index: 1000;
     }
-    .toast.success { background: #2e7d32; }
-    .toast.error { background: #e53e3e; }
 
-    /* Responsive */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
     @media (max-width: 768px) {
       .sidebar { width: 60px; }
-      .sidebar-header h2, .sidebar-header p, .nav-item span:not(.icon) { display: none; }
-      .main-content { margin-left: 60px; }
+      .sidebar h2, .nav-item span { display: none; }
+      .main { margin-left: 60px; }
       .form-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-<!-- Login Page -->
-<div class="login-container" id="loginPage">
-  <div class="login-box">
+<!-- Login -->
+<div class="login-wrap" id="loginPage">
+  <div class="login-card">
     <h1>AEC GROUP</h1>
-    <p class="subtitle">Admin Panel · 后台管理系统</p>
+    <p class="sub">Admin Panel</p>
     <form id="loginForm">
       <div class="form-group">
-        <label>Username 用户名</label>
-        <input type="text" id="username" placeholder="Enter username" required>
+        <label>Username</label>
+        <input type="text" id="username" required>
       </div>
       <div class="form-group">
-        <label>Password 密码</label>
-        <input type="password" id="password" placeholder="Enter password" required>
+        <label>Password</label>
+        <input type="password" id="password" required>
       </div>
-      <button type="submit" class="btn-login">Login 登录</button>
-      <p class="login-error" id="loginError">Invalid username or password</p>
+      <button type="submit" class="btn btn-primary">Login</button>
     </form>
-    <p style="text-align:center;margin-top:16px;font-size:12px;color:#a0aec0;">
-      Default: admin / admin123
-    </p>
   </div>
 </div>
 
-<!-- Admin Dashboard -->
-<div class="admin-dashboard" id="adminDashboard">
-  <div class="dashboard-layout">
-    <!-- Sidebar -->
+<!-- Dashboard -->
+<div class="dashboard" id="dashboard">
+  <div class="layout">
     <nav class="sidebar">
-      <div class="sidebar-header">
-        <h2>AEC GROUP</h2>
-        <p>Admin Panel</p>
-      </div>
-      <a class="nav-item active" onclick="showPage('dashboard')"><span class="icon">📊</span> Dashboard 仪表盘</a>
-      <a class="nav-item" onclick="showPage('products')"><span class="icon">📦</span> Products 产品管理</a>
-      <a class="nav-item" onclick="showPage('categories')"><span class="icon">📁</span> Categories 分类管理</a>
-      <a class="nav-item" onclick="showPage('pages')"><span class="icon">📄</span> Pages 页面管理</a>
-      <a class="nav-item" onclick="showPage('messages')"><span class="icon">💬</span> Messages 留言管理</a>
-      <a class="nav-item" onclick="showPage('settings')"><span class="icon">⚙️</span> Settings 系统设置</a>
-      <div style="padding:20px;margin-top:auto;">
-        <a class="nav-item" onclick="logout()"><span class="icon">🚪</span> Logout 退出</a>
-      </div>
+      <h2>AEC ADMIN</h2>
+      <a class="nav-item active" onclick="showPage('products')">📦 Products</a>
+      <a class="nav-item" onclick="logout()">🚪 Logout</a>
     </nav>
-
-    <!-- Main Content -->
-    <main class="main-content">
-      <!-- Dashboard Page -->
-      <div id="page-dashboard" class="page">
-        <div class="page-header">
-          <h1>Dashboard 仪表盘</h1>
-        </div>
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="value" id="stat-products">0</div>
-            <div class="label">Total Products 产品总数</div>
-          </div>
-          <div class="stat-card">
-            <div class="value" id="stat-categories">0</div>
-            <div class="label">Categories 分类数</div>
-          </div>
-          <div class="stat-card">
-            <div class="value" id="stat-messages">0</div>
-            <div class="label">New Messages 新留言</div>
-          </div>
-          <div class="stat-card">
-            <div class="value" id="stat-pages">0</div>
-            <div class="label">Pages 页面数</div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">Recent Products 最近产品</span>
-          </div>
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Category</th>
-                  <th>Price</th>
-                  <th>Updated</th>
-                </tr>
-              </thead>
-              <tbody id="recentProducts"></tbody>
-            </table>
-          </div>
-        </div>
+    <main class="main">
+      <div class="page-header">
+        <h1>Products Management</h1>
+        <button class="btn btn-primary" onclick="openModal()">+ Add Product</button>
       </div>
-
-      <!-- Products Page -->
-      <div id="page-products" class="page" style="display:none;">
-        <div class="page-header">
-          <h1>Products 产品管理</h1>
-          <button class="btn btn-primary" onclick="openProductModal()">+ Add Product 添加产品</button>
-        </div>
-        <div class="card">
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Image</th>
-                  <th>Name</th>
-                  <th>Category</th>
-                  <th>Price</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="productsTable"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Categories Page -->
-      <div id="page-categories" class="page" style="display:none;">
-        <div class="page-header">
-          <h1>Categories 分类管理</h1>
-          <button class="btn btn-primary" onclick="openCategoryModal()">+ Add Category 添加分类</button>
-        </div>
-        <div class="card">
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Icon</th>
-                  <th>Name (EN)</th>
-                  <th>Name (ZH)</th>
-                  <th>Slug</th>
-                  <th>Products</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="categoriesTable"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pages Page -->
-      <div id="page-pages" class="page" style="display:none;">
-        <div class="page-header">
-          <h1>Pages 页面管理</h1>
-          <button class="btn btn-primary" onclick="openPageModal()">+ Add Page 添加页面</button>
-        </div>
-        <div class="card">
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Slug</th>
-                  <th>Status</th>
-                  <th>Updated</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="pagesTable"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Messages Page -->
-      <div id="page-messages" class="page" style="display:none;">
-        <div class="page-header">
-          <h1>Messages 留言管理</h1>
-        </div>
-        <div class="card">
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Message</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="messagesTable"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Settings Page -->
-      <div id="page-settings" class="page" style="display:none;">
-        <div class="page-header">
-          <h1>Settings 系统设置</h1>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">Site Settings 网站设置</span>
-          </div>
-          <div id="settingsForm"></div>
-          <button class="btn btn-primary" onclick="saveSettings()">Save Settings 保存设置</button>
-        </div>
-        <div class="card" style="margin-top:16px;">
-          <div class="card-header">
-            <span class="card-title">Change Password 修改密码</span>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Current Password 当前密码</label>
-              <input type="password" id="currentPassword">
-            </div>
-            <div class="form-group">
-              <label>New Password 新密码</label>
-              <input type="password" id="newPassword">
-            </div>
-          </div>
-          <button class="btn btn-primary" onclick="changePassword()">Change Password 修改密码</button>
-        </div>
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Thickness</th>
+              <th>Price</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="productsTable"></tbody>
+        </table>
       </div>
     </main>
   </div>
 </div>
 
-<!-- Product Modal -->
-<div class="modal-overlay" id="productModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h2 id="productModalTitle">Add Product</h2>
-      <button class="modal-close" onclick="closeModal('productModal')">&times;</button>
+<!-- Modal -->
+<div class="card" id="productModal" style="display:none;max-width:500px;margin:20px auto;">
+  <h2 style="margin-bottom:16px;color:#28F064" id="modalTitle">Add Product</h2>
+  <form id="productForm">
+    <input type="hidden" id="productId">
+    <div class="form-row">
+      <div class="form-group"><label>Title*</label><input id="title" required></div>
+      <div class="form-group"><label>Category</label><input id="category"></div>
     </div>
-    <form id="productForm">
-      <input type="hidden" id="productId">
-      <div class="form-row">
-        <div class="form-group">
-          <label>Name (EN) *</label>
-          <input type="text" id="productNameEn" required>
-        </div>
-        <div class="form-group">
-          <label>Name (ZH)</label>
-          <input type="text" id="productNameZh">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Category *</label>
-          <select id="productCategory" required></select>
-        </div>
-        <div class="form-group">
-          <label>Slug *</label>
-          <input type="text" id="productSlug" required>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Tag</label>
-          <input type="text" id="productTag">
-        </div>
-        <div class="form-group">
-          <label>Price</label>
-          <input type="text" id="productPrice" placeholder="From $0.8/m²">
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Description (EN)</label>
-        <textarea id="productDescEn"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Description (ZH)</label>
-        <textarea id="productDescZh"></textarea>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Icon (emoji)</label>
-          <input type="text" id="productIcon" placeholder="🎞️">
-        </div>
-        <div class="form-group">
-          <label>Sort Order</label>
-          <input type="number" id="productSort" value="0">
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;justify-content:flex-end;">
-        <button type="button" class="btn btn-secondary" onclick="closeModal('productModal')">Cancel</button>
-        <button type="submit" class="btn btn-primary">Save</button>
-      </div>
-    </form>
-  </div>
+    <div class="form-group"><label>Description</label><textarea id="description" rows="3"></textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label>Thickness</label><input id="thickness"></div>
+      <div class="form-group"><label>Haze</label><input id="haze"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Gloss</label><input id="gloss"></div>
+      <div class="form-group"><label>Heat Seal</label><input id="heat_seal"></div>
+    </div>
+    <div class="form-group"><label>Image URL</label><input id="image_url"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;">
+      <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+  </form>
 </div>
 
-<!-- Category Modal -->
-<div class="modal-overlay" id="categoryModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h2 id="categoryModalTitle">Add Category</h2>
-      <button class="modal-close" onclick="closeModal('categoryModal')">&times;</button>
-    </div>
-    <form id="categoryForm">
-      <input type="hidden" id="categoryId">
-      <div class="form-row">
-        <div class="form-group">
-          <label>Name (EN) *</label>
-          <input type="text" id="categoryNameEn" required>
-        </div>
-        <div class="form-group">
-          <label>Name (ZH)</label>
-          <input type="text" id="categoryNameZh">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Slug *</label>
-          <input type="text" id="categorySlug" required>
-        </div>
-        <div class="form-group">
-          <label>Icon (emoji)</label>
-          <input type="text" id="categoryIcon" placeholder="🎞️">
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Description (EN)</label>
-        <textarea id="categoryDescEn"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Description (ZH)</label>
-        <textarea id="categoryDescZh"></textarea>
-      </div>
-      <div style="display:flex;gap:10px;justify-content:flex-end;">
-        <button type="button" class="btn btn-secondary" onclick="closeModal('categoryModal')">Cancel</button>
-        <button type="submit" class="btn btn-primary">Save</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- Page Modal -->
-<div class="modal-overlay" id="pageModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h2 id="pageModalTitle">Add Page</h2>
-      <button class="modal-close" onclick="closeModal('pageModal')">&times;</button>
-    </div>
-    <form id="pageForm">
-      <input type="hidden" id="pageId">
-      <div class="form-row">
-        <div class="form-group">
-          <label>Title (EN) *</label>
-          <input type="text" id="pageTitleEn" required>
-        </div>
-        <div class="form-group">
-          <label>Title (ZH)</label>
-          <input type="text" id="pageTitleZh">
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Slug *</label>
-        <input type="text" id="pageSlug" required>
-      </div>
-      <div class="form-group">
-        <label>Content (EN)</label>
-        <textarea id="pageContentEn" style="min-height:150px;"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Content (ZH)</label>
-        <textarea id="pageContentZh" style="min-height:150px;"></textarea>
-      </div>
-      <div style="display:flex;gap:10px;justify-content:flex-end;">
-        <button type="button" class="btn btn-secondary" onclick="closeModal('pageModal')">Cancel</button>
-        <button type="submit" class="btn btn-primary">Save</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
-//
+// Login
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const res = await fetch('/api/auth', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: username.value, password: password.value })
+  });
+  const data = await res.json();
+  if (data.success) {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadProducts();
+  } else {
+    showToast('Invalid credentials', 'error');
+  }
+});
+
+// Load products
+async function loadProducts() {
+  const res = await fetch('/api/products');
+  const data = await res.json();
+  const tbody = document.getElementById('productsTable');
+  tbody.innerHTML = data.products.map(p => `
+    <tr>
+      <td>${p.title}</td>
+      <td>${p.category||'-'}</td>
+      <td>${p.thickness||'-'}</td>
+      <td>${p.price||'-'}</td>
+      <td>
+        <button class="btn btn-sm btn-secondary" onclick="editProduct(${p.id})">Edit</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteProduct(${p.id})">Delete</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// Modal
+function openModal() {
+  document.getElementById('productModal').style.display = 'block';
+  document.getElementById('modalTitle').textContent = 'Add Product';
+  document.getElementById('productForm').reset();
+  document.getElementById('productId').value = '';
+}
+
+function closeModal() {
+  document.getElementById('productModal').style.display = 'none';
+}
+
+// Save product
+document.getElementById('productForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = document.getElementById('productId').value;
+  const body = {
+    title: document.getElementById('title').value,
+    category: document.getElementById('category').value,
+    description: document.getElementById('description').value,
+    thickness: document.getElementById('thickness').value,
+    haze: document.getElementById('haze').value,
+    gloss: document.getElementById('gloss').value,
+    heat_seal: document.getElementById('heat_seal').value,
+    image_url: document.getElementById('image_url').value
+  };
+
+  const url = id ? `/api/products?id=${id}` : '/api/products';
+  const method = id ? 'PUT' : 'POST';
+
+  const res = await fetch(url, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+
+  if (res.ok) {
+    showToast('Product saved!');
+    closeModal();
+    loadProducts();
+  } else {
+    showToast('Error saving product', 'error');
+  }
+});
+
+// Edit product
+async function editProduct(id) {
+  const res = await fetch(`/api/products?id=${id}`);
+  const data = await res.json();
+  const p = data.product;
+
+  document.getElementById('productModal').style.display = 'block';
+  document.getElementById('modalTitle').textContent = 'Edit Product';
+  document.getElementById('productId').value = p.id;
+  document.getElementById('title').value = p.title || '';
+  document.getElementById('category').value = p.category || '';
+  document.getElementById('description').value = p.description || '';
+  document.getElementById('thickness').value = p.thickness || '';
+  document.getElementById('haze').value = p.haze || '';
+  document.getElementById('gloss').value = p.gloss || '';
+  document.getElementById('heat_seal').value = p.heat_seal || '';
+  document.getElementById('image_url').value = p.image_url || '';
+}
+
+// Delete product
+async function deleteProduct(id) {
+  if (!confirm('Delete this product?')) return;
+  await fetch(`/api/products?id=${id}`, { method: 'DELETE' });
+  showToast('Product deleted!');
+  loadProducts();
+}
+
+// Logout
+function logout() {
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('loginPage').style.display = 'flex';
+}
+
+// Toast
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 3000);
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+  // Check if already logged in
+  const token = localStorage.getItem('aec_token');
+  if (token) {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadProducts();
+  }
+});
+</script>
+</body>
+</html>
