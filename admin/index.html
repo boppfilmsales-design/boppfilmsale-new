@@ -240,14 +240,40 @@ function showToast(msg, type = 'success') {
 }
 
 function showTab(name) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  event.target.classList.add('active');
-  document.getElementById('tab-' + name).classList.add('active');
-  const titles = {pages:'页面管理',products:'产品管理',categories:'分类管理',nav:'导航管理',company:'公司信息'};
-  document.getElementById('pageTitle').textContent = titles[name];
+  // Remove active from all tabs and contents
+  var tabs = document.querySelectorAll('.tab');
+  var contents = document.querySelectorAll('.tab-content');
+  for (var i = 0; i < tabs.length; i++) {
+    tabs[i].classList.remove('active');
+  }
+  for (var i = 0; i < contents.length; i++) {
+    contents[i].classList.remove('active');
+  }
+
+  // Find the clicked tab by onclick attribute and activate it
+  var allTabs = document.querySelectorAll('.tab');
+  for (var i = 0; i < allTabs.length; i++) {
+    if (allTabs[i].getAttribute('onclick') && allTabs[i].getAttribute('onclick').indexOf("'" + name + "'") > -1) {
+      allTabs[i].classList.add('active');
+      break;
+    }
+  }
+
+  // Show the corresponding content
+  var target = document.getElementById('tab-' + name);
+  if (target) {
+    target.classList.add('active');
+  }
+
+  // Update page title
+  var titles = {pages:'页面管理',products:'产品管理',categories:'分类管理',nav:'导航管理',company:'公司信息'};
+  document.getElementById('pageTitle').textContent = titles[name] || name;
+
+  // Load data if needed
   if (name === 'products') loadProducts();
   if (name === 'categories') loadCategories();
+  if (name === 'pages') loadPages();
+  if (name === 'company') loadCompany();
 }
 
 // ========== AUTH ==========
