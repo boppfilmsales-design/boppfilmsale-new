@@ -45,13 +45,20 @@
 
 <div class="sidebar">
   <div class="sidebar-brand">AEC 后台系统</div>
-  <div class="menu-item active" onclick="showTab('page-manage', this)">📄 页面内容管理</div>
+  <div class="menu-item active" onclick="showTab('dashboard', this)">📊 仪表盘</div>
+  <div class="menu-item" onclick="showTab('page-manage', this)">📄 页面内容管理</div>
   <div class="menu-item" onclick="showTab('product-manage', this)">📦 产品数据管理</div>
   <div class="menu-item" onclick="showTab('category-manage', this)">🗂️ 分类数据管理</div>
+  <div class="menu-item" onclick="showTab('nav-manage', this)">🔗 导航菜单管理</div>
+  <div class="menu-item" onclick="showTab('about-manage', this)">ℹ️ 关于我们管理</div>
+  <div class="menu-item" onclick="showTab('header-manage', this)">🎯 Header管理</div>
+  <div class="menu-item" onclick="showTab('footer-manage', this)">🦶 Footer管理</div>
+  <div class="menu-item" onclick="showTab('cta-manage', this)">📢 CTA Section管理</div>
   <div class="menu-item" onclick="showTab('company-manage', this)">🏢 公司信息配置</div>
   <div class="menu-item" onclick="showTab('seo-manage', this)">🔍 SEO设置</div>
   <div class="menu-item" onclick="showTab('media-manage', this)">🖼️ 媒体管理</div>
-  <div class="menu-item" onclick="showTab('user-manage', this)">👥 用户管理</div>
+  <div class="menu-item" onclick="showTab('settings-manage', this)">⚙️ 系统设置</div>
+  <div class="menu-item" onclick="showTab('import-manage', this)">📥 导入/导出</div>
   <div class="logout-btn" onclick="location.reload();">🚪 退出安全系统</div>
 </div>
 
@@ -141,10 +148,93 @@
     <div class="header"><h1>管理员用户管理</h1></div>
     <div class="card">
       <div class="card-title">管理员列表</div>
-      <table>
-        <thead><tr><th>用户名</th><th>创建时间</th><th>操作</th></tr></thead>
-        <tbody><tr><td>admin</td><td>2026-06-27</td><td><button class="btn btn-danger" style="padding:3px 8px;font-size:11px;">删除</button></td></tr></tbody>
-      </table>
+      <table><thead><tr><th>用户名</th><th>创建时间</th><th>操作</th></tr></thead><tbody><tr><td>admin</td><td>2026-06-27</td><td><button class="btn btn-danger" style="padding:3px 8px;font-size:11px;">删除</button></td></tr></tbody></table>
+    </div>
+  </div>
+
+  <div id="dashboard" class="tab-panel">
+    <div class="header"><h1>数据仪表盘</h1></div>
+    <div class="card">
+      <div class="card-title">网站统计概览</div>
+      <div class="form-row">
+        <div class="form-group"><label>产品总数</label><input type="text" value="0" readonly></div>
+        <div class="form-group"><label>分类总数</label><input type="text" value="9" readonly></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="nav-manage" class="tab-panel">
+    <div class="header"><h1>导航菜单管理</h1><button class="btn btn-primary" onclick="showNotification('导航菜单已保存！')">保存菜单</button></div>
+    <div class="card">
+      <div class="card-title">主导航菜单</div>
+      <div class="form-group"><label>菜单1</label><input type="text" value="Home / 首页"></div>
+      <div class="form-group"><label>菜单2</label><input type="text" value="About / 关于"></div>
+      <div class="form-group"><label>菜单3</label><input type="text" value="Products / 产品"></div>
+      <div class="form-group"><label>菜单4</label><input type="text" value="Contact / 联系"></div>
+    </div>
+  </div>
+
+  <div id="about-manage" class="tab-panel">
+    <div class="header"><h1>关于我们管理</h1><button class="btn btn-primary" onclick="showNotification('关于我们已保存！')">保存内容</button></div>
+    <div class="card">
+      <div class="card-title">About Us 内容</div>
+      <div class="form-group"><label>标题（英文）</label><input id="about_title_en" type="text"></div>
+      <div class="form-group"><label>标题（中文）</label><input id="about_title_zh" type="text"></div>
+      <div class="form-group"><label>详细描述</label><textarea id="about_content" rows="4"></textarea></div>
+    </div>
+  </div>
+
+  <div id="header-manage" class="tab-panel">
+    <div class="header"><h1>Header 管理</h1><button class="btn btn-primary" onclick="showNotification('Header已保存！')">保存设置</button></div>
+    <div class="card">
+      <div class="card-title">顶部导航设置</div>
+      <div class="form-group"><label>Logo文字</label><input id="header_logo" type="text" value="AEC GROUP"></div>
+      <div class="form-group"><label>联系电话</label><input id="header_phone" type="text" placeholder="+86 18919659471"></div>
+      <div class="form-group"><label>邮箱</label><input id="header_email" type="text" placeholder="sale@aecgroup.com"></div>
+    </div>
+  </div>
+
+  <div id="footer-manage" class="tab-panel">
+    <div class="header"><h1>Footer 管理</h1><button class="btn btn-primary" onclick="showNotification('Footer已保存！')">保存设置</button></div>
+    <div class="card">
+      <div class="card-title">页脚内容设置</div>
+      <div class="form-group"><label>公司名称</label><input id="footer_company" type="text"></div>
+      <div class="form-group"><label>地址</label><input id="footer_address" type="text"></div>
+      <div class="form-group"><label>ICP备案号</label><input id="footer_icp" type="text" placeholder="皖ICP备11005402号"></div>
+    </div>
+  </div>
+
+  <div id="cta-manage" class="tab-panel">
+    <div class="header"><h1>CTA Section 管理</h1><button class="btn btn-primary" onclick="showNotification('CTA已保存！')">保存CTA</button></div>
+    <div class="card">
+      <div class="card-title">行动号召区域</div>
+      <div class="form-group"><label>CTA标题</label><input id="cta_title" type="text" placeholder="Ready to start?"></div>
+      <div class="form-group"><label>CTA描述</label><textarea id="cta_desc" rows="2"></textarea></div>
+      <div class="form-group"><label>按钮文字</label><input id="cta_btn" type="text" placeholder="Get Quote"></div>
+      <div class="form-group"><label>按钮链接</label><input id="cta_link" type="text" placeholder="/contact.html"></div>
+    </div>
+  </div>
+
+  <div id="settings-manage" class="tab-panel">
+    <div class="header"><h1>系统设置</h1><button class="btn btn-primary" onclick="showNotification('系统设置已保存！')">保存设置</button></div>
+    <div class="card">
+      <div class="card-title">网站基本设置</div>
+      <div class="form-group"><label>网站名称</label><input id="site_name" type="text" value="AEC GROUP"></div>
+      <div class="form-group"><label>网站URL</label><input id="site_url" type="text" value="https://boppfilmsale-new.vercel.app"></div>
+      <div class="form-group"><label>管理员邮箱</label><input id="admin_email" type="text"></div>
+    </div>
+  </div>
+
+  <div id="import-manage" class="tab-panel">
+    <div class="header"><h1>数据导入/导出</h1></div>
+    <div class="card">
+      <div class="card-title">导入产品数据</div>
+      <div class="form-group"><label>CSV文件内容</label><textarea id="import_data" rows="5" placeholder="title,category,description,thickness,price"></textarea></div>
+      <button class="btn btn-primary" onclick="showNotification('导入功能开发中...')">导入数据</button>
+    </div>
+    <div class="card">
+      <div class="card-title">导出数据</div>
+      <button class="btn btn-secondary" onclick="showNotification('导出功能开发中...')">导出为CSV</button>
     </div>
   </div>
 
