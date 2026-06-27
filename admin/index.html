@@ -57,6 +57,10 @@
       var u = document.getElementById('username').value.trim();
       var p = document.getElementById('password').value.trim();
       if (u === 'admin' && p === 'admin123') {
+        if (document.getElementById('remember').checked) {
+          localStorage.setItem('aec_user', u);
+          localStorage.setItem('aec_pass', p);
+        }
         document.getElementById('loginPage').style.display = 'none';
         document.getElementById('dashboard').style.display = 'flex';
         loadAll();
@@ -67,6 +71,10 @@
     ">
       <div class="form-group"><label>用户名</label><input type="text" id="username" required></div>
       <div class="form-group"><label>密码</label><input type="password" id="password" required></div>
+      <div class="form-group" style="display:flex;align-items:center;gap:8px;">
+        <input type="checkbox" id="remember" checked style="width:auto;">
+        <label for="remember" style="margin:0;color:#A0AAB0;font-size:13px;">记住登录</label>
+      </div>
       <button type="submit" class="btn btn-primary" style="width:100%">登录</button>
     </form>
   </div>
@@ -232,38 +240,26 @@ async function sql(query) {
 
 // ========== UI ==========
 function showToast(msg, type = 'success') {
-  const t = document.getElementById('toast');
+  var t = document.getElementById('toast');
   t.textContent = msg;
   t.style.background = type === 'error' ? '#e53e3e' : '#28F064';
   t.style.display = 'block';
-  setTimeout(() => t.style.display = 'none', 3000);
+  setTimeout(function() { t.style.display = 'none'; }, 3000);
 }
 
 function showTab(name) {
   // Remove active from all tabs and contents
   var tabs = document.querySelectorAll('.tab');
   var contents = document.querySelectorAll('.tab-content');
-  for (var i = 0; i < tabs.length; i++) {
-    tabs[i].classList.remove('active');
-  }
-  for (var i = 0; i < contents.length; i++) {
-    contents[i].classList.remove('active');
-  }
+  for (var i = 0; i < tabs.length; i++) { tabs[i].classList.remove('active'); }
+  for (var i = 0; i < contents.length; i++) { contents[i].classList.remove('active'); }
 
-  // Find the clicked tab by onclick attribute and activate it
-  var allTabs = document.querySelectorAll('.tab');
-  for (var i = 0; i < allTabs.length; i++) {
-    if (allTabs[i].getAttribute('onclick') && allTabs[i].getAttribute('onclick').indexOf("'" + name + "'") > -1) {
-      allTabs[i].classList.add('active');
-      break;
-    }
-  }
+  // Activate the corresponding tab and content
+  var tabBtn = document.querySelector('.tab[onclick*="' + name + '"]');
+  if (tabBtn) tabBtn.classList.add('active');
 
-  // Show the corresponding content
   var target = document.getElementById('tab-' + name);
-  if (target) {
-    target.classList.add('active');
-  }
+  if (target) target.classList.add('active');
 
   // Update page title
   var titles = {pages:'页面管理',products:'产品管理',categories:'分类管理',nav:'导航管理',company:'公司信息'};
@@ -476,5 +472,28 @@ async function loadCompany() {
 
 async function saveCompany() {
   try {
-    const fields = ['name', 'slogan', 'year', 'employees'];
-    for (const
+    var name = document.getElementById('company_name').value;
+    var slogan = document.getElementById('company_slogan').value;
+    var year = document.getElementById('company_year').value;
+    var employees = document.getElementById('company_employees').value;
+    await sql(`INSERT INTO site_settings (key, value) VALUES ('company_name', '${name}') ON CONFLICT (key) DO UPDATE SET value='${name}'`);
+    await sql(`INSERT INTO site_settings (key, value) VALUES ('company_slogan', '${slogan}') ON CONFLICT (key) DO UPDATE SET value='${slogan}'`);
+    await sql(`INSERT INTO site_settings (key, value) VALUES ('company_year', '${year}') ON CONFLICT (key) DO UPDATE SET value='${year}'`);
+    await sql(`INSERT INTO site_settings (key, value) VALUES ('company_employees', '${employees}') ON CONFLICT (key) DO UPDATE SET value='${employees}'`);
+    showToast('保存成功！');
+  } catch (e) { showToast('保存失败: ' + e.message, 'error'); }
+}
+
+// ========== AUTO LOGIN ==========
+(function() {
+  var savedUser = localStorage.getItem('aec_user');
+  var savedPass = localStorage.getItem('aec_pass');
+  if (savedUser && savedPass) {
+    document.getElementById('username').value = savedUser;
+    document.getElementById('password').value = savedPass;
+    document.getElementById('remember').checked = true;
+  }
+})();
+
+// ========== INIT ==========
+loadCategories();
