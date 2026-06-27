@@ -3,71 +3,213 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>后台管理 - AEC GROUP</title>
+  <title>网站后台管理 - AEC GROUP</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Microsoft YaHei', sans-serif; background: #0A190F; color: #fff; min-height: 100vh; padding: 20px; }
-    h1 { color: #28F064; margin-bottom: 20px; text-align: center; }
-    .container { max-width: 1200px; margin: 0 auto; }
-    .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(40,240,100,0.2); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
-    th { color: #28F064; font-size: 14px; }
-    td { font-size: 14px; }
-    .btn { padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; font-size: 14px; }
+    body { font-family: 'Microsoft YaHei', sans-serif; background: #0A190F; color: #fff; min-height: 100vh; }
+    .login-wrap { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+    .login-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(40,240,100,0.2); border-radius: 16px; padding: 40px; width: 100%; max-width: 380px; }
+    .login-card h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; color: #28F064; }
+    .login-card .sub { color: #A0AAB0; font-size: 14px; margin-bottom: 24px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; color: #A0AAB0; font-size: 13px; margin-bottom: 6px; }
+    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 14px; }
+    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #28F064; }
+    .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s; }
     .btn-primary { background: #28F064; color: #0A190F; }
+    .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; }
     .btn-danger { background: #e53e3e; color: #fff; margin-left: 8px; }
-    .btn-edit { background: #3498db; color: #fff; margin-right: 8px; }
-    input, textarea { width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff; margin-bottom: 10px; }
-    label { color: #A0AAB0; font-size: 13px; display: block; margin-bottom: 4px; }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+    .dashboard { display: none; }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar { width: 220px; background: rgba(255,255,255,0.02); border-right: 1px solid rgba(255,255,255,0.05); padding: 20px 0; position: fixed; height: 100vh; overflow-y: auto; }
+    .sidebar h2 { padding: 0 20px 20px; font-size: 16px; color: #28F064; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 16px; }
+    .nav-item { display: block; padding: 10px 20px; color: #A0AAB0; text-decoration: none; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+    .nav-item:hover, .nav-item.active { background: rgba(40,240,100,0.1); color: #28F064; }
+    .main { flex: 1; margin-left: 220px; padding: 20px; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .page-header h1 { font-size: 20px; }
+    .card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+    .card h3 { color: #28F064; margin-bottom: 12px; font-size: 16px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; }
+    th { color: #A0AAB0; font-size: 12px; text-transform: uppercase; }
+    .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab { padding: 10px 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; color: #A0AAB0; font-size: 14px; }
+    .tab.active { background: rgba(40,240,100,0.2); border-color: #28F064; color: #28F064; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .toast { position: fixed; top: 20px; right: 20px; padding: 12px 20px; background: #28F064; color: #0A190F; border-radius: 8px; display: none; font-weight: bold; z-index: 1000; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    .toast { position: fixed; top: 20px; right: 20px; padding: 12px 20px; background: #28F064; color: #0A190F; border-radius: 8px; display: none; font-weight: bold; }
-    .actions { margin-top: 20px; text-align: center; }
+    .full-width { grid-column: 1 / -1; }
+    .actions { margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end; }
   </style>
 </head>
 <body>
-<div class="container">
-  <h1>后台管理</h1>
-  <div class="card">
-    <div class="actions">
-      <button class="btn btn-primary" onclick="showAddForm()">+ 添加产品</button>
-    </div>
-    <table id="productsTable">
-      <thead><tr><th>产品名称</th><th>分类</th><th>厚度</th><th>价格</th><th>操作</th></tr></thead>
-      <tbody></tbody>
-    </table>
+
+<!-- Login -->
+<div class="login-wrap" id="loginPage">
+  <div class="login-card">
+    <h1>AEC GROUP</h1>
+    <p class="sub">网站后台管理系统</p>
+    <form id="loginForm">
+      <div class="form-group"><label>用户名</label><input type="text" id="username" required></div>
+      <div class="form-group"><label>密码</label><input type="password" id="password" required></div>
+      <button type="submit" class="btn btn-primary" style="width:100%">登录</button>
+    </form>
   </div>
 </div>
 
-<!-- 添加产品表单 -->
-<div class="card" id="addForm" style="display:none;">
-  <h2 style="color:#28F064;margin-bottom:15px;">添加产品</h2>
-  <div class="form-row">
-    <div><label>产品名称</label><input id="title" placeholder="BOPP Plain Film"></div>
-    <div><label>分类</label><input id="category" placeholder="BOPP Film"></div>
+<!-- Dashboard -->
+<div class="dashboard" id="dashboard">
+  <div class="layout">
+    <nav class="sidebar">
+      <h2>AEC 后台</h2>
+      <a class="nav-item active" onclick="showTab('pages')">📄 页面管理</a>
+      <a class="nav-item" onclick="showTab('products')">📦 产品管理</a>
+      <a class="nav-item" onclick="showTab('categories')">📁 分类管理</a>
+      <a class="nav-item" onclick="showTab('nav')">🔗 导航菜单</a>
+      <a class="nav-item" onclick="showTab('company')">🏢 公司信息</a>
+      <a class="nav-item" onclick="logout()" style="margin-top:30px;color:#e53e3e;">🚪 退出登录</a>
+    </nav>
+    <main class="main">
+      <div class="page-header">
+        <h1 id="pageTitle">页面管理</h1>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <div class="tab active" onclick="showTab('pages')">页面内容</div>
+        <div class="tab" onclick="showTab('products')">产品</div>
+        <div class="tab" onclick="showTab('categories')">分类</div>
+        <div class="tab" onclick="showTab('nav')">导航</div>
+        <div class="tab" onclick="showTab('company')">公司信息</div>
+      </div>
+
+      <!-- 页面管理 -->
+      <div class="tab-content active" id="tab-pages">
+        <div class="card">
+          <h3>首页内容</h3>
+          <div class="form-group"><label>Hero 标题（英文）</label><input id="hero_title_en" placeholder="Film Technology Redefined"></div>
+          <div class="form-group"><label>Hero 标题（中文）</label><input id="hero_title_zh" placeholder="薄膜技术重新定义"></div>
+          <div class="form-group"><label>Hero 描述</label><textarea id="hero_desc" rows="2"></textarea></div>
+          <div class="actions"><button class="btn btn-primary" onclick="savePage('home')">保存</button></div>
+        </div>
+        <div class="card">
+          <h3>关于我们</h3>
+          <div class="form-group"><label>公司简介（英文）</label><textarea id="about_en" rows="3"></textarea></div>
+          <div class="form-group"><label>公司简介（中文）</label><textarea id="about_zh" rows="3"></textarea></div>
+          <div class="actions"><button class="btn btn-primary" onclick="savePage('about')">保存</button></div>
+        </div>
+        <div class="card">
+          <h3>联系方式</h3>
+          <div class="form-row">
+            <div class="form-group"><label>邮箱</label><input id="contact_email" placeholder="sale@aecgroup.com"></div>
+            <div class="form-group"><label>电话</label><input id="contact_phone" placeholder="+86 18919659471"></div>
+          </div>
+          <div class="form-group"><label>地址</label><input id="contact_address" placeholder="No.1158 Huizhou Ave."></div>
+          <div class="actions"><button class="btn btn-primary" onclick="savePage('contact')">保存</button></div>
+        </div>
+      </div>
+
+      <!-- 产品管理 -->
+      <div class="tab-content" id="tab-products">
+        <div class="card">
+          <div class="page-header" style="margin-bottom:0;">
+            <h3>产品列表</h3>
+            <button class="btn btn-primary" onclick="showProductForm()">+ 添加产品</button>
+          </div>
+          <table>
+            <thead><tr><th>名称</th><th>分类</th><th>厚度</th><th>操作</th></tr></thead>
+            <tbody id="productsTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 分类管理 -->
+      <div class="tab-content" id="tab-categories">
+        <div class="card">
+          <div class="page-header" style="margin-bottom:0;">
+            <h3>产品分类</h3>
+            <button class="btn btn-primary" onclick="showCategoryForm()">+ 添加分类</button>
+          </div>
+          <table>
+            <thead><tr><th>分类名称（英文）</th><th>分类名称（中文）</th><th>产品数</th><th>操作</th></tr></thead>
+            <tbody id="categoriesTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 导航管理 -->
+      <div class="tab-content" id="tab-nav">
+        <div class="card">
+          <h3>导航菜单</h3>
+          <table>
+            <thead><tr><th>菜单名称</th><th>链接</th><th>排序</th><th>操作</th></tr></thead>
+            <tbody id="navTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 公司信息 -->
+      <div class="tab-content" id="tab-company">
+        <div class="card">
+          <h3>公司基本信息</h3>
+          <div class="form-group"><label>公司名称</label><input id="company_name" placeholder="AEC GROUP"></div>
+          <div class="form-group"><label>Slogan</label><input id="company_slogan" placeholder="Film Technology Redefined"></div>
+          <div class="form-group"><label>成立年份</label><input id="company_year" placeholder="2006"></div>
+          <div class="form-group"><label>员工数量</label><input id="company_employees" placeholder="1200"></div>
+          <div class="actions"><button class="btn btn-primary" onclick="saveCompany()">保存</button></div>
+        </div>
+      </div>
+    </main>
   </div>
+</div>
+
+<!-- 产品表单弹窗 -->
+<div class="card" id="productForm" style="display:none;max-width:500px;margin:20px auto;">
+  <h3 id="productFormTitle">添加产品</h3>
+  <input type="hidden" id="productId">
   <div class="form-row">
-    <div><label>厚度</label><input id="thickness" placeholder="3-75μm"></div>
-    <div><label>价格</label><input id="price" placeholder="From $0.8/m²"></div>
+    <div class="form-group"><label>产品名称*</label><input id="product_title" required></div>
+    <div class="form-group"><label>分类</label><select id="product_category"></select></div>
   </div>
-  <label>描述</label>
-  <textarea id="description" rows="3" placeholder="产品描述..."></textarea>
+  <div class="form-group"><label>描述</label><textarea id="product_desc" rows="2"></textarea></div>
+  <div class="form-row">
+    <div class="form-group"><label>厚度</label><input id="product_thickness" placeholder="3-75μm"></div>
+    <div class="form-group"><label>价格</label><input id="product_price" placeholder="From $0.8/m²"></div>
+  </div>
+  <div class="form-group"><label>图片 URL</label><input id="product_image" placeholder="https://..."></div>
   <div class="actions">
+    <button class="btn btn-secondary" onclick="hideProductForm()">取消</button>
     <button class="btn btn-primary" onclick="saveProduct()">保存</button>
-    <button class="btn" style="background:#666;color:#fff;" onclick="hideAddForm()">取消</button>
+  </div>
+</div>
+
+<!-- 分类表单弹窗 -->
+<div class="card" id="categoryForm" style="display:none;max-width:400px;margin:20px auto;">
+  <h3>添加分类</h3>
+  <div class="form-group"><label>分类名称（英文）*</label><input id="category_name_en" required></div>
+  <div class="form-group"><label>分类名称（中文）</label><input id="category_name_zh"></div>
+  <div class="actions">
+    <button class="btn btn-secondary" onclick="hideCategoryForm()">取消</button>
+    <button class="btn btn-primary" onclick="saveCategory()">保存</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
+// ========== CONFIG ==========
 const API_KEY = 'napi_ed806cd64eqqmzg2bcu12xkhh55wcsrjjzls65zpk0ucnd5c89ye0pb72bknznc9';
-const PROJECT_ID = 'ep-young-rice-af65ccr8';
-const DB = 'neondb';
+const PROJECT = 'ep-young-rice-af65ccr8';
+const API = `https://${PROJECT}.neon.tech/api/v1/sql`;
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'admin123';
 
+// ========== DB ==========
 async function sql(query) {
-  const url = `https://${PROJECT_ID}.neon.tech/api/v1/sql`;
-  const res = await fetch(url, {
+  const res = await fetch(API, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'apikey': API_KEY, 'Authorization': 'Bearer ' + API_KEY },
     body: JSON.stringify({ query, params: [] })
@@ -76,6 +218,7 @@ async function sql(query) {
   return await res.json();
 }
 
+// ========== UI ==========
 function showToast(msg, type = 'success') {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -84,75 +227,214 @@ function showToast(msg, type = 'success') {
   setTimeout(() => t.style.display = 'none', 3000);
 }
 
-function showAddForm() {
-  document.getElementById('addForm').style.display = 'block';
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  const titles = {pages:'页面管理',products:'产品管理',categories:'分类管理',nav:'导航管理',company:'公司信息'};
+  document.getElementById('pageTitle').textContent = titles[name];
+  if (name === 'products') loadProducts();
+  if (name === 'categories') loadCategories();
 }
 
-function hideAddForm() {
-  document.getElementById('addForm').style.display = 'none';
+// ========== AUTH ==========
+document.getElementById('loginForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (username.value === ADMIN_USER && password.value === ADMIN_PASS) {
+    loginPage.style.display = 'none';
+    dashboard.style.display = 'block';
+    loadAll();
+  } else {
+    showToast('用户名或密码错误', 'error');
+  }
+});
+
+function logout() {
+  dashboard.style.display = 'none';
+  loginPage.style.display = 'flex';
 }
 
+// ========== LOAD ALL ==========
+async function loadAll() {
+  await loadPages();
+  await loadProducts();
+  await loadCategories();
+  await loadCompany();
+}
+
+// ========== PAGES ==========
+async function loadPages() {
+  try {
+    const data = await sql("SELECT * FROM pages WHERE slug IN ('home','about','contact')");
+    const rows = data.response || [];
+    rows.forEach(r => {
+      if (r.slug === 'home') {
+        document.getElementById('hero_title_en').value = r.title_en || '';
+        document.getElementById('hero_title_zh').value = r.title_zh || '';
+        document.getElementById('hero_desc').value = r.content_en || '';
+      } else if (r.slug === 'about') {
+        document.getElementById('about_en').value = r.content_en || '';
+        document.getElementById('about_zh').value = r.content_zh || '';
+      } else if (r.slug === 'contact') {
+        const specs = r.specs || {};
+        document.getElementById('contact_email').value = specs.email || '';
+        document.getElementById('contact_phone').value = specs.phone || '';
+        document.getElementById('contact_address').value = specs.address || '';
+      }
+    });
+  } catch (e) { console.error(e); }
+}
+
+async function savePage(slug) {
+  try {
+    let query;
+    if (slug === 'home') {
+      const titleEn = document.getElementById('hero_title_en').value;
+      const titleZh = document.getElementById('hero_title_zh').value;
+      const desc = document.getElementById('hero_desc').value;
+      query = `INSERT INTO pages (slug, title_en, title_zh, content_en) VALUES ('home', '${titleEn}', '${titleZh}', '${desc}') ON CONFLICT (slug) DO UPDATE SET title_en='${titleEn}', title_zh='${titleZh}', content_en='${desc}'`;
+    } else if (slug === 'about') {
+      const en = document.getElementById('about_en').value;
+      const zh = document.getElementById('about_zh').value;
+      query = `INSERT INTO pages (slug, content_en, content_zh) VALUES ('about', '${en}', '${zh}') ON CONFLICT (slug) DO UPDATE SET content_en='${en}', content_zh='${zh}'`;
+    } else if (slug === 'contact') {
+      const email = document.getElementById('contact_email').value;
+      const phone = document.getElementById('contact_phone').value;
+      const address = document.getElementById('contact_address').value;
+      query = `INSERT INTO pages (slug, specs) VALUES ('contact', '{"email":"${email}","phone":"${phone}","address":"${address}"}'::jsonb) ON CONFLICT (slug) DO UPDATE SET specs='{"email":"${email}","phone":"${phone}","address":"${address}"}'::jsonb`;
+    }
+    await sql(query);
+    showToast('保存成功！');
+  } catch (e) { showToast('保存失败: ' + e.message, 'error'); }
+}
+
+// ========== PRODUCTS ==========
 async function loadProducts() {
   try {
-    const data = await sql('SELECT * FROM products WHERE is_active = true ORDER BY sort_order ASC');
-    const tbody = document.querySelector('#productsTable tbody');
+    const data = await sql('SELECT p.*, c.name_en as cat_name FROM products p LEFT JOIN categories c ON p.category_id = c.id ORDER BY p.sort_order ASC');
+    const tbody = document.getElementById('productsTable');
     tbody.innerHTML = (data.response || []).map(p => `
       <tr>
         <td>${p.title}</td>
-        <td>${p.category || '-'}</td>
+        <td>${p.category || p.cat_name || '-'}</td>
         <td>${p.thickness || '-'}</td>
-        <td>${p.price || '-'}</td>
-        <td>
-          <button class="btn btn-danger" onclick="deleteProduct(${p.id})">删除</button>
-        </td>
+        <td><button class="btn btn-sm btn-danger" onclick="deleteProduct(${p.id})">删除</button></td>
       </tr>
     `).join('');
-  } catch (e) {
-    showToast('加载失败: ' + e.message, 'error');
-  }
+    await loadCategories();
+  } catch (e) { console.error(e); }
+}
+
+function showProductForm() {
+  document.getElementById('productForm').style.display = 'block';
+  document.getElementById('productFormTitle').textContent = '添加产品';
+  document.getElementById('productId').value = '';
+  document.getElementById('product_title').value = '';
+  document.getElementById('product_desc').value = '';
+  document.getElementById('product_thickness').value = '';
+  document.getElementById('product_price').value = '';
+  document.getElementById('product_image').value = '';
+  const catSelect = document.getElementById('product_category');
+  catSelect.innerHTML = '<option value="">选择分类</option>';
+  categories.forEach(c => catSelect.innerHTML += `<option value="${c.id}">${c.name_en}</option>`);
+}
+
+function hideProductForm() {
+  document.getElementById('productForm').style.display = 'none';
 }
 
 async function saveProduct() {
-  const body = {
-    title: document.getElementById('title').value,
-    category: document.getElementById('category').value,
-    thickness: document.getElementById('thickness').value,
-    price: document.getElementById('price').value,
-    description: document.getElementById('description').value,
-    is_active: true,
-    sort_order: 0
-  };
-
   try {
-    await sql(`INSERT INTO products (title, category, thickness, price, description, is_active, sort_order) VALUES ('${body.title}', '${body.category}', '${body.thickness}', '${body.price}', '${body.description}', true, 0)`);
+    const id = document.getElementById('productId').value;
+    const title = document.getElementById('product_title').value;
+    const categoryId = document.getElementById('product_category').value;
+    const desc = document.getElementById('product_desc').value;
+    const thickness = document.getElementById('product_thickness').value;
+    const price = document.getElementById('product_price').value;
+    const image = document.getElementById('product_image').value;
+
+    if (!title) { showToast('请输入产品名称', 'error'); return; }
+
+    if (id) {
+      await sql(`UPDATE products SET title='${title}', category_id=${categoryId||'NULL'}, description='${desc}', thickness='${thickness}', price='${price}', image_url='${image}' WHERE id=${id}`);
+    } else {
+      await sql(`INSERT INTO products (title, category_id, description, thickness, price, image_url, is_active, sort_order) VALUES ('${title}', ${categoryId||'NULL'}, '${desc}', '${thickness}', '${price}', '${image}', true, 0)`);
+    }
     showToast('保存成功！');
-    hideAddForm();
+    hideProductForm();
     loadProducts();
-  } catch (e) {
-    showToast('保存失败: ' + e.message, 'error');
-  }
+  } catch (e) { showToast('保存失败: ' + e.message, 'error'); }
 }
 
 async function deleteProduct(id) {
   if (!confirm('确定删除？')) return;
-  try {
-    await sql(`DELETE FROM products WHERE id = ${id}`);
-    showToast('删除成功！');
-    loadProducts();
-  } catch (e) {
-    showToast('删除失败: ' + e.message, 'error');
-  }
+  await sql(`DELETE FROM products WHERE id=${id}`);
+  showToast('删除成功！');
+  loadProducts();
 }
 
-// 初始化
-window.onload = function() {
-  // 检查 users 表是否存在
-  sql('SELECT COUNT(*) FROM users').then(() => {
-    loadProducts();
-  }).catch(e => {
-    showToast('数据库连接失败，请检查 API Key', 'error');
-  });
-};
-</script>
-</body>
-</html>
+// ========== CATEGORIES ==========
+let categories = [];
+
+async function loadCategories() {
+  try {
+    const data = await sql('SELECT c.*, (SELECT COUNT(*) FROM products WHERE category_id=c.id) as cnt FROM categories c ORDER BY c.sort_order ASC');
+    categories = data.response || [];
+    const tbody = document.getElementById('categoriesTable');
+    tbody.innerHTML = categories.map(c => `
+      <tr>
+        <td>${c.name_en}</td>
+        <td>${c.name_zh || '-'}</td>
+        <td>${c.cnt || 0}</td>
+        <td><button class="btn btn-sm btn-danger" onclick="deleteCategory(${c.id})">删除</button></td>
+      </tr>
+    `).join('');
+  } catch (e) { console.error(e); }
+}
+
+function showCategoryForm() {
+  document.getElementById('categoryForm').style.display = 'block';
+  document.getElementById('category_name_en').value = '';
+  document.getElementById('category_name_zh').value = '';
+}
+
+function hideCategoryForm() {
+  document.getElementById('categoryForm').style.display = 'none';
+}
+
+async function saveCategory() {
+  try {
+    const nameEn = document.getElementById('category_name_en').value;
+    const nameZh = document.getElementById('category_name_zh').value;
+    if (!nameEn) { showToast('请输入分类名称', 'error'); return; }
+    await sql(`INSERT INTO categories (name_en, name_zh, sort_order) VALUES ('${nameEn}', '${nameZh}', ${categories.length})`);
+    showToast('保存成功！');
+    hideCategoryForm();
+    loadCategories();
+  } catch (e) { showToast('保存失败: ' + e.message, 'error'); }
+}
+
+async function deleteCategory(id) {
+  if (!confirm('确定删除？')) return;
+  await sql(`DELETE FROM categories WHERE id=${id}`);
+  showToast('删除成功！');
+  loadCategories();
+}
+
+// ========== COMPANY ==========
+async function loadCompany() {
+  try {
+    const data = await sql("SELECT * FROM site_settings WHERE key LIKE 'company_%'");
+    (data.response || []).forEach(r => {
+      const key = r.key.replace('company_', '');
+      const el = document.getElementById('company_' + key);
+      if (el) el.value = r.value;
+    });
+  } catch (e) { console.error(e); }
+}
+
+async function saveCompany() {
+  try {
+    const fields = ['name', 'slogan', 'year', 'employees'];
+    for (const
