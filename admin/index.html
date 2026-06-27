@@ -49,6 +49,9 @@
   <div class="menu-item" onclick="showTab('product-manage', this)">📦 产品数据管理</div>
   <div class="menu-item" onclick="showTab('category-manage', this)">🗂️ 分类数据管理</div>
   <div class="menu-item" onclick="showTab('company-manage', this)">🏢 公司信息配置</div>
+  <div class="menu-item" onclick="showTab('seo-manage', this)">🔍 SEO设置</div>
+  <div class="menu-item" onclick="showTab('media-manage', this)">🖼️ 媒体管理</div>
+  <div class="menu-item" onclick="showTab('user-manage', this)">👥 用户管理</div>
   <div class="logout-btn" onclick="location.reload();">🚪 退出安全系统</div>
 </div>
 
@@ -111,6 +114,37 @@
       <div class="card-title">关于我们 (About Us)</div>
       <div class="form-group"><label>企业简介（英文）</label><textarea id="comp_desc_en" rows="4"></textarea></div>
       <div class="form-group"><label>企业简介（中文）</label><textarea id="comp_desc_zh" rows="4"></textarea></div>
+    </div>
+  </div>
+
+  <div id="seo-manage" class="tab-panel">
+    <div class="header"><h1>SEO 搜索引擎优化</h1><button class="btn btn-primary" onclick="showNotification('SEO设置已保存！')">保存SEO设置</button></div>
+    <div class="card">
+      <div class="card-title">Meta 标签设置</div>
+      <div class="form-group"><label>网站标题 (Title)</label><input id="seo_title" type="text" placeholder="AEC GROUP - BOPP Film Manufacturer"></div>
+      <div class="form-group"><label>网站描述 (Description)</label><textarea id="seo_desc" rows="2" placeholder="Leading manufacturer of BOPP, BOPET, CPP packaging films..."></textarea></div>
+      <div class="form-group"><label>关键词 (Keywords)</label><input id="seo_keywords" type="text" placeholder="BOPP film, packaging film, AEC GROUP"></div>
+    </div>
+  </div>
+
+  <div id="media-manage" class="tab-panel">
+    <div class="header"><h1>媒体资源管理</h1></div>
+    <div class="card">
+      <div class="card-title">图片资源库</div>
+      <div class="form-group"><label>上传图片 URL</label><input id="media_url" type="text" placeholder="https://example.com/image.jpg"></div>
+      <div class="form-group"><label>图片说明</label><input id="media_alt" type="text" placeholder="图片描述文字"></div>
+      <button class="btn btn-primary" onclick="showNotification('媒体资源已添加！')">添加到资源库</button>
+    </div>
+  </div>
+
+  <div id="user-manage" class="tab-panel">
+    <div class="header"><h1>管理员用户管理</h1></div>
+    <div class="card">
+      <div class="card-title">管理员列表</div>
+      <table>
+        <thead><tr><th>用户名</th><th>创建时间</th><th>操作</th></tr></thead>
+        <tbody><tr><td>admin</td><td>2026-06-27</td><td><button class="btn btn-danger" style="padding:3px 8px;font-size:11px;">删除</button></td></tr></tbody>
+      </table>
     </div>
   </div>
 
