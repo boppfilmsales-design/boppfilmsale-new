@@ -241,6 +241,8 @@ function showTab(name) {
 // ========== AUTH ==========
 document.getElementById('loginForm').addEventListener('submit', (e) => {
   e.preventDefault();
+  const username = document.getElementById('username');
+  const password = document.getElementById('password');
   if (username.value === ADMIN_USER && password.value === ADMIN_PASS) {
     loginPage.style.display = 'none';
     dashboard.style.display = 'block';
