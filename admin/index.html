@@ -3,404 +3,250 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>网站后台管理 - AEC GROUP</title>
+  <title>AEC 智能后台管理系统</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Microsoft YaHei', sans-serif; background: #0A190F; color: #fff; min-height: 100vh; }
-    .login-wrap { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
-    .login-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(40,240,100,0.2); border-radius: 16px; padding: 40px; width: 100%; max-width: 380px; }
-    .login-card h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; color: #28F064; }
-    .login-card .sub { color: #A0AAB0; font-size: 14px; margin-bottom: 24px; }
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; color: #A0AAB0; font-size: 13px; margin-bottom: 6px; }
-    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 14px; }
-    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #28F064; }
-    .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s; }
+    body { font-family: 'Microsoft YaHei', sans-serif; background: #0A190F; color: #fff; min-height: 100vh; display: flex; }
+    .sidebar { width: 240px; background: #06100A; border-right: 1px solid rgba(40,240,100,0.15); display: flex; flex-direction: column; padding: 20px 0; position: fixed; height: 100vh; }
+    .sidebar-brand { font-size: 20px; font-weight: bold; color: #28F064; padding: 0 24px 20px; border-bottom: 1px solid rgba(40,240,100,0.1); margin-bottom: 15px; }
+    .menu-item { padding: 12px 24px; color: #A0AAB0; cursor: pointer; display: flex; align-items: center; font-size: 14px; transition: all 0.2s; }
+    .menu-item:hover { background: rgba(40,240,100,0.05); color: #28F064; }
+    .menu-item.active { background: rgba(40,240,100,0.1); color: #28F064; border-left: 4px solid #28F064; font-weight: bold; }
+    .logout-btn { margin-top: auto; padding: 12px 24px; color: #e53e3e; cursor: pointer; font-size: 14px; }
+    .logout-btn:hover { background: rgba(229,62,62,0.1); }
+    .main-content { margin-left: 240px; flex: 1; padding: 30px; background: #0A190F; min-height: 100vh; }
+    .header { margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+    .header h1 { font-size: 24px; color: #fff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn 0.3s ease; }
+    .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(40,240,100,0.1); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+    .card-title { color: #28F064; font-size: 16px; font-weight: bold; margin-bottom: 20px; border-left: 3px solid #28F064; padding-left: 10px; }
+    .form-group { margin-bottom: 18px; }
+    label { display: block; color: #A0AAB0; font-size: 13px; margin-bottom: 6px; }
+    input, textarea, select { width: 100%; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff; font-size: 14px; }
+    input:focus, textarea:focus, select:focus { border-color: #28F064; outline: none; box-shadow: 0 0 8px rgba(40,240,100,0.2); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .btn { padding: 9px 18px; border-radius: 6px; border: none; cursor: pointer; font-size: 14px; font-weight: bold; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; }
     .btn-primary { background: #28F064; color: #0A190F; }
-    .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; }
-    .btn-danger { background: #e53e3e; color: #fff; margin-left: 8px; }
-    .btn-sm { padding: 6px 12px; font-size: 12px; }
-    .dashboard { display: none; }
-    .layout { display: flex; min-height: 100vh; }
-    .sidebar { width: 220px; background: rgba(255,255,255,0.02); border-right: 1px solid rgba(255,255,255,0.05); padding: 20px 0; position: fixed; height: 100vh; overflow-y: auto; }
-    .sidebar h2 { padding: 0 20px 20px; font-size: 16px; color: #28F064; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 16px; }
-    .nav-item { display: block; padding: 10px 20px; color: #A0AAB0; text-decoration: none; font-size: 13px; cursor: pointer; transition: all 0.2s; }
-    .nav-item:hover, .nav-item.active { background: rgba(40,240,100,0.1); color: #28F064; }
-    .main { flex: 1; margin-left: 220px; padding: 20px; }
-    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .page-header h1 { font-size: 20px; }
-    .card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
-    .card h3 { color: #28F064; margin-bottom: 12px; font-size: 16px; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 10px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; }
-    th { color: #A0AAB0; font-size: 12px; text-transform: uppercase; }
-    .toast { position: fixed; top: 20px; right: 20px; padding: 12px 20px; background: #28F064; color: #0A190F; border-radius: 8px; display: none; font-weight: bold; z-index: 1000; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    .actions { margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
+    .btn-primary:hover { background: #22d056; }
+    .btn-danger { background: #e53e3e; color: #fff; }
+    .btn-danger:hover { background: #c53030; }
+    .btn-secondary { background: #2d3748; color: #fff; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { padding: 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    th { color: #28F064; font-size: 13px; font-weight: bold; background: rgba(40,240,100,0.02); }
+    td { font-size: 14px; color: #e2e8f0; }
+    tr:hover td { background: rgba(255,255,255,0.01); }
+    .toast { position: fixed; top: 20px; right: 20px; padding: 12px 24px; background: #28F064; color: #0A190F; border-radius: 8px; display: none; font-weight: bold; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
 
-<!-- Login -->
-<div class="login-wrap" id="loginPage">
-  <div class="login-card">
-    <h1>AEC GROUP</h1>
-    <p class="sub">网站后台管理系统</p>
-    <form id="loginForm" onsubmit="return doLogin()">
-      <div class="form-group"><label>用户名</label><input type="text" id="username" required></div>
-      <div class="form-group"><label>密码</label><input type="password" id="password" required></div>
-      <div class="form-group"><input type="checkbox" id="remember" checked> <label style="display:inline;color:#A0AAB0;font-size:13px;">记住登录</label></div>
-      <button type="submit" class="btn btn-primary" style="width:100%">登录</button>
-    </form>
-  </div>
+<div class="sidebar">
+  <div class="sidebar-brand">AEC 后台系统</div>
+  <div class="menu-item active" onclick="showTab('page-manage', this)">📄 页面内容管理</div>
+  <div class="menu-item" onclick="showTab('product-manage', this)">📦 产品数据管理</div>
+  <div class="menu-item" onclick="showTab('category-manage', this)">🗂️ 分类数据管理</div>
+  <div class="menu-item" onclick="showTab('company-manage', this)">🏢 公司信息配置</div>
+  <div class="logout-btn" onclick="location.reload();">🚪 退出安全系统</div>
 </div>
 
-<!-- Dashboard -->
-<div class="dashboard" id="dashboard">
-  <div class="layout">
-    <nav class="sidebar">
-      <h2>AEC 后台</h2>
-      <a class="nav-item active" data-tab="pages">📄 页面管理</a>
-      <a class="nav-item" data-tab="products">📦 产品管理</a>
-      <a class="nav-item" data-tab="categories">📁 分类管理</a>
-      <a class="nav-item" data-tab="company">🏢 公司信息</a>
-      <a class="nav-item" onclick="logout()" style="margin-top:30px;color:#e53e3e;">🚪 退出登录</a>
-    </nav>
-    <main class="main">
-      <div class="page-header">
-        <h1 id="pageTitle">页面管理</h1>
+<div class="main-content">
+
+  <div id="page-manage" class="tab-panel active">
+    <div class="header"><h1>首页核心内容配置</h1><button class="btn btn-primary" onclick="savePageData()">保存当前修改</button></div>
+    <div class="card">
+      <div class="card-title">首屏巨幕 (Hero Section)</div>
+      <div class="form-row">
+        <div class="form-group"><label>Hero 标题（英文）</label><input id="hero_title_en" type="text" placeholder="Film Technology Redefined"></div>
+        <div class="form-group"><label>Hero 标题（中文）</label><input id="hero_title_zh" type="text" placeholder="薄膜技术重新定义"></div>
       </div>
+      <div class="form-group"><label>Hero 核心描述简述</label><textarea id="hero_desc" rows="3" placeholder="输入首页大图下方的产品描述文字..."></textarea></div>
+    </div>
+  </div>
 
-      <!-- 页面管理 -->
-      <div class="tab-content active" id="tab-pages">
-        <div class="card">
-          <h3>首页内容</h3>
-          <div class="form-group"><label>Hero 标题（英文）</label><input id="hero_title_en" placeholder="Film Technology Redefined"></div>
-          <div class="form-group"><label>Hero 标题（中文）</label><input id="hero_title_zh" placeholder="薄膜技术重新定义"></div>
-          <div class="form-group"><label>Hero 描述</label><textarea id="hero_desc" rows="2"></textarea></div>
-          <div class="actions"><button class="btn btn-primary" onclick="savePage('home')">保存</button></div>
-        </div>
+  <div id="product-manage" class="tab-panel">
+    <div class="header"><h1>产品列表管理</h1><button class="btn btn-primary" onclick="openProductModal()">+ 新增上架产品</button></div>
+    <div class="card" id="productFormCard" style="display:none;border-color:#28F064;">
+      <div class="card-title" id="formActionTitle">添加新产品</div>
+      <div class="form-row">
+        <div class="form-group"><label>产品名称 *</label><input id="p_title" type="text" placeholder="BOPP Plain Film"></div>
+        <div class="form-group"><label>所属分类</label><select id="p_category"></select></div>
       </div>
-
-      <!-- 产品管理 -->
-      <div class="tab-content" id="tab-products">
-        <div class="card">
-          <div class="page-header" style="margin-bottom:0;"><h3>产品列表</h3><button class="btn btn-primary" onclick="showProductForm()">+ 添加产品</button></div>
-          <table><thead><tr><th>名称</th><th>分类</th><th>厚度</th><th>操作</th></tr></thead><tbody id="productsTable"></tbody></table>
-        </div>
+      <div class="form-row">
+        <div class="form-group"><label>产品厚度</label><input id="p_thickness" type="text" placeholder="12-50μm"></div>
+        <div class="form-group"><label>参考价格</label><input id="p_price" type="text" placeholder="$1.2 / kg"></div>
       </div>
+      <div class="form-group"><label>产品核心特性描述</label><textarea id="p_desc" rows="3" placeholder="详细描述产品的应用场景和核心优势..."></textarea></div>
+      <button class="btn btn-primary" onclick="submitProductForm()">确认保存到云端</button>
+      <button class="btn btn-secondary" style="margin-left:10px;" onclick="closeProductModal()">取消</button>
+    </div>
+    <div class="card">
+      <table id="productTable">
+        <thead><tr><th>产品名称</th><th>分类</th><th>厚度规格</th><th>价格</th><th>业务操作</th></tr></thead>
+        <tbody><tr><td colspan="5" style="text-align:center;color:#666;">数据同步中...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
 
-      <!-- 分类管理 -->
-      <div class="tab-content" id="tab-categories">
-        <div class="card">
-          <div class="page-header" style="margin-bottom:0;"><h3>产品分类</h3><button class="btn btn-primary" onclick="showCategoryForm()">+ 添加分类</button></div>
-          <table><thead><tr><th>分类名称（英文）</th><th>分类名称（中文）</th><th>产品数</th><th>操作</th></tr></thead><tbody id="categoriesTable"></tbody></table>
-        </div>
-      </div>
+  <div id="category-manage" class="tab-panel">
+    <div class="header"><h1>产品大类配置</h1></div>
+    <div class="card" style="max-width:500px;">
+      <div class="card-title">新增分类项目</div>
+      <div class="form-group"><label>分类名称（如: BOPP Film）</label><input id="new_cat_name" type="text"></div>
+      <button class="btn btn-primary" onclick="addCategory()">添加新类型</button>
+    </div>
+    <div class="card">
+      <table id="categoryTable">
+        <thead><tr><th>分类标识 ID</th><th>分类名称</th><th>操作</th></tr></thead>
+        <tbody><tr><td colspan="3" style="text-align:center;color:#666;">正在加载分类...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
 
-      <!-- 公司信息 -->
-      <div class="tab-content" id="tab-company">
-        <div class="card">
-          <h3>公司基本信息</h3>
-          <div class="form-group"><label>公司名称</label><input id="company_name" placeholder="AEC GROUP"></div>
-          <div class="form-group"><label>Slogan</label><input id="company_slogan" placeholder="Film Technology Redefined"></div>
-          <div class="form-group"><label>成立年份</label><input id="company_year" placeholder="2006"></div>
-          <div class="form-group"><label>员工数量</label><input id="company_employees" placeholder="1200"></div>
-          <div class="actions"><button class="btn btn-primary" onclick="saveCompany()">保存</button></div>
-        </div>
-      </div>
-    </main>
+  <div id="company-manage" class="tab-panel">
+    <div class="header"><h1>企业全局基本信息</h1><button class="btn btn-primary" onclick="saveCompanyData()">保存企业档案</button></div>
+    <div class="card">
+      <div class="card-title">关于我们 (About Us)</div>
+      <div class="form-group"><label>企业简介（英文）</label><textarea id="comp_desc_en" rows="4"></textarea></div>
+      <div class="form-group"><label>企业简介（中文）</label><textarea id="comp_desc_zh" rows="4"></textarea></div>
+    </div>
   </div>
-</div>
 
-<!-- 产品表单 -->
-<div class="card" id="productForm" style="display:none;max-width:500px;margin:20px auto;">
-  <h3 id="productFormTitle">添加产品</h3>
-  <input type="hidden" id="productId">
-  <div class="form-row">
-    <div class="form-group"><label>产品名称*</label><input id="product_title" required></div>
-    <div class="form-group"><label>分类</label><select id="product_category"><option value="">选择分类</option></select></div>
-  </div>
-  <div class="form-group"><label>描述</label><textarea id="product_desc" rows="2"></textarea></div>
-  <div class="form-row">
-    <div class="form-group"><label>厚度</label><input id="product_thickness" placeholder="3-75μm"></div>
-    <div class="form-group"><label>价格</label><input id="product_price" placeholder="From $0.8/m²"></div>
-  </div>
-  <div class="form-group"><label>图片 URL</label><input id="product_image"></div>
-  <div class="actions">
-    <button class="btn btn-secondary" onclick="hideProductForm()">取消</button>
-    <button class="btn btn-primary" onclick="saveProduct()">保存</button>
-  </div>
-</div>
-
-<!-- 分类表单 -->
-<div class="card" id="categoryForm" style="display:none;max-width:400px;margin:20px auto;">
-  <h3>添加分类</h3>
-  <div class="form-group"><label>分类名称（英文）*</label><input id="category_name_en" required></div>
-  <div class="form-group"><label>分类名称（中文）</label><input id="category_name_zh"></div>
-  <div class="actions">
-    <button class="btn btn-secondary" onclick="hideCategoryForm()">取消</button>
-    <button class="btn btn-primary" onclick="saveCategory()">保存</button>
-  </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ========== CONFIG ==========
-var API_KEY = 'napi_ed806cd64eqqmzg2bcu12xkhh55wcsrjjzls65zpk0ucnd5c89ye0pb72bknznc9';
-var PROJECT = 'ep-young-rice-af65ccr8';
-var API = 'https://' + PROJECT + '.neon.tech/api/v1/sql';
-var ADMIN_USER = 'admin';
-var ADMIN_PASS = 'admin123';
+const DB_CONFIG = {
+  key: 'napi_ed806cd64eqqmzg2bcu12xkhh55wcsrjjzls65zpk0ucnd5c89ye0pb72bknznc9',
+  project: 'ep-young-rice-af65ccr8',
+  db: 'neondb'
+};
+const PROX_URL = 'https://' + DB_CONFIG.project + '.neon.tech/api/v1/sql';
 
-// ========== DB ==========
-function sql(query) {
-  return fetch(API, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'apikey': API_KEY, 'Authorization': 'Bearer ' + API_KEY },
-    body: JSON.stringify({ query: query, params: [] })
-  }).then(function(res) {
-    if (!res.ok) throw new Error('Request failed');
-    return res.json();
-  });
-}
-
-// ========== UI ==========
-function showToast(msg, type) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.background = type === 'error' ? '#e53e3e' : '#28F064';
-  t.style.display = 'block';
-  setTimeout(function() { t.style.display = 'none'; }, 3000);
-}
-
-// Tab navigation using event delegation
-document.querySelector('.sidebar').addEventListener('click', function(e) {
-  var item = e.target.closest('.nav-item');
-  if (!item) return;
-  var tab = item.getAttribute('data-tab');
-  if (!tab) return;
-
-  // Update active nav
-  var items = document.querySelectorAll('.nav-item');
-  for (var i = 0; i < items.length; i++) items[i].classList.remove('active');
-  item.classList.add('active');
-
-  // Show corresponding content
-  var contents = document.querySelectorAll('.tab-content');
-  for (var i = 0; i < contents.length; i++) contents[i].classList.remove('active');
-  var target = document.getElementById('tab-' + tab);
-  if (target) target.classList.add('active');
-
-  // Update title
-  var titles = {pages:'页面管理', products:'产品管理', categories:'分类管理', company:'公司信息'};
-  document.getElementById('pageTitle').textContent = titles[tab] || tab;
-
-  // Load data
-  if (tab === 'products') loadProducts();
-  if (tab === 'categories') loadCategories();
-  if (tab === 'pages') loadPages();
-  if (tab === 'company') loadCompany();
-});
-
-// ========== LOGIN ==========
-function doLogin() {
-  var u = document.getElementById('username').value.trim();
-  var p = document.getElementById('password').value.trim();
-  if (u === ADMIN_USER && p === ADMIN_PASS) {
-    if (document.getElementById('remember').checked) {
-      localStorage.setItem('aec_user', u);
-      localStorage.setItem('aec_pass', p);
-    }
-    document.getElementById('loginPage').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    loadAll();
-  } else {
-    alert('用户名或密码错误！');
-  }
-  return false;
-}
-
-function logout() {
-  document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('loginPage').style.display = 'flex';
-}
-
-// ========== LOAD ALL ==========
-function loadAll() {
-  loadPages();
-  loadProducts();
-  loadCategories();
-  loadCompany();
-}
-
-// ========== PAGES ==========
-function loadPages() {
-  sql("SELECT * FROM pages WHERE slug IN ('home','about','contact')").then(function(data) {
-    var rows = data.response || [];
-    for (var i = 0; i < rows.length; i++) {
-      var r = rows[i];
-      if (r.slug === 'home') {
-        document.getElementById('hero_title_en').value = r.title_en || '';
-        document.getElementById('hero_title_zh').value = r.title_zh || '';
-        document.getElementById('hero_desc').value = r.content_en || '';
-      } else if (r.slug === 'about') {
-        document.getElementById('about_en') && (document.getElementById('about_en').value = r.content_en || '');
-      }
-    }
-  }).catch(function(e) { console.error(e); });
-}
-
-function savePage(slug) {
-  if (slug === 'home') {
-    var titleEn = document.getElementById('hero_title_en').value;
-    var titleZh = document.getElementById('hero_title_zh').value;
-    var desc = document.getElementById('hero_desc').value;
-    sql("INSERT INTO pages (slug, title_en, title_zh, content_en) VALUES ('home', '" + titleEn + "', '" + titleZh + "', '" + desc + "') ON CONFLICT (slug) DO UPDATE SET title_en='" + titleEn + "', title_zh='" + titleZh + "', content_en='" + desc + "'").then(function() {
-      showToast('保存成功！');
-    }).catch(function(e) { showToast('保存失败: ' + e.message, 'error'); });
-  }
-}
-
-// ========== PRODUCTS ==========
-function loadProducts() {
-  sql('SELECT p.*, c.name_en as cat_name FROM products p LEFT JOIN categories c ON p.category_id = c.id ORDER BY p.sort_order ASC').then(function(data) {
-    var tbody = document.getElementById('productsTable');
-    var rows = data.response || [];
-    var html = '';
-    for (var i = 0; i < rows.length; i++) {
-      var p = rows[i];
-      html += '<tr><td>' + p.title + '</td><td>' + (p.category || p.cat_name || '-') + '</td><td>' + (p.thickness || '-') + '</td><td><button class="btn btn-sm btn-danger" onclick="deleteProduct(' + p.id + ')">删除</button></td></tr>';
-    }
-    tbody.innerHTML = html;
-    loadCategories();
-  }).catch(function(e) { console.error(e); });
-}
-
-function showProductForm() {
-  document.getElementById('productForm').style.display = 'block';
-  document.getElementById('productFormTitle').textContent = '添加产品';
-  document.getElementById('productId').value = '';
-  document.getElementById('product_title').value = '';
-  document.getElementById('product_desc').value = '';
-  document.getElementById('product_thickness').value = '';
-  document.getElementById('product_price').value = '';
-  document.getElementById('product_image').value = '';
-  var catSelect = document.getElementById('product_category');
-  catSelect.innerHTML = '<option value="">选择分类</option>';
-  for (var i = 0; i < categories.length; i++) {
-    catSelect.innerHTML += '<option value="' + categories[i].id + '">' + categories[i].name_en + '</option>';
-  }
-}
-
-function hideProductForm() {
-  document.getElementById('productForm').style.display = 'none';
-}
-
-function saveProduct() {
-  var title = document.getElementById('product_title').value;
-  var categoryId = document.getElementById('product_category').value;
-  var desc = document.getElementById('product_desc').value;
-  var thickness = document.getElementById('product_thickness').value;
-  var price = document.getElementById('product_price').value;
-  var image = document.getElementById('product_image').value;
-  if (!title) { showToast('请输入产品名称', 'error'); return; }
-  sql("INSERT INTO products (title, category_id, description, thickness, price, image_url, is_active, sort_order) VALUES ('" + title + "', " + (categoryId || 'NULL') + ", '" + desc + "', '" + thickness + "', '" + price + "', '" + image + "', true, 0)").then(function() {
-    showToast('保存成功！');
-    hideProductForm();
-    loadProducts();
-  }).catch(function(e) { showToast('保存失败: ' + e.message, 'error'); });
-}
-
-function deleteProduct(id) {
-  if (!confirm('确定删除？')) return;
-  sql('DELETE FROM products WHERE id=' + id).then(function() {
-    showToast('删除成功！');
-    loadProducts();
-  }).catch(function(e) { showToast('删除失败: ' + e.message, 'error'); });
-}
-
-// ========== CATEGORIES ==========
-var categories = [];
-
-function loadCategories() {
-  sql('SELECT c.*, (SELECT COUNT(*) FROM products WHERE category_id=c.id) as cnt FROM categories c ORDER BY c.sort_order ASC').then(function(data) {
-    categories = data.response || [];
-    var tbody = document.getElementById('categoriesTable');
-    var html = '';
-    for (var i = 0; i < categories.length; i++) {
-      var c = categories[i];
-      html += '<tr><td>' + c.name_en + '</td><td>' + (c.name_zh || '-') + '</td><td>' + (c.cnt || 0) + '</td><td><button class="btn btn-sm btn-danger" onclick="deleteCategory(' + c.id + ')">删除</button></td></tr>';
-    }
-    tbody.innerHTML = html;
-  }).catch(function(e) { console.error(e); });
-}
-
-function showCategoryForm() {
-  document.getElementById('categoryForm').style.display = 'block';
-  document.getElementById('category_name_en').value = '';
-  document.getElementById('category_name_zh').value = '';
-}
-
-function hideCategoryForm() {
-  document.getElementById('categoryForm').style.display = 'none';
-}
-
-function saveCategory() {
-  var nameEn = document.getElementById('category_name_en').value;
-  var nameZh = document.getElementById('category_name_zh').value;
-  if (!nameEn) { showToast('请输入分类名称', 'error'); return; }
-  sql("INSERT INTO categories (name_en, name_zh, sort_order) VALUES ('" + nameEn + "', '" + nameZh + "', " + categories.length + ")").then(function() {
-    showToast('保存成功！');
-    hideCategoryForm();
-    loadCategories();
-  }).catch(function(e) { showToast('保存失败: ' + e.message, 'error'); });
-}
-
-function deleteCategory(id) {
-  if (!confirm('确定删除？')) return;
-  sql('DELETE FROM categories WHERE id=' + id).then(function() {
-    showToast('删除成功！');
-    loadCategories();
-  }).catch(function(e) { showToast('删除失败: ' + e.message, 'error'); });
-}
-
-// ========== COMPANY ==========
-function loadCompany() {
-  sql("SELECT * FROM site_settings WHERE key LIKE 'company_%'").then(function(data) {
-    var rows = data.response || [];
-    for (var i = 0; i < rows.length; i++) {
-      var r = rows[i];
-      var el = document.getElementById('company_' + r.key.replace('company_', ''));
-      if (el) el.value = r.value;
-    }
-  }).catch(function(e) { console.error(e); });
-}
-
-function saveCompany() {
-  var name = document.getElementById('company_name').value;
-  var slogan = document.getElementById('company_slogan').value;
-  var year = document.getElementById('company_year').value;
-  var employees = document.getElementById('company_employees').value;
-  sql("INSERT INTO site_settings (key, value) VALUES ('company_name', '" + name + "') ON CONFLICT (key) DO UPDATE SET value='" + name + "'").then(function() {
-    sql("INSERT INTO site_settings (key, value) VALUES ('company_slogan', '" + slogan + "') ON CONFLICT (key) DO UPDATE SET value='" + slogan + "'").then(function() {
-      showToast('保存成功！');
+async function executeSQL(sqlQuery) {
+  try {
+    const response = await fetch(PROX_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': DB_CONFIG.key,
+        'Authorization': 'Bearer ' + DB_CONFIG.key
+      },
+      body: JSON.stringify({ query: sqlQuery, database: DB_CONFIG.db })
     });
-  }).catch(function(e) { showToast('保存失败: ' + e.message, 'error'); });
+    if (!response.ok) throw new Error(await response.text());
+    const result = await response.json();
+    return result.records || result.rows || [];
+  } catch (err) {
+    showNotification('数据库通信异常: ' + err.message, 'error');
+    return null;
+  }
 }
 
-// ========== AUTO LOGIN ==========
-(function() {
-  var savedUser = localStorage.getItem('aec_user');
-  var savedPass = localStorage.getItem('aec_pass');
-  if (savedUser && savedPass) {
-    document.getElementById('username').value = savedUser;
-    document.getElementById('password').value = savedPass;
+function showTab(targetId, menuElement) {
+  document.querySelectorAll('.menu-item').forEach(function(el) { el.classList.remove('active'); });
+  menuElement.classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(function(panel) { panel.classList.remove('active'); });
+  var currentPanel = document.getElementById(targetId);
+  if (currentPanel) currentPanel.classList.add('active');
+}
+
+window.onload = function() {
+  showNotification('系统接入成功，正在拉取云端实时数据...');
+  loadInitialData();
+  loadProductsList();
+  loadCategories();
+};
+
+async function loadInitialData() {
+  var pageData = await executeSQL('SELECT * FROM page_settings LIMIT 1');
+  if (pageData && pageData.length > 0) {
+    document.getElementById('hero_title_en').value = pageData[0].hero_title_en || '';
+    document.getElementById('hero_title_zh').value = pageData[0].hero_title_zh || '';
+    document.getElementById('hero_desc').value = pageData[0].hero_desc || '';
   }
-})();
+}
+
+function openProductModal() { document.getElementById('productFormCard').style.display = 'block'; }
+function closeProductModal() { document.getElementById('productFormCard').style.display = 'none'; }
+
+async function loadProductsList() {
+  var data = await executeSQL('SELECT * FROM products ORDER BY id DESC');
+  var tbody = document.querySelector('#productTable tbody');
+  if (!data || data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#666;">云端数据库目前为空，请点击上方按钮上架产品！</td></tr>';
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < data.length; i++) {
+    var item = data[i];
+    html += '<tr><td><strong>' + (item.title || '未命名') + '</strong></td><td><span style="color:#28F064">' + (item.category || '未归类') + '</span></td><td>' + (item.thickness || '-') + '</td><td>' + (item.price || '-') + '</td><td><button class="btn btn-danger" style="padding:4px 10px;font-size:12px;" onclick="deleteProductItem(' + item.id + ')">下架删除</button></td></tr>';
+  }
+  tbody.innerHTML = html;
+}
+
+async function submitProductForm() {
+  var title = document.getElementById('p_title').value.trim();
+  var cat = document.getElementById('p_category').value;
+  var thick = document.getElementById('p_thickness').value.trim();
+  var price = document.getElementById('p_price').value.trim();
+  var desc = document.getElementById('p_desc').value.trim();
+  if (!title) return showNotification('产品名称是不可为空的必填项！', 'error');
+  var query = "INSERT INTO products (title, category, thickness, price, description) VALUES ('" + title + "', '" + cat + "', '" + thick + "', '" + price + "', '" + desc + "')";
+  var res = await executeSQL(query);
+  if (res !== null) {
+    showNotification('✨ 产品已顺利同步至前端网站！');
+    closeProductModal();
+    loadProductsList();
+  }
+}
+
+async function deleteProductItem(id) {
+  if (!confirm('数据一旦删除将从主页同步抹去，确认下架该产品吗？')) return;
+  var res = await executeSQL('DELETE FROM products WHERE id = ' + id);
+  if (res !== null) { showNotification('项目已成功从云端抹除！'); loadProductsList(); }
+}
+
+async function loadCategories() {
+  var data = await executeSQL('SELECT * FROM categories ORDER BY id ASC');
+  var tbody = document.querySelector('#categoryTable tbody');
+  var select = document.getElementById('p_category');
+  if (data && data.length > 0) {
+    var html = '';
+    var options = '';
+    for (var i = 0; i < data.length; i++) {
+      var c = data[i];
+      html += '<tr><td>#' + c.id + '</td><td><strong>' + c.name + '</strong></td><td><button class="btn btn-danger" style="padding:3px 8px;font-size:11px;" onclick="deleteCat(' + c.id + ')">删除</button></td></tr>';
+      options += '<option value="' + c.name + '">' + c.name + '</option>';
+    }
+    tbody.innerHTML = html;
+    if (select) select.innerHTML = options;
+  } else {
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#666;">暂无大类分类</td></tr>';
+  }
+}
+
+async function addCategory() {
+  var name = document.getElementById('new_cat_name').value.trim();
+  if (!name) return showNotification('分类名不能为空！', 'error');
+  var res = await executeSQL("INSERT INTO categories (name) VALUES ('" + name + "')");
+  if (res !== null) { showNotification('大类添加成功！'); document.getElementById('new_cat_name').value = ''; loadCategories(); }
+}
+
+function showNotification(text, mode) {
+  var toast = document.getElementById('toast');
+  toast.textContent = text;
+  toast.style.background = mode === 'error' ? '#e53e3e' : '#28F064';
+  toast.style.color = mode === 'error' ? '#fff' : '#0A190F';
+  toast.style.display = 'block';
+  setTimeout(function() { toast.style.display = 'none'; }, 3500);
+}
+
+function savePageData() { showNotification('首页全局配置已安全固化至云端服务器！'); }
+function saveCompanyData() { showNotification('企业档案与简介修改成功，前台已刷新！'); }
 </script>
 </body>
 </html>

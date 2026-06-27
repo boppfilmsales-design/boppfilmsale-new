@@ -1,24 +1,16 @@
--- 创建页面表
-CREATE TABLE IF NOT EXISTS pages (
+-- 创建页面设置表
+CREATE TABLE IF NOT EXISTS page_settings (
   id SERIAL PRIMARY KEY,
-  slug VARCHAR(100) UNIQUE NOT NULL,
-  title_en VARCHAR(255),
-  title_zh VARCHAR(255),
-  content_en TEXT,
-  content_zh TEXT,
-  specs JSONB DEFAULT '{}',
-  is_published BOOLEAN DEFAULT true,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  hero_title_en VARCHAR(255),
+  hero_title_zh VARCHAR(255),
+  hero_desc TEXT,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 创建分类表
 CREATE TABLE IF NOT EXISTS categories (
   id SERIAL PRIMARY KEY,
-  name_en VARCHAR(100) NOT NULL,
-  name_zh VARCHAR(100),
-  slug VARCHAR(100) UNIQUE,
-  description TEXT,
+  name VARCHAR(100) NOT NULL,
   sort_order INTEGER DEFAULT 0,
   is_active BOOLEAN DEFAULT true,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -28,26 +20,22 @@ CREATE TABLE IF NOT EXISTS categories (
 CREATE TABLE IF NOT EXISTS products (
   id SERIAL PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
-  category_id INTEGER REFERENCES categories(id),
+  category VARCHAR(100),
   description TEXT,
   thickness VARCHAR(100),
-  haze VARCHAR(100),
-  gloss VARCHAR(100),
-  heat_seal VARCHAR(100),
   price VARCHAR(100),
   image_url VARCHAR(500),
-  specs JSONB DEFAULT '{}',
   is_active BOOLEAN DEFAULT true,
   sort_order INTEGER DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 创建网站设置表
-CREATE TABLE IF NOT EXISTS site_settings (
+-- 创建公司信息表
+CREATE TABLE IF NOT EXISTS company_info (
   id SERIAL PRIMARY KEY,
-  key VARCHAR(100) UNIQUE NOT NULL,
-  value TEXT,
+  comp_desc_en TEXT,
+  comp_desc_zh TEXT,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -65,26 +53,19 @@ VALUES ('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a9
 ON CONFLICT (username) DO NOTHING;
 
 -- 插入默认分类
-INSERT INTO categories (name_en, name_zh, slug, sort_order) VALUES
-  ('BOPP Film', 'BOPP薄膜', 'bopp', 1),
-  ('BOPET Film', 'BOPET薄膜', 'bopet', 2),
-  ('Coated Film', '涂布膜', 'coating', 3),
-  ('Packing Tape', '包装胶带', 'tape', 4),
-  ('CPP / BOPA', '流延膜', 'cpp', 5),
-  ('POF Shrink', '收缩膜', 'pof', 6)
-ON CONFLICT (slug) DO NOTHING;
+INSERT INTO categories (name, sort_order) VALUES
+  ('BOPP Film', 1),
+  ('BOPET Film', 2),
+  ('Coated Film', 3),
+  ('Packing Tape', 4),
+  ('CPP / BOPA', 5),
+  ('POF Shrink', 6),
+  ('Tear Tape', 7),
+  ('Paper Products', 8),
+  ('Machines & Equipment', 9)
+ON CONFLICT DO NOTHING;
 
--- 插入默认页面
-INSERT INTO pages (slug, title_en, title_zh) VALUES
-  ('home', 'Home', '首页'),
-  ('about', 'About Us', '关于我们'),
-  ('contact', 'Contact', '联系我们')
-ON CONFLICT (slug) DO NOTHING;
-
--- 插入默认公司信息
-INSERT INTO site_settings (key, value) VALUES
-  ('company_name', 'AEC GROUP'),
-  ('company_slogan', 'Film Technology Redefined'),
-  ('company_year', '2006'),
-  ('company_employees', '1200')
-ON CONFLICT (key) DO NOTHING;
+-- 插入默认页面设置
+INSERT INTO page_settings (hero_title_en, hero_title_zh, hero_desc)
+VALUES ('Film Technology Redefined', '薄膜技术重新定义', 'Precision packaging solutions for global industries')
+ON CONFLICT DO NOTHING;
