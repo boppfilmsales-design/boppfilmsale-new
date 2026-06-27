@@ -274,14 +274,15 @@ section{padding:88px 0}
 /* WHY US */
 .why-us{background:transparent}
 .wgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.wcrd{background:transparent;border:1px solid var(--border);border-radius:10px;padding:30px 24px;position:relative;overflow:hidden}
-.wcrd::after{content:'';position:absolute;bottom:0;right:0;width:70px;height:70px;background:radial-gradient(circle,rgba(232,196,106,0.06),transparent 70%)}
-.wn{font-family:'Playfair Display',serif;font-size:44px;font-weight:700;color:rgba(232,196,106,0.1);line-height:1;margin-bottom:9px}
-.wt{font-size:14.5px;font-weight:600;color:#1a202c;margin-bottom:5px}
-.wtz{font-size:15px;color:var(--gold);margin-bottom:11px}
-.wd{font-size:14.5px;color:var(--slate);line-height:1.7}
-.wl-more{display:inline-block;margin-top:10px;font-size:15px;color:var(--gold);text-decoration:none;font-weight:600;transition:color .2s}
-.wl-more:hover{color:var(--ice)}
+.wcrd{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:30px 24px;position:relative;overflow:hidden;transition:all .3s}
+.wcrd:hover{border-color:var(--gold);box-shadow:0 4px 20px rgba(0,0,0,0.08)}
+.wn{font-family:'Playfair Display',serif;font-size:48px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:12px;opacity:0.9}
+.wt{font-size:16px;font-weight:600;color:#1a202c;margin-bottom:6px}
+.wtz{font-size:14px;color:#718096;margin-bottom:12px}
+.wd{font-size:14px;color:#4a5568;line-height:1.7;margin-bottom:8px}
+.wl-more{display:inline-block;margin-top:8px;font-size:15px;color:var(--gold);text-decoration:none;font-weight:600;transition:color .2s;cursor:pointer}
+.wl-more:hover{color:#2e7d32}
+.wl-detail{margin-top:12px;padding-top:12px;border-top:1px solid #e2e8f0;font-size:14px;color:#4a5568;line-height:1.8}
 
 /* EQUIPMENT */
 .equipment{background:transparent}
