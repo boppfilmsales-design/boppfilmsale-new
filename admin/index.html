@@ -369,8 +369,9 @@ async function loadCategories() {
     var options = '';
     for (var i = 0; i < data.length; i++) {
       var c = data[i];
-      html += '<tr><td>#' + c.id + '</td><td><strong>' + c.name + '</strong></td><td><button class="btn btn-danger" style="padding:3px 8px;font-size:11px;" onclick="deleteCat(' + c.id + ')">删除</button></td></tr>';
-      options += '<option value="' + c.name + '">' + c.name + '</option>';
+      var catName = c.name_en || c.name || 'Unknown';
+      html += '<tr><td>#' + c.id + '</td><td><strong>' + catName + '</strong></td><td><button class="btn btn-danger" style="padding:3px 8px;font-size:11px;" onclick="deleteCat(' + c.id + ')">Delete</button></td></tr>';
+      options += '<option value="' + catName + '">' + catName + '</option>';
     }
     tbody.innerHTML = html;
     if (select) select.innerHTML = options;
