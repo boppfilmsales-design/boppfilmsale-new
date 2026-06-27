@@ -36,3 +36,5 @@ tests/
 # Runtime
 *.pid
 *.seed
+
+.vercel

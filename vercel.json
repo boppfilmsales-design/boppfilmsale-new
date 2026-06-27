@@ -20,10 +20,6 @@
     {
       "src": "scripts.js",
       "use": "@vercel/static"
-    },
-    {
-      "src": "admin/**/*.js",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -32,21 +28,8 @@
       "dest": "/api/$1"
     },
     {
-      "src": "/admin/(.*)",
-      "dest": "/admin/$1"
-    },
-    {
       "src": "/(.*)",
       "dest": "/$1"
     }
-  ],
-  "env": {
-    "POSTGRES_URL": "@postgres-url",
-    "POSTGRES_PRISMA_URL": "@postgres-prisma-url",
-    "POSTGRES_URL_NON_POOLED": "@postgres-url-non-pooled",
-    "POSTGRES_USER": "@postgres-user",
-    "POSTGRES_HOST": "@postgres-host",
-    "POSTGRES_PASSWORD": "@postgres-password",
-    "POSTGRES_DATABASE": "@postgres-database"
-  }
+  ]
 }
