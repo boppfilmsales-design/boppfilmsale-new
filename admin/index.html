@@ -79,18 +79,28 @@
   <div id="product-manage" class="tab-panel">
     <div class="header"><h1>产品列表管理</h1><button class="btn btn-primary" onclick="openProductModal()">+ 新增上架产品</button></div>
     <div class="card" id="productFormCard" style="display:none;border-color:#28F064;">
-      <div class="card-title" id="formActionTitle">添加新产品</div>
+      <div class="card-title" id="formActionTitle">Add Product</div>
       <div class="form-row">
-        <div class="form-group"><label>产品名称 *</label><input id="p_title" type="text" placeholder="BOPP Plain Film"></div>
-        <div class="form-group"><label>所属分类</label><select id="p_category"></select></div>
+        <div class="form-group"><label>Slug</label><input id="p_slug" type="text" placeholder="bopp-gloss-15"></div>
+        <div class="form-group"><label>Category</label><select id="p_category"><option value="">Select a category</option></select></div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label>产品厚度</label><input id="p_thickness" type="text" placeholder="12-50μm"></div>
-        <div class="form-group"><label>参考价格</label><input id="p_price" type="text" placeholder="$1.2 / kg"></div>
+        <div class="form-group"><label>Name (EN)</label><input id="p_name_en" type="text" placeholder="BOPP Gloss Film 15 Micron"></div>
+        <div class="form-group"><label>Name (ZH)</label><input id="p_name_zh" type="text" placeholder="BOPP光膜 15微米"></div>
       </div>
-      <div class="form-group"><label>产品核心特性描述</label><textarea id="p_desc" rows="3" placeholder="详细描述产品的应用场景和核心优势..."></textarea></div>
-      <button class="btn btn-primary" onclick="submitProductForm()">确认保存到云端</button>
-      <button class="btn btn-secondary" style="margin-left:10px;" onclick="closeProductModal()">取消</button>
+      <div class="form-group"><label>Description (EN)</label><textarea id="p_desc_en" rows="2" placeholder="Ultra-thin BOPP gloss film..."></textarea></div>
+      <div class="form-group"><label>Description (ZH)</label><textarea id="p_desc_zh" rows="2" placeholder="超薄BOPP光膜..."></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>Thickness</label><input id="p_thickness" type="text" placeholder="15 microns"></div>
+        <div class="form-group"><label>Width</label><input id="p_width" type="text" placeholder="200-1200mm"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Material</label><input id="p_material" type="text" placeholder="Polypropylene"></div>
+        <div class="form-group"><label>Featured</label><select id="p_featured"><option value="0">No</option><option value="1">Yes</option></select></div>
+      </div>
+      <div class="form-group"><label>Product Images</label><input id="p_images" type="text" placeholder="https://example.com/image.jpg"></div>
+      <button class="btn btn-primary" onclick="submitProductForm()">Save</button>
+      <button class="btn btn-secondary" style="margin-left:10px;" onclick="closeProductModal()">Cancel</button>
     </div>
     <div class="card">
       <table id="productTable">
@@ -243,29 +253,20 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const DB_CONFIG = {
-  key: 'napi_ed806cd64eqqmzg2bcu12xkhh55wcsrjjzls65zpk0ucnd5c89ye0pb72bknznc9',
-  project: 'ep-young-rice-af65ccr8',
-  db: 'neondb'
-};
-const PROX_URL = 'https://' + DB_CONFIG.project + '.neon.tech/api/v1/sql';
+const API_URL = '/api/db';
 
-async function executeSQL(sqlQuery) {
+async function executeSQL(query, params) {
   try {
-    const response = await fetch(PROX_URL, {
+    const response = await fetch(API_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': DB_CONFIG.key,
-        'Authorization': 'Bearer ' + DB_CONFIG.key
-      },
-      body: JSON.stringify({ query: sqlQuery, database: DB_CONFIG.db })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: query, params: params || [] })
     });
-    if (!response.ok) throw new Error(await response.text());
+    if (!response.ok) throw new Error('Database request failed');
     const result = await response.json();
-    return result.records || result.rows || [];
+    return result.data || [];
   } catch (err) {
-    showNotification('数据库通信异常: ' + err.message, 'error');
+    showNotification('Database error: ' + err.message, 'error');
     return null;
   }
 }
@@ -301,37 +302,62 @@ async function loadProductsList() {
   var data = await executeSQL('SELECT * FROM products ORDER BY id DESC');
   var tbody = document.querySelector('#productTable tbody');
   if (!data || data.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#666;">云端数据库目前为空，请点击上方按钮上架产品！</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#666;">No products found. Click "Add Product" to add products.</td></tr>';
     return;
   }
   var html = '';
   for (var i = 0; i < data.length; i++) {
     var item = data[i];
-    html += '<tr><td><strong>' + (item.title || '未命名') + '</strong></td><td><span style="color:#28F064">' + (item.category || '未归类') + '</span></td><td>' + (item.thickness || '-') + '</td><td>' + (item.price || '-') + '</td><td><button class="btn btn-danger" style="padding:4px 10px;font-size:12px;" onclick="deleteProductItem(' + item.id + ')">下架删除</button></td></tr>';
+    html += '<tr><td><strong>' + (item.name_en || item.title || 'N/A') + '</strong><br><span style="color:#666;font-size:12px;">' + (item.slug || '') + '</span></td><td><span style="color:#28F064">' + (item.category || '-') + '</span></td><td>' + (item.thickness || '-') + '</td><td>' + (item.width || '-') + '</td><td>' + (item.material || '-') + '</td><td><button class="btn btn-secondary" style="padding:4px 8px;font-size:11px;margin-right:5px;" onclick="editProductItem(' + item.id + ')">Edit</button><button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="deleteProductItem(' + item.id + ')">Delete</button></td></tr>';
   }
   tbody.innerHTML = html;
 }
 
 async function submitProductForm() {
-  var title = document.getElementById('p_title').value.trim();
+  var slug = document.getElementById('p_slug').value.trim();
   var cat = document.getElementById('p_category').value;
-  var thick = document.getElementById('p_thickness').value.trim();
-  var price = document.getElementById('p_price').value.trim();
-  var desc = document.getElementById('p_desc').value.trim();
-  if (!title) return showNotification('产品名称是不可为空的必填项！', 'error');
-  var query = "INSERT INTO products (title, category, thickness, price, description) VALUES ('" + title + "', '" + cat + "', '" + thick + "', '" + price + "', '" + desc + "')";
+  var nameEn = document.getElementById('p_name_en').value.trim();
+  var nameZh = document.getElementById('p_name_zh').value.trim();
+  var descEn = document.getElementById('p_desc_en').value.trim();
+  var descZh = document.getElementById('p_desc_zh').value.trim();
+  var thickness = document.getElementById('p_thickness').value.trim();
+  var width = document.getElementById('p_width').value.trim();
+  var material = document.getElementById('p_material').value.trim();
+  var featured = document.getElementById('p_featured').value;
+  var images = document.getElementById('p_images').value.trim();
+  if (!slug || !nameEn) return showNotification('Slug and Name (EN) are required', 'error');
+  var query = "INSERT INTO products (slug, category, name_en, name_zh, description_en, description_zh, thickness, width, material, featured, image_url) VALUES ('" + slug + "', '" + cat + "', '" + nameEn + "', '" + nameZh + "', '" + descEn + "', '" + descZh + "', '" + thickness + "', '" + width + "', '" + material + "', " + featured + ", '" + images + "')";
   var res = await executeSQL(query);
   if (res !== null) {
-    showNotification('✨ 产品已顺利同步至前端网站！');
+    showNotification('Product saved successfully!');
     closeProductModal();
     loadProductsList();
   }
 }
 
 async function deleteProductItem(id) {
-  if (!confirm('数据一旦删除将从主页同步抹去，确认下架该产品吗？')) return;
+  if (!confirm('Are you sure you want to delete this product?')) return;
   var res = await executeSQL('DELETE FROM products WHERE id = ' + id);
-  if (res !== null) { showNotification('项目已成功从云端抹除！'); loadProductsList(); }
+  if (res !== null) { showNotification('Product deleted successfully!'); loadProductsList(); }
+}
+
+async function editProductItem(id) {
+  var data = await executeSQL('SELECT * FROM products WHERE id = ' + id);
+  if (!data || data.length === 0) return showNotification('Product not found', 'error');
+  var p = data[0];
+  document.getElementById('p_slug').value = p.slug || '';
+  document.getElementById('p_category').value = p.category || '';
+  document.getElementById('p_name_en').value = p.name_en || p.title || '';
+  document.getElementById('p_name_zh').value = p.name_zh || '';
+  document.getElementById('p_desc_en').value = p.description_en || p.description || '';
+  document.getElementById('p_desc_zh').value = p.description_zh || '';
+  document.getElementById('p_thickness').value = p.thickness || '';
+  document.getElementById('p_width').value = p.width || '';
+  document.getElementById('p_material').value = p.material || '';
+  document.getElementById('p_featured').value = p.featured || '0';
+  document.getElementById('p_images').value = p.image_url || '';
+  document.getElementById('formActionTitle').textContent = 'Edit Product';
+  document.getElementById('productFormCard').style.display = 'block';
 }
 
 async function loadCategories() {
