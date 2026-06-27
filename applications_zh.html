@@ -229,50 +229,51 @@
 
 <script src="scripts.js"></script>
 
-<!-- ONLINE CHAT WIDGET -->
-<div class="chat-widget">
-  <div class="chat-panel" id="chatPanel">
-    <div class="chat-header">
-      <div class="chat-avatar">AEC</div>
-      <div class="chat-header-info">
+
+<!-- CHAT WIDGET -->
+<div class='chat-widget'>
+  <div class='chat-panel' id='chatPanel'>
+    <div class='chat-header'>
+      <div class='chat-avatar'>AEC</div>
+      <div class='chat-header-info'>
         <h4>AEC GROUP 智能客服</h4>
         <p>在线 · 立即回复</p>
       </div>
-      <button class="chat-close" onclick="toggleChat()" title="关闭">
-        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      <button class='chat-close' onclick='toggleChat()' title='关闭'>
+        <svg viewBox='0 0 24 24'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg>
       </button>
     </div>
-    <div class="chat-body" id="chatBody">
-      <div class="chat-msg bot">
-        <div class="avatar">A</div>
+    <div class='chat-body' id='chatBody'>
+      <div class='chat-msg bot'>
+        <div class='avatar'>A</div>
         <div>
-          <div class="chat-bubble">您好！我是AEC GROUP智能客服，有什么可以帮助您的吗？</div>
-          <div class="chat-time">刚刚</div>
+          <div class='chat-bubble'>您好！我是AEC GROUP智能客服，有什么可以帮助您的吗？</div>
+          <div class='chat-time'>刚刚</div>
         </div>
       </div>
-      <div class="chat-msg bot">
-        <div class="avatar">A</div>
+      <div class='chat-msg bot'>
+        <div class='avatar'>A</div>
         <div>
-          <div class="chat-bubble">Hello! I'm AEC GROUP AI assistant. How can I help you today?</div>
-          <div class="chat-time">刚刚</div>
+          <div class='chat-bubble'>Hello! I'm AEC GROUP AI assistant. How can I help you today?</div>
+          <div class='chat-time'>刚刚</div>
         </div>
       </div>
     </div>
-    <div class="quick-replies">
-      <button onclick="sendQuickReply('我想询价')">我想询价</button>
-      <button onclick="sendQuickReply('产品规格')">产品规格</button>
-      <button onclick="sendQuickReply('交期查询')">交期查询</button>
-      <button onclick="sendQuickReply('样品申请')">样品申请</button>
+    <div class='quick-replies'>
+      <button onclick='sendQuickReply("我想询价")'>我想询价</button>
+      <button onclick='sendQuickReply("产品规格")'>产品规格</button>
+      <button onclick='sendQuickReply("交期查询")'>交期查询</button>
+      <button onclick='sendQuickReply("样品申请")'>样品申请</button>
     </div>
-    <div class="chat-input">
-      <input type="text" id="chatInput" placeholder="输入您的问题..." onkeypress="if(event.key==='Enter')sendChat()"/>
-      <button onclick="sendChat()">
-        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    <div class='chat-input'>
+      <input type='text' id='chatInput' placeholder='输入您的问题...' onkeypress='if(event.key==="Enter")sendChat()'/>
+      <button onclick='sendChat()'>
+        <svg viewBox='0 0 24 24'><path d='M2.01 21L23 12 2.01 3 2 10l15 2-15 2z'/></svg>
       </button>
     </div>
   </div>
-  <button class="chat-toggle" onclick="toggleChat()" title="在线客服">
-    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+  <button class='chat-toggle' onclick='toggleChat()' title='在线客服'>
+    <svg viewBox='0 0 24 24'><path d='M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z'/></svg>
   </button>
 </div>
 
