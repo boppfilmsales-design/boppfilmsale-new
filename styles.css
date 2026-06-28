@@ -855,6 +855,59 @@ header.nav-open .mobile-menu-toggle span:nth-child(3){transform:translateY(-7px)
 .tech-card-btn .arrow{transition:transform 0.2s}
 .tech-card-btn:hover .arrow{transform:translateX(3px)}
 
+/* ---- COLLAPSIBLE PRODUCT SECTIONS ---- */
+.pgrid-wrapper {
+  position: relative;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.pgrid-wrapper.collapsed {
+  max-height: 320px;
+}
+.pgrid-wrapper.expanded {
+  max-height: none;
+}
+.view-more-btn {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  margin-top: 16px;
+  background: linear-gradient(135deg, rgba(40,240,100,0.1), rgba(40,240,100,0.05));
+  border: 1px solid rgba(40,240,100,0.3);
+  border-radius: 8px;
+  color: #28F064;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.3s;
+}
+.view-more-btn:hover {
+  background: linear-gradient(135deg, rgba(40,240,100,0.2), rgba(40,240,100,0.1));
+  border-color: #28F064;
+}
+.view-more-btn .arrow {
+  display: inline-block;
+  margin-left: 8px;
+  transition: transform 0.3s;
+}
+.view-more-btn.expanded .arrow {
+  transform: rotate(180deg);
+}
+.pfade-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, #0A190F);
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.pgrid-wrapper.expanded .pfade-overlay {
+  opacity: 0;
+}
+
 /* ---- TECH CATEGORY SECTIONS ---- */
 .tech-section{
   margin-bottom:64px;
