@@ -376,10 +376,12 @@ footer{background:transparent;border-top:1px solid var(--border);padding:52px 0 
   .cgrid{grid-template-columns:1fr}
   .fgrid{grid-template-columns:1fr 1fr}
   .pgrid{grid-template-columns:repeat(3,1fr)}
+  .pgrid-wrapper{grid-template-columns:repeat(3,1fr)}
   .agrid{grid-template-columns:repeat(3,1fr)}
 }
 @media(max-width:680px){
   .pgrid{grid-template-columns:repeat(2,1fr)}
+  .pgrid-wrapper{grid-template-columns:repeat(2,1fr)}
   .agrid{grid-template-columns:repeat(2,1fr)}
   .tech-card-img{aspect-ratio:1}
 }
@@ -855,57 +857,42 @@ header.nav-open .mobile-menu-toggle span:nth-child(3){transform:translateY(-7px)
 .tech-card-btn .arrow{transition:transform 0.2s}
 .tech-card-btn:hover .arrow{transform:translateX(3px)}
 
-/* ---- COLLAPSIBLE PRODUCT SECTIONS ---- */
-.pgrid-wrapper {
-  position: relative;
-  overflow: hidden;
-  transition: max-height 0.4s ease;
+/* ---- PRODUCT GRID - SHOW MORE ---- */
+.pcard-hidden{
+  display: none !important;
 }
-.pgrid-wrapper.collapsed {
-  max-height: 320px;
-}
-.pgrid-wrapper.expanded {
-  max-height: none;
-}
-.view-more-btn {
-  display: block;
+.pgrid-showmore-btn{
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   width: 100%;
-  padding: 12px 20px;
-  margin-top: 16px;
-  background: linear-gradient(135deg, rgba(40,240,100,0.1), rgba(40,240,100,0.05));
-  border: 1px solid rgba(40,240,100,0.3);
-  border-radius: 8px;
-  color: #28F064;
-  font-size: 14px;
+  margin-top: 8px;
+  padding: 13px 24px;
+  background: var(--bg-card-hover);
+  border: 1px solid var(--tech-border);
+  border-radius: 10px;
+  color: var(--neon-cyan);
+  font-family: 'Inter', sans-serif;
+  font-size: 14.5px;
   font-weight: 600;
+  letter-spacing: 0.2px;
   cursor: pointer;
-  text-align: center;
-  transition: all 0.3s;
+  transition: all 0.25s ease;
 }
-.view-more-btn:hover {
-  background: linear-gradient(135deg, rgba(40,240,100,0.2), rgba(40,240,100,0.1));
-  border-color: #28F064;
+.pgrid-showmore-btn:hover{
+  background: var(--bg-card);
+  border-color: var(--neon-cyan);
+  transform: translateY(-1px);
 }
-.view-more-btn .arrow {
+.pgrid-showmore-btn .pgrid-arrow{
   display: inline-block;
-  margin-left: 8px;
-  transition: transform 0.3s;
+  font-size: 11px;
+  transition: transform 0.3s ease;
 }
-.view-more-btn.expanded .arrow {
+.pgrid-showmore-btn.is-expanded .pgrid-arrow{
   transform: rotate(180deg);
-}
-.pfade-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
-  background: linear-gradient(to bottom, transparent, #0A190F);
-  pointer-events: none;
-  transition: opacity 0.3s;
-}
-.pgrid-wrapper.expanded .pfade-overlay {
-  opacity: 0;
 }
 
 /* ---- TECH CATEGORY SECTIONS ---- */

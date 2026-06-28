@@ -3387,47 +3387,42 @@
 <!-- FLOATING CONTACT SIDEBAR -->
 <div class="contact-sidebar"><a href="https://wa.me/8618919659471" target="_blank" class="contact-item contact-whatsapp" title="WhatsApp"><span class="contact-icon">💬</span><span class="contact-label">WhatsApp</span></a><a href="weixin://chat?18919659471" class="contact-item contact-wechat" title="WeChat"><span class="contact-icon">💚</span><span class="contact-label">WeChat</span></a><a href="mailto:SALE@boppfilmsale.com" class="contact-item contact-email" title="Email"><span class="contact-icon">📧</span><span class="contact-label">Email</span></a></div>
 
-<script src="scripts.js">
-// Collapse/Expand product sections
+<script src="scripts.js"></script>
+<script>
+// Show first 8 product cards per category, hide the rest behind a "View All" toggle
 document.addEventListener('DOMContentLoaded', function() {
-  var sections = document.querySelectorAll('.pgrid');
-  sections.forEach(function(section) {
-    if (!section.classList.contains('pgrid-wrapper')) {
-      // Wrap the pgrid content
-      var wrapper = document.createElement('div');
-      wrapper.className = 'pgrid-wrapper collapsed';
-      var fadeOverlay = document.createElement('div');
-      fadeOverlay.className = 'pfade-overlay';
+  var VISIBLE_COUNT = 8;
+  var grids = document.querySelectorAll('.pgrid');
+  grids.forEach(function(grid) {
+    var cards = Array.prototype.filter.call(grid.children, function(el) {
+      return el.classList.contains('tech-card');
+    });
+    if (cards.length <= VISIBLE_COUNT) return;
 
-      // Move all children to wrapper
-      while (section.firstChild) {
-        wrapper.appendChild(section.firstChild);
+    var hiddenCards = cards.slice(VISIBLE_COUNT);
+    hiddenCards.forEach(function(card) { card.classList.add('pcard-hidden'); });
+
+    var total = cards.length;
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'pgrid-showmore-btn';
+    btn.innerHTML = '查看全部 ' + total + ' 个产品 · View All <span class="pgrid-arrow">▼</span>';
+
+    btn.addEventListener('click', function() {
+      var isExpanded = btn.classList.contains('is-expanded');
+      if (isExpanded) {
+        hiddenCards.forEach(function(card) { card.classList.add('pcard-hidden'); });
+        btn.classList.remove('is-expanded');
+        btn.innerHTML = '查看全部 ' + total + ' 个产品 · View All <span class="pgrid-arrow">▼</span>';
+        grid.scrollIntoView({behavior: 'smooth', block: 'start'});
+      } else {
+        hiddenCards.forEach(function(card) { card.classList.remove('pcard-hidden'); });
+        btn.classList.add('is-expanded');
+        btn.innerHTML = '收起 · Collapse <span class="pgrid-arrow">▼</span>';
       }
+    });
 
-      // Add view more button
-      var viewMoreBtn = document.createElement('button');
-      viewMoreBtn.className = 'view-more-btn';
-      viewMoreBtn.innerHTML = 'View All Products <span class="arrow">▼</span>';
-      viewMoreBtn.onclick = function() {
-        if (wrapper.classList.contains('collapsed')) {
-          wrapper.classList.remove('collapsed');
-          wrapper.classList.add('expanded');
-          viewMoreBtn.classList.add('expanded');
-          viewMoreBtn.innerHTML = 'Collapse <span class="arrow">▼</span>';
-        } else {
-          wrapper.classList.remove('expanded');
-          wrapper.classList.add('collapsed');
-          viewMoreBtn.classList.remove('expanded');
-          viewMoreBtn.innerHTML = 'View All Products <span class="arrow">▼</span>';
-          // Scroll to top of section
-          section.scrollIntoView({behavior: 'smooth', block: 'start'});
-        }
-      };
-
-      wrapper.appendChild(fadeOverlay);
-      section.appendChild(wrapper);
-      section.appendChild(viewMoreBtn);
-    }
+    grid.appendChild(btn);
   });
 });
 </script>
