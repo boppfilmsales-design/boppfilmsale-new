@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AEC GROUP 本地后台管理系统</title>
+  <link rel="stylesheet" href="admin.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- 侧边栏 -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">AEC <span>GROUP</span></div>
+      <p class="logo-sub">本地后台管理系统</p>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item active" data-page="dashboard">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">仪表盘</span>
+      </a>
+      <a class="nav-item" data-page="products">
+        <span class="nav-icon">📦</span>
+        <span class="nav-label">产品管理</span>
+      </a>
+      <a class="nav-item" data-page="categories">
+        <span class="nav-icon">📁</span>
+        <span class="nav-label">分类管理</span>
+      </a>
+      <a class="nav-item" data-page="pages">
+        <span class="nav-icon">📄</span>
+        <span class="nav-label">页面管理</span>
+      </a>
+      <a class="nav-item" data-page="company">
+        <span class="nav-icon">🏢</span>
+        <span class="nav-label">公司信息</span>
+      </a>
+      <a class="nav-item" data-page="files">
+        <span class="nav-icon">💾</span>
+        <span class="nav-label">文件管理</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="btn-save-all" onclick="saveAllData()">💾 保存所有更改</button>
+      <button class="btn-export" onclick="exportData()">📤 导出数据备份</button>
+      <button class="btn-import" onclick="document.getElementById('importFile').click()">📥 导入数据备份</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+    </div>
+  </aside>
+
+  <!-- 主内容区 -->
+  <main class="main-content">
+    <!-- 顶部栏 -->
+    <header class="top-bar">
+      <h1 class="page-title" id="pageTitle">仪表盘</h1>
+      <div class="top-bar-actions">
+        <span class="status-indicator" id="statusIndicator">● 已同步</span>
+        <button class="btn-preview" onclick="previewSite()">👁 预览网站</button>
+      </div>
+    </header>
+
+    <!-- 仪表盘页面 -->
+    <section class="page active" id="page-dashboard">
+      <div class="dashboard-stats">
+        <div class="stat-card">
+          <div class="stat-icon">📦</div>
+          <div class="stat-info">
+            <span class="stat-number" id="totalProducts">0</span>
+            <span class="stat-label">产品总数</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📁</div>
+          <div class="stat-info">
+            <span class="stat-number" id="totalCategories">0</span>
+            <span class="stat-label">分类总数</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📄</div>
+          <div class="stat-info">
+            <span class="stat-number" id="totalPages">0</span>
+            <span class="stat-label">页面总数</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💾</div>
+          <div class="stat-info">
+            <span class="stat-number" id="lastSave">--</span>
+            <span class="stat-label">最后保存</span>
+          </div>
+        </div>
+      </div>
+      <div class="dashboard-actions">
+        <h2>快捷操作</h2>
+        <div class="action-grid">
+          <button class="action-btn" onclick="navigateTo('products')">
+            <span class="action-icon">➕</span>
+            <span>添加产品</span>
+          </button>
+          <button class="action-btn" onclick="navigateTo('categories')">
+            <span class="action-icon">📁</span>
+            <span>管理分类</span>
+          </button>
+          <button class="action-btn" onclick="navigateTo('pages')">
+            <span class="action-icon">📝</span>
+            <span>编辑页面</span>
+          </button>
+          <button class="action-btn" onclick="navigateTo('company')">
+            <span class="action-icon">🏢</span>
+            <span>公司信息</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 产品管理页面 -->
+    <section class="page" id="page-products">
+      <div class="page-header">
+        <h2>产品列表</h2>
+        <button class="btn-primary" onclick="showProductModal()">➕ 添加产品</button>
+      </div>
+      <div class="table-container">
+        <table class="data-table" id="productsTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>产品名称(EN)</th>
+              <th>产品名称(ZH)</th>
+              <th>分类</th>
+              <th>价格</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="productsTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 分类管理页面 -->
+    <section class="page" id="page-categories">
+      <div class="page-header">
+        <h2>分类列表</h2>
+        <button class="btn-primary" onclick="showCategoryModal()">➕ 添加分类</button>
+      </div>
+      <div class="table-container">
+        <table class="data-table" id="categoriesTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>分类名称(EN)</th>
+              <th>分类名称(ZH)</th>
+              <th>图标</th>
+              <th>产品数</th>
+              <th>排序</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="categoriesTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 页面管理页面 -->
+    <section class="page" id="page-pages">
+      <div class="page-header">
+        <h2>页面内容管理</h2>
+      </div>
+      <div class="pages-list" id="pagesList"></div>
+    </section>
+
+    <!-- 公司信息页面 -->
+    <section class="page" id="page-company">
+      <div class="page-header">
+        <h2>公司信息管理</h2>
+        <button class="btn-primary" onclick="saveCompanyInfo()">💾 保存更改</button>
+      </div>
+      <div class="form-container">
+        <form id="companyForm">
+          <div class="form-group">
+            <label>公司名称(EN)</label>
+            <input type="text" id="companyNameEn" name="nameEn">
+          </div>
+          <div class="form-group">
+            <label>公司名称(ZH)</label>
+            <input type="text" id="companyNameZh" name="nameZh">
+          </div>
+          <div class="form-group">
+            <label>Slogan(EN)</label>
+            <input type="text" id="sloganEn" name="sloganEn">
+          </div>
+          <div class="form-group">
+            <label>Slogan(ZH)</label>
+            <input type="text" id="sloganZh" name="sloganZh">
+          </div>
+          <div class="form-group">
+            <label>邮箱</label>
+            <input type="email" id="companyEmail" name="email">
+          </div>
+          <div class="form-group">
+            <label>电话/WhatsApp</label>
+            <input type="text" id="companyPhone" name="phone">
+          </div>
+          <div class="form-group">
+            <label>QQ</label>
+            <input type="text" id="companyQQ" name="qq">
+          </div>
+          <div class="form-group">
+            <label>地址(EN)</label>
+            <textarea id="addressEn" name="addressEn" rows="2"></textarea>
+          </div>
+          <div class="form-group">
+            <label>地址(ZH)</label>
+            <textarea id="addressZh" name="addressZh" rows="2"></textarea>
+          </div>
+          <div class="form-group">
+            <label>ICP备案号</label>
+            <input type="text" id="icpNumber" name="icp">
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- 文件管理页面 -->
+    <section class="page" id="page-files">
+      <div class="page-header">
+        <h2>本地文件管理</h2>
+        <p class="page-desc">此功能需要浏览器支持 File System Access API。建议使用 Chrome 或 Edge 浏览器。</p>
+      </div>
+      <div class="file-manager">
+        <div class="file-toolbar">
+          <button class="btn-primary" onclick="selectFolder()">📁 选择网站文件夹</button>
+          <span id="folderStatus" class="folder-status">未选择文件夹</span>
+        </div>
+        <div class="file-tree" id="fileTree"></div>
+        <div class="file-content" id="fileContent">
+          <p class="placeholder">选择一个文件查看内容</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 产品编辑弹窗 -->
+  <div class="modal" id="productModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="productModalTitle">添加产品</h3>
+        <button class="modal-close" onclick="closeProductModal()">×</button>
+      </div>
+      <form id="productForm">
+        <input type="hidden" id="productId">
+        <div class="form-row">
+          <div class="form-group">
+            <label>产品名称(EN) *</label>
+            <input type="text" id="productNameEn" required>
+          </div>
+          <div class="form-group">
+            <label>产品名称(ZH)</label>
+            <input type="text" id="productNameZh">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>分类 *</label>
+          <select id="productCategory" required></select>
+        </div>
+        <div class="form-group">
+          <label>产品描述(EN)</label>
+          <textarea id="productDescEn" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label>产品描述(ZH)</label>
+          <textarea id="productDescZh" rows="2"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>价格</label>
+            <input type="text" id="productPrice" placeholder="From $0.8/m²">
+          </div>
+          <div class="form-group">
+            <label>厚度</label>
+            <input type="text" id="productThickness" placeholder="3-75μm">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>规格标签</label>
+          <input type="text" id="productSpecs" placeholder="High clarity, 250-10000mm (用逗号分隔)">
+        </div>
+        <div class="form-group">
+          <label>状态</label>
+          <select id="productStatus">
+            <option value="active">上架</option>
+            <option value="inactive">下架</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" onclick="closeProductModal()">取消</button>
+          <button type="submit" class="btn-primary">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 分类编辑弹窗 -->
+  <div class="modal" id="categoryModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="categoryModalTitle">添加分类</h3>
+        <button class="modal-close" onclick="closeCategoryModal()">×</button>
+      </div>
+      <form id="categoryForm">
+        <input type="hidden" id="categoryId">
+        <div class="form-row">
+          <div class="form-group">
+            <label>分类名称(EN) *</label>
+            <input type="text" id="categoryNameEn" required>
+          </div>
+          <div class="form-group">
+            <label>分类名称(ZH)</label>
+            <input type="text" id="categoryNameZh">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>图标(emoji)</label>
+            <input type="text" id="categoryIcon" placeholder="🎞️">
+          </div>
+          <div class="form-group">
+            <label>排序</label>
+            <input type="number" id="categoryOrder" value="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>描述(EN)</label>
+          <textarea id="categoryDescEn" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label>描述(ZH)</label>
+          <textarea id="categoryDescZh" rows="2"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" onclick="closeCategoryModal()">取消</button>
+          <button type="submit" class="btn-primary">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 页面编辑弹窗 -->
+  <div class="modal" id="pageModal">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h3 id="pageModalTitle">编辑页面</h3>
+        <button class="modal-close" onclick="closePageModal()">×</button>
+      </div>
+      <form id="pageForm">
+        <input type="hidden" id="pageId">
+        <div class="form-group">
+          <label>页面名称</label>
+          <input type="text" id="pageName" readonly>
+        </div>
+        <div class="form-group">
+          <label>页面内容 (HTML)</label>
+          <textarea id="pageContent" rows="20" class="code-editor"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" onclick="closePageModal()">取消</button>
+          <button type="submit" class="btn-primary">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 消息提示 -->
+  <div class="toast" id="toast"></div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
