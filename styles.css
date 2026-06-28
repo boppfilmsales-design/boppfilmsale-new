@@ -723,6 +723,9 @@ header.nav-open .mobile-menu-toggle span:nth-child(3){transform:translateY(-7px)
 
 /* ---- PRODUCT CARDS ---- */
 .tech-card{
+  display:block;
+  text-decoration:none;
+  color:inherit;
   position:relative;
   background:var(--bg-card);
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
