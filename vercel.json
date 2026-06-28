@@ -20,6 +20,18 @@
     {
       "src": "scripts.js",
       "use": "@vercel/static"
+    },
+    {
+      "src": "images/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "files/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "AEC-LOGO.jpg",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
