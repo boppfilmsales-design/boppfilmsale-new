@@ -12,31 +12,30 @@ function setupMobileNav(){
 }
 document.addEventListener('DOMContentLoaded',setupMobileNav);
 
-// ============ FADE IN (run immediately + on scroll) ============
-function checkFadeIn(){
+// ============ SCROLL PROGRESS + FADE IN ============
+function updateScrollProgressAndFades(){
+  var bar=document.getElementById('scrollProgress');
+  if(bar){
+    var h=document.documentElement;
+    var scrolled=h.scrollTop;
+    var total=h.scrollHeight-h.clientHeight;
+    var pct=total>0?(scrolled/total)*100:0;
+    bar.style.width=pct+'%';
+  }
+
+  // FADE IN
   var fades=document.querySelectorAll('.fade-in');
   for(var i=0;i<fades.length;i++){
     var el=fades[i];
-    if(el.classList.contains('visible'))continue;
     var rect=el.getBoundingClientRect();
     if(rect.top<window.innerHeight-40&&rect.bottom>0){
       el.classList.add('visible');
     }
   }
 }
-document.addEventListener('DOMContentLoaded',checkFadeIn);
-window.addEventListener('scroll',checkFadeIn);
-
-// ============ SCROLL PROGRESS ============
-window.addEventListener('scroll',function(){
-  var bar=document.getElementById('scrollProgress');
-  if(!bar)return;
-  var h=document.documentElement;
-  var scrolled=h.scrollTop;
-  var total=h.scrollHeight-h.clientHeight;
-  var pct=total>0?(scrolled/total)*100:0;
-  bar.style.width=pct+'%';
-});
+window.addEventListener('scroll',updateScrollProgressAndFades);
+document.addEventListener('DOMContentLoaded',updateScrollProgressAndFades);
+window.addEventListener('load',updateScrollProgressAndFades);
 
 // ============ LANGUAGE ============
 var currentLang=localStorage.getItem('aec-lang')||'en';
