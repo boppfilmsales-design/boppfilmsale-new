@@ -207,7 +207,7 @@ section{padding:88px 0}
 
 /* PRODUCTS */
 .products{background:transparent}
-.prod-layout{display:block;width:100%}
+.prod-layout{display:grid;grid-template-columns:280px 1fr;gap:40px;width:100%;align-items:start}
 .pnd{width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0;opacity:.5}
 .pcat{margin-bottom:56px}
 .cat-hdr{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
@@ -723,9 +723,6 @@ header.nav-open .mobile-menu-toggle span:nth-child(3){transform:translateY(-7px)
 
 /* ---- PRODUCT CARDS ---- */
 .tech-card{
-  display:block;
-  text-decoration:none;
-  color:inherit;
   position:relative;
   background:var(--bg-card);
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
