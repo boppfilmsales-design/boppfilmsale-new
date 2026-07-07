@@ -864,12 +864,13 @@ async function saveEditedProduct() {
   } catch(e) { /* ignore */ }
 
   // ③ ★ 在线模式：直接保存到云端 API ─────────────────────────
+  //   只发送单个改动产品（{product: productData}），
+  //   避免全量 165 个产品（5MB）超出 Vercel 4.5MB 请求体限制。
   var isOnline = window.location.hostname !== 'localhost' &&
                  window.location.hostname !== '127.0.0.1' &&
                  !window.location.href.startsWith('file://');
   if (isOnline) {
     try {
-      // ★ 只发送单个产品数据（避免全部 165 个产品超出 Vercel 4.5MB 限制）
       var resp = await fetch(window.location.origin + '/api/data', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
