@@ -8,6 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
+<!-- CNZZTV Code https://cnzztv.com/ -->
+<script async src="https://cnzztv.com/pixel/xnXGYVgJL9ltKlbz"></script>
+<!-- Js Code End -->
 </head>
 <body>
 
@@ -225,23 +228,8 @@
 <section style="padding:60px 0">
 <div class="container">
   <div class="sec-label">Product Categories · 产品分类</div><h2 class="sec-title">Explore Our Products</h2>
-  <div class="sec-zh">探索我们的薄膜产品系列 · 14 Categories</div>
-  <div class="agrid">
-    <a href="products.html#boppfilm-cat" class="acrd" style="text-decoration:none"><span class="ai">🎞️</span><div class="an">BOPP Film</div><div class="anz">双向拉伸聚丙烯薄膜</div></a>
-    <a href="products.html#bopetfilm-cat" class="acrd" style="text-decoration:none"><span class="ai">🧊</span><div class="an">BOPET Film</div><div class="anz">双向拉伸聚酯薄膜</div></a>
-    <a href="products.html#boppthermal-cat" class="acrd" style="text-decoration:none"><span class="ai">🔥</span><div class="an">BOPP Thermal Lamination</div><div class="anz">BOPP预涂膜</div></a>
-    <a href="products.html#coatingfilm-cat" class="acrd" style="text-decoration:none"><span class="ai">🛡️</span><div class="an">Coating Film</div><div class="anz">涂布膜 · K膜</div></a>
-    <a href="products.html#packingtape-cat" class="acrd" style="text-decoration:none"><span class="ai">📦</span><div class="an">Packing Tape</div><div class="anz">包装胶带</div></a>
-    <a href="products.html#bopswindows-cat" class="acrd" style="text-decoration:none"><span class="ai">📄</span><div class="an">BOPS Windows Envelope</div><div class="anz">聚苯乙烯薄膜</div></a>
-    <a href="products.html#cppbopa-cat" class="acrd" style="text-decoration:none"><span class="ai">🌊</span><div class="an">CPP / BOPA Film</div><div class="anz">流延膜&amp;尼龙膜</div></a>
-    <a href="products.html#pofpepvc-cat" class="acrd" style="text-decoration:none"><span class="ai">🎬</span><div class="an">POF / PE / PVC</div><div class="anz">收缩膜及袋类产品</div></a>
-    <a href="products.html#teartape-cat" class="acrd" style="text-decoration:none"><span class="ai">📌</span><div class="an">Tear Tape &amp; Clips</div><div class="anz">拉线和包扎绳</div></a>
-    <a href="products.html#paperproducts-cat" class="acrd" style="text-decoration:none"><span class="ai">📄</span><div class="an">Paper Products</div><div class="anz">纸制品 · 打印耗材</div></a>
-    <a href="products.html#machinesequipment-cat" class="acrd" style="text-decoration:none"><span class="ai">🔧</span><div class="an">Machines &amp; Equipment</div><div class="anz">机器设备</div></a>
-    <a href="products.html#ttrlabels-cat" class="acrd" style="text-decoration:none"><span class="ai">📊</span><div class="an">TTR Ribbons &amp; Labels</div><div class="anz">热转印碳带</div></a>
-    <a href="products.html#adhesives-cat" class="acrd" style="text-decoration:none"><span class="ai">🧴</span><div class="an">Adhesive Glue</div><div class="anz">胶水粘合剂</div></a>
-    <a href="products.html#other-cat" class="acrd" style="text-decoration:none"><span class="ai">📦</span><div class="an">Other Products</div><div class="anz">其他产品</div></a>
-  </div>
+  <div class="sec-zh">探索我们的薄膜产品系列 · <span id="cat-count">14</span> Categories</div>
+  <div class="agrid"><!-- auto-rendered by renderCategoryGrid() in scripts.js, synced from products-data.js --></div>
 </div>
 </section>
 
@@ -343,10 +331,8 @@
 </footer>
 
 
+<script src="products-data.js"></script>
 <script src="scripts.js"></script>
-<!-- CNZZTV Code https://cnzztv.com/ -->
-<script async src="https://cnzztv.com/pixel/xnXGYVgJL9ltKlbz"></script>
-<!-- Js Code End -->
 
 <script>
 // Fetch and display products from API

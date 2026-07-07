@@ -1,0 +1,7 @@
+① 打开后台 admin/index.html
+② 左侧菜单 → 「文件管理」→ 点「📁 选择网站文件夹」→ 选 aec-project 文件夹
+   （每次打开后台都要重新选一次，这是浏览器安全限制）
+③ 修改产品信息 → 点保存
+   → 系统自动将 products-data.js 写入 aec-project 文件夹
+④ 切换到前端 products.html，按 F5 刷新
+   → 看到最新内容 ✅

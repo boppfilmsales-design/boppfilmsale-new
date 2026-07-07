@@ -175,6 +175,38 @@ function toggleThumbs(id,btn){
   if(btn)btn.textContent=el.classList.contains('eq-thumbs-collapsed')?'Read More 查看更多 ▾':'收起 ↑';
 }
 
+// ============ CATEGORY GRID (auto-synced with products-data.js) ============
+// This renders the homepage "Explore Our Products" tile grid directly from
+// productsData.categories, so it can NEVER drift out of sync with the top
+// nav / products page again. To add, remove or reorder a top-level category,
+// only edit products-data.js — this grid (on both index.html and
+// index_zh.html) will automatically pick up the change.
+function renderCategoryGrid(){
+  var grid = document.querySelector('.agrid');
+  if(!grid || typeof productsData === 'undefined' || !productsData.categories) return;
+
+  var page = window.location.pathname.split('/').pop() || 'index.html';
+  var isZh = page.indexOf('_zh.html') > -1;
+  var productsPage = isZh ? 'products_zh.html' : 'products.html';
+
+  var cats = productsData.categories.filter(function(c){ return !c.parentId; });
+  cats.sort(function(a,b){ return (a.order||0) - (b.order||0); });
+
+  var html = '';
+  cats.forEach(function(c){
+    html += '<a href="'+productsPage+'#'+c.id+'" class="acrd" style="text-decoration:none">'
+          + '<span class="ai">'+c.icon+'</span>'
+          + '<div class="an">'+c.nameEn+'</div>'
+          + '<div class="anz">'+c.nameZh+'</div>'
+          + '</a>';
+  });
+  grid.innerHTML = html;
+
+  var countEl = document.getElementById('cat-count');
+  if(countEl) countEl.textContent = cats.length;
+}
+document.addEventListener('DOMContentLoaded', renderCategoryGrid);
+
 // ============ BOPP CATEGORY ACCORDION ============
 function toggleCategory(header){
   var sub=header.nextElementSibling;
