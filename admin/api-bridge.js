@@ -83,12 +83,17 @@
     };
   }
 
-  // ── OVERRIDE: loadData ──────────────────────────────────
-  // Replace the original loadData with one that tries API first
-  var originalLoadData = window.loadData;
-  window.loadData = async function() {
-    // Try API first
-    var apiOk = await loadDataFromApi();
+  // ── OVERRIDE: loadData (only on main admin page) ─────────
+  // On product_edit.html and product.html, the page has its own loadData
+  // that reads from window.productsData (products-data.js).
+  // Only override on index.html where admin.js functions exist.
+  var isProductPage = window.location.pathname.indexOf('product_') !== -1;
+  
+  if (!isProductPage) {
+    var originalLoadData = window.loadData;
+    window.loadData = async function() {
+      // Try API first
+      var apiOk = await loadDataFromApi();
 
     if (apiOk) {
       // Still run localStorage restore for any extra state
@@ -128,6 +133,7 @@
       // Still mark as online-available
     }
   };
+  } // end if (!isProductPage)
 
   // ── OVERRIDE: saveAllData ───────────────────────────────
   var originalSaveAll = window.saveAllData;
