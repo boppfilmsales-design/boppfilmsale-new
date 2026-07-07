@@ -870,7 +870,7 @@ async function saveEditedProduct() {
   if (isOnline) {
     try {
       // ★ 只发送单个产品数据（避免全部 165 个产品超出 Vercel 4.5MB 限制）
-      var resp = await fetch(window.location.origin + '/api/data/product', {
+      var resp = await fetch(window.location.origin + '/api/data', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ product: productData })
