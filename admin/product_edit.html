@@ -869,18 +869,14 @@ async function saveEditedProduct() {
                  !window.location.href.startsWith('file://');
   if (isOnline) {
     try {
-      var fullData = {
-        products: APP_DATA.products || [],
-        categories: APP_DATA.categories || [],
-        company: APP_DATA.company || {},
-        headerFooter: APP_DATA.headerFooter || {}
-      };
-      var resp = await fetch(window.location.origin + '/api/data', {
+      // ★ 只发送单个产品数据（避免全部 165 个产品超出 Vercel 4.5MB 限制）
+      var resp = await fetch(window.location.origin + '/api/data/product', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: fullData })
+        body: JSON.stringify({ product: productData })
       });
-      var result = await resp.json();
+      var text = await resp.text();
+      var result = JSON.parse(text);
       if (result.success) {
         showToast('✅ 产品已保存到云端！刷新前端即可看到更新');
         setTimeout(function(){ window.location.href = 'index.html?page=products'; }, 1500);
@@ -888,7 +884,7 @@ async function saveEditedProduct() {
         showToast('❌ 云端保存失败: ' + (result.error || '未知错误'), 'error');
       }
     } catch(e) {
-      showToast('❌ 云端保存失败: ' + e.message, 'error');
+      showToast('❌ 云端保存失败 (' + e.message.substring(0,50) + ')', 'error');
     }
     return;
   }
