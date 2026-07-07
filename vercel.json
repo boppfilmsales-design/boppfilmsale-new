@@ -61,7 +61,7 @@
     },
     {
       "src": "/products-data\\.js",
-      "dest": "/api/productdata"
+      "dest": "/api/data?format=js"
     },
     {
       "src": "/(.*)",
