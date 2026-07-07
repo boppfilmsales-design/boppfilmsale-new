@@ -32,9 +32,25 @@ async function ensureTable(sql) {
       CONSTRAINT single_row CHECK (id = 1)
     );
   `;
-  const rows = await sql`SELECT id FROM admin_data WHERE id = 1`;
+  const rows = await sql`SELECT id, data FROM admin_data WHERE id = 1`;
   if (rows.length === 0) {
-    await sql`INSERT INTO admin_data (id, data) VALUES (1, '{}'::jsonb)`;
+    // Seed from static products-data.js if DB is empty
+    const staticPath = path.join(process.cwd(), 'products-data.js');
+    let seedData = {};
+    if (fs.existsSync(staticPath)) {
+      try {
+        const content = fs.readFileSync(staticPath, 'utf-8');
+        // Extract the JSON object from `var productsData = {...};`
+        const match = content.match(/var productsData\s*=\s*(\{[\s\S]*\});/);
+        if (match) {
+          seedData = JSON.parse(match[1]);
+          console.log('Seeded DB from static products-data.js');
+        }
+      } catch (e) {
+        console.error('Failed to parse static file for seeding:', e.message);
+      }
+    }
+    await sql`INSERT INTO admin_data (id, data) VALUES (1, ${JSON.stringify(seedData)}::jsonb)`;
   }
 }
 
@@ -93,7 +109,24 @@ module.exports = async function handler(req, res) {
       }
       // Default: return JSON
       const rows = await sql`SELECT data FROM admin_data WHERE id = 1`;
-      const data = rows.length > 0 ? rows[0].data : {};
+      let data = rows.length > 0 ? rows[0].data : {};
+
+      // Fallback: if DB data is empty but static file exists, use that
+      if (!data || (typeof data === 'object' && Object.keys(data).length === 0)) {
+        const staticPath = path.join(process.cwd(), 'products-data.js');
+        if (fs.existsSync(staticPath)) {
+          try {
+            const content = fs.readFileSync(staticPath, 'utf-8');
+            const match = content.match(/var productsData\s*=\s*(\{[\s\S]*\});/);
+            if (match) {
+              data = JSON.parse(match[1]);
+            }
+          } catch (e) {
+            console.error('Fallback parse error:', e.message);
+          }
+        }
+      }
+
       return jsonResponse(res, { success: true, data });
     }
 
