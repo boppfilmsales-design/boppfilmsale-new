@@ -60,6 +60,10 @@
       "dest": "/api/$1"
     },
     {
+      "src": "/products-data\\.js",
+      "dest": "/api/products-data-feed"
+    },
+    {
       "src": "/(.*)",
       "dest": "/$1"
     }
