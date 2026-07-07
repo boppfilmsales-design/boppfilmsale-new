@@ -22,6 +22,26 @@
       "use": "@vercel/static"
     },
     {
+      "src": "products-data.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "products-render.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "product-detail-render.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "admin/*.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "admin/*.css",
+      "use": "@vercel/static"
+    },
+    {
       "src": "images/**",
       "use": "@vercel/static"
     },

@@ -38,3 +38,4 @@ tests/
 *.seed
 
 .vercel
+.env*
