@@ -637,8 +637,12 @@ function saveEditedProduct() {
 }
 
 // ============ INIT ============
+// ★ 修复：loadData() 必须在 DOMContentLoaded 外同步执行，
+//   否则会被 api-bridge.js 替换为不兼容的版本
+loadData();
+
 document.addEventListener('DOMContentLoaded', function() {
-  loadData();
+  // loadData 已在 DOM 加载前执行完毕
   loadProductForEdit();
 });
 </script>

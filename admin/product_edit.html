@@ -886,8 +886,14 @@ async function saveEditedProduct() {
 }
 
 // ============ INIT ============
+// ★ 修复：loadData() 必须在 DOMContentLoaded 外同步执行，
+//   否则会被 api-bridge.js 替换为不兼容的版本（调用 updateDashboard 等不存在的函数）
+loadData();
+
 document.addEventListener('DOMContentLoaded', async function() {
-  loadData();
+  // ★ loadData 已在 DOM 加载前执行完毕，APP_DATA.products 已有数据
+  //   （从 window.productsData 同步填充）
+  //   api-bridge.js 的覆盖不影响这一步
   loadProductForEdit();
   await restoreFolderHandle();
   initRedColorEnforcer();
