@@ -185,6 +185,13 @@ module.exports = async function handler(req, res) {
         return jsonResponse(res, { success: true, message: 'Product saved' });
       }
 
+      // RESET: reseed DB from static file
+      if (req.body && req.body._action === 'reset') {
+        await sql`DELETE FROM admin_data WHERE id = 1`;
+        await seedFromStaticFile(sql);
+        return jsonResponse(res, { success: true, message: 'DB reset from static file' });
+      }
+
       // Full data replace
       if (!data) {
         return jsonResponse(res, { success: false, error: 'Missing "data" or "product" in request body' }, 400);
