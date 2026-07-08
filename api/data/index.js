@@ -39,20 +39,24 @@ async function ensureTable(sql) {
 }
 
 function tryReadStaticData() {
-  const candidates = ['products-data.js', '_products-data.js'];
-  for (const name of candidates) {
-    const p = path.join(process.cwd(), name);
+  const base = process.cwd();
+  const candidates = [
+    path.join(base, 'data', 'products-data.js'),
+    path.join(base, 'products-data.js'),
+    path.join(base, '_products-data.js'),
+  ];
+  for (const p of candidates) {
     if (fs.existsSync(p)) {
       try {
         const content = fs.readFileSync(p, 'utf-8');
         const match = content.match(/var productsData\s*=\s*(\{[\s\S]*\});/);
         if (match) {
           const data = JSON.parse(match[1]);
-          console.log('Read static data from', name);
+          console.log('Read static data from', path.relative(base, p));
           return data;
         }
       } catch (e) {
-        console.error('Failed to parse', name, e.message);
+        console.error('Failed to parse', p, e.message);
       }
     }
   }
