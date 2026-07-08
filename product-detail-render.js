@@ -24,6 +24,15 @@
       .replace(/"/g, '&quot;');
   }
 
+  /* URL-encode image paths (spaces, parentheses, etc.) */
+  function urlEncodePath(p) {
+    if (!p) return '';
+    // Only encode characters that break URLs, not the entire URI scheme
+    return p.split('/').map(function(seg) {
+      return encodeURIComponent(seg);
+    }).join('/');
+  }
+
   function stripHtml(html) {
     if (!html) return '';
     return html
@@ -177,7 +186,7 @@
 
     /* hero section */
     var imageHtml = hasImage
-      ? '<div class="pdr-hero-img"><img src="' + esc(product.image) + '" alt="' + esc(product.nameEn) + '" loading="lazy"/></div>'
+      ? '<div class="pdr-hero-img"><img src="' + urlEncodePath(product.image) + '" alt="' + esc(product.nameEn) + '" loading="lazy"/></div>'
       : '<div class="pdr-hero-img pdr-hero-img--icon"><span class="pdr-hero-icon">' + icon + '</span></div>';
 
     var priceHtml = product.price
