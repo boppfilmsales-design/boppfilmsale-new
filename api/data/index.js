@@ -38,21 +38,29 @@ async function ensureTable(sql) {
   }
 }
 
-async function seedFromStaticFile(sql) {
-  const staticPath = path.join(process.cwd(), 'products-data.js');
-  let seedData = {};
-  if (fs.existsSync(staticPath)) {
-    try {
-      const content = fs.readFileSync(staticPath, 'utf-8');
-      const match = content.match(/var productsData\s*=\s*(\{[\s\S]*\});/);
-      if (match) {
-        seedData = JSON.parse(match[1]);
-        console.log('Seeded DB from static products-data.js');
+function tryReadStaticData() {
+  const candidates = ['products-data.js', '_products-data.js'];
+  for (const name of candidates) {
+    const p = path.join(process.cwd(), name);
+    if (fs.existsSync(p)) {
+      try {
+        const content = fs.readFileSync(p, 'utf-8');
+        const match = content.match(/var productsData\s*=\s*(\{[\s\S]*\});/);
+        if (match) {
+          const data = JSON.parse(match[1]);
+          console.log('Read static data from', name);
+          return data;
+        }
+      } catch (e) {
+        console.error('Failed to parse', name, e.message);
       }
-    } catch (e) {
-      console.error('Failed to parse static file for seeding:', e.message);
     }
   }
+  return null;
+}
+
+async function seedFromStaticFile(sql) {
+  const seedData = tryReadStaticData() || {};
   await sql`INSERT INTO admin_data (id, data) VALUES (1, ${JSON.stringify(seedData)}::jsonb)`;
 }
 
@@ -145,19 +153,11 @@ module.exports = async function handler(req, res) {
         data = newRows.length > 0 ? newRows[0].data : {};
       }
 
-      // Fallback: if DB data is still empty but static file exists, use that
+      // Fallback: if DB data is still empty but a static file exists, use that
       if (isDataCorrupted(data)) {
-        const staticPath = path.join(process.cwd(), 'products-data.js');
-        if (fs.existsSync(staticPath)) {
-          try {
-            const content = fs.readFileSync(staticPath, 'utf-8');
-            const match = content.match(/var productsData\s*=\s*(\{[\s\S]*\});/);
-            if (match) {
-              data = JSON.parse(match[1]);
-            }
-          } catch (e) {
-            console.error('Fallback parse error:', e.message);
-          }
+        const fallbackData = tryReadStaticData();
+        if (fallbackData) {
+          data = fallbackData;
         }
       }
 
