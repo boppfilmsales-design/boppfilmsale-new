@@ -191,7 +191,11 @@ module.exports = async function handler(req, res) {
 
         const idx = dbData.products.findIndex(p => p && p.id === product.id);
         if (idx >= 0) {
-          dbData.products[idx] = product;
+          // ★ MERGE: only overwrite fields sent in the payload,
+          //          keeping existing fields untouched
+          Object.keys(product).forEach(function(k) {
+            dbData.products[idx][k] = product[k];
+          });
         } else {
           dbData.products.push(product);
         }
