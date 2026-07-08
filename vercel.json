@@ -22,6 +22,10 @@
       "use": "@vercel/static"
     },
     {
+      "src": "products-data.js",
+      "use": "@vercel/static"
+    },
+    {
       "src": "products-render.js",
       "use": "@vercel/static"
     },
@@ -54,10 +58,6 @@
     {
       "src": "/api/(.*)",
       "dest": "/api/$1"
-    },
-    {
-      "src": "/products-data\\.js",
-      "dest": "/api/data?format=js"
     },
     {
       "src": "/(.*)",
