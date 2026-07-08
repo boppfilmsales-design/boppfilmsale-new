@@ -172,13 +172,23 @@ module.exports = async function handler(req, res) {
       const { data, product } = req.body;
 
       // Single product update (small payload, avoids 4.5MB limit)
-      if (product && product.id) {
+      if (product) {
         const rows = await sql`SELECT data FROM admin_data WHERE id = 1`;
         if (rows.length === 0) {
           return jsonResponse(res, { success: false, error: 'No data in DB' }, 404);
         }
         let dbData = rows[0].data;
         if (!Array.isArray(dbData.products)) dbData.products = [];
+
+        // If product has no valid id, auto-generate one
+        let pid = parseInt(product.id, 10);
+        if (!pid || pid <= 0 || isNaN(pid)) {
+          let maxId = 0;
+          dbData.products.forEach(p => { if (p && p.id > maxId) maxId = p.id; });
+          pid = maxId + 1;
+          product.id = pid;
+        }
+
         const idx = dbData.products.findIndex(p => p && p.id === product.id);
         if (idx >= 0) {
           dbData.products[idx] = product;
@@ -186,7 +196,7 @@ module.exports = async function handler(req, res) {
           dbData.products.push(product);
         }
         await sql`UPDATE admin_data SET data = ${JSON.stringify(dbData)}::jsonb, updated_at = CURRENT_TIMESTAMP WHERE id = 1`;
-        return jsonResponse(res, { success: true, message: 'Product saved' });
+        return jsonResponse(res, { success: true, message: 'Product saved', id: product.id });
       }
 
       // RESET: reseed DB from static file
