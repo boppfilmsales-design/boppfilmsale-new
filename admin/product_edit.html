@@ -727,12 +727,22 @@ function handleImageUpload(event) {
 async function uploadImageToCloud(file) {
   showToast('⏫ 正在上传图片到云端...');
   try {
-    var formData = new FormData();
-    formData.append('image', file);
+    // Read file as base64
+    var reader = new FileReader();
+    var base64data = await new Promise(function(resolve, reject) {
+      reader.onload = function(e) { resolve(e.target.result.split(',')[1]); };
+      reader.onerror = function(e) { reject(new Error('读取文件失败')); };
+      reader.readAsDataURL(file);
+    });
 
-    var resp = await fetch('/api/upload-image', {
+    var resp = await fetch('/api/data', {
       method: 'POST',
-      body: formData
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        _action: 'upload_image',
+        image: base64data,
+        filename: file.name
+      })
     });
     var result = await resp.json();
 

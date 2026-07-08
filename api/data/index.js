@@ -210,6 +210,22 @@ module.exports = async function handler(req, res) {
         return jsonResponse(res, { success: true, message: 'DB reset from static file' });
       }
 
+      // UPLOAD IMAGE: forward to Telegraph (free image host by Telegram)
+      if (req.body && req.body._action === 'upload_image') {
+        const imageBase64 = req.body.image;
+        const filename = req.body.filename || 'upload.jpg';
+        if (!imageBase64) {
+          return jsonResponse(res, { success: false, error: 'Missing "image" (base64)' }, 400);
+        }
+        try {
+          const imageBuffer = Buffer.from(imageBase64, 'base64');
+          const url = await uploadToTelegraph(imageBuffer, filename);
+          return jsonResponse(res, { success: true, url });
+        } catch (e) {
+          return jsonResponse(res, { success: false, error: e.message }, 500);
+        }
+      }
+
       // Full data replace
       if (!data) {
         return jsonResponse(res, { success: false, error: 'Missing "data" or "product" in request body' }, 400);
@@ -228,3 +244,49 @@ module.exports = async function handler(req, res) {
     return jsonResponse(res, { success: false, error: error.message }, 500);
   }
 };
+
+// ── Upload to Telegraph (Telegram's free image host) ──────────
+function uploadToTelegraph(imageBuffer, filename) {
+  return new Promise((resolve, reject) => {
+    const boundary = '----TelegraphBoundary' + Date.now();
+    const header = Buffer.from(
+      '--' + boundary + '\r\n' +
+      'Content-Disposition: form-data; name="image"; filename="' + filename + '"\r\n' +
+      'Content-Type: image/jpeg\r\n\r\n'
+    );
+    const footer = Buffer.from('\r\n--' + boundary + '--\r\n');
+    const body = Buffer.concat([header, imageBuffer, footer]);
+
+    const opts = {
+      hostname: 'telegra.ph',
+      path: '/upload',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data; boundary=' + boundary,
+        'Content-Length': body.length,
+      },
+    };
+
+    const req = require('https').request(opts, (res) => {
+      let data = '';
+      res.on('data', (c) => (data += c));
+      res.on('end', () => {
+        try {
+          const result = JSON.parse(data);
+          if (Array.isArray(result) && result[0] && result[0].src) {
+            resolve('https://telegra.ph' + result[0].src);
+          } else if (result.error) {
+            reject(new Error(result.error));
+          } else {
+            reject(new Error('Unexpected response: ' + data));
+          }
+        } catch (e) {
+          reject(new Error('Parse error: ' + e.message + ' body: ' + data));
+        }
+      });
+    });
+    req.on('error', reject);
+    req.write(body);
+    req.end();
+  });
+}
