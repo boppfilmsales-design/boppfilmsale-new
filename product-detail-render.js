@@ -27,7 +27,9 @@
   /* URL-encode image paths (spaces, parentheses, etc.) */
   function urlEncodePath(p) {
     if (!p) return '';
-    // Only encode characters that break URLs, not the entire URI scheme
+    // If it's already a full URL (http/https), don't encode — it's a remote link
+    if (p.startsWith('http://') || p.startsWith('https://')) return p;
+    // Only encode local relative paths
     return p.split('/').map(function(seg) {
       return encodeURIComponent(seg);
     }).join('/');
