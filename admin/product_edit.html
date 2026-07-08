@@ -699,19 +699,52 @@ function handleImageUpload(event) {
   var file = event.target.files[0];
   if (!file || !file.type.startsWith('image/')) { showToast('请选择图片文件', 'error'); return; }
   if (file.size > 10 * 1024 * 1024) { showToast('图片大小不能超过 10MB', 'error'); return; }
+
+  // 预览
   var reader = new FileReader();
   reader.onload = function(e) {
     document.getElementById('imagePreviewImg').src = e.target.result;
     document.getElementById('imagePreview').style.display = 'block';
-    var pi = document.getElementById('productImage');
-    if (!pi.value) pi.value = 'images/' + file.name;
   };
   reader.readAsDataURL(file);
 
-  // ★ 真正把图片文件写入 aec-project/images/ 文件夹（这一步之前在本页面是缺失的，
-  //   只做了内存预览，导致保存产品后前端网站找不到实际的图片文件）。
-  //   无论成功还是失败，都用醒目的方式明确告诉用户，不再静默。
-  trySaveImageToDiskWithFeedback(file);
+  // 判断是否在线
+  var isOnline = window.location.hostname !== 'localhost' &&
+                 window.location.hostname !== '127.0.0.1' &&
+                 !window.location.href.startsWith('file://');
+
+  if (isOnline) {
+    // ★ 云上传：通过 API 上传到 Telegraph（Telegram 图床）
+    uploadImageToCloud(file);
+  } else {
+    // 本地模式：尝试写入磁盘
+    var pi = document.getElementById('productImage');
+    if (!pi.value) pi.value = 'images/' + file.name;
+    trySaveImageToDiskWithFeedback(file);
+  }
+}
+
+async function uploadImageToCloud(file) {
+  showToast('⏫ 正在上传图片到云端...');
+  try {
+    var formData = new FormData();
+    formData.append('image', file);
+
+    var resp = await fetch('/api/upload-image', {
+      method: 'POST',
+      body: formData
+    });
+    var result = await resp.json();
+
+    if (result.success && result.url) {
+      document.getElementById('productImage').value = result.url;
+      showToast('✅ 图片已上传到云端！保存产品即可生效');
+    } else {
+      showToast('❌ 上传失败: ' + (result.error || '未知错误'), 'error');
+    }
+  } catch (e) {
+    showToast('❌ 上传失败: ' + e.message.substring(0, 50), 'error');
+  }
 }
 
 async function trySaveImageToDiskWithFeedback(file) {
