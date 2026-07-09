@@ -20,9 +20,10 @@ function jsonResponse(res, data, status = 200) {
 let pool = null;
 function getPool() {
   if (pool) return pool;
-  const cs = process.env.DATABASE_URL || process.env.POSTGRES_URL;
-  if (!cs) throw new Error('DATABASE_URL is required');
-  pool = new Pool({ connectionString: cs, ssl: { rejectUnauthorized: false } });
+  const cs = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.SUPABASE_URL;
+  console.log('DB connecting... cs length:', cs ? cs.length : 0);
+  if (!cs) throw new Error('No database connection string found in env');
+  pool = new Pool({ connectionString: cs, ssl: { rejectUnauthorized: false }, connectionTimeoutMillis: 10000 });
   return pool;
 }
 
@@ -112,7 +113,7 @@ module.exports = async function handler(req, res) {
       p = getPool();
       await ensureTable();
     } catch (dbErr) {
-      console.error('DB unavailable:', dbErr.message);
+      console.error('DB unavailable:', dbErr.message, dbErr.stack ? dbErr.stack.substring(0,300) : '');
       if (req.method === 'GET' && req.query && req.query.format === 'js') return serveStaticJs(res);
       if (req.method === 'GET') return jsonResponse(res, { success: true, data: tryReadStaticData() || {}, source: 'static' });
       if (req.method === 'POST') return jsonResponse(res, { success: false, error: 'Database unavailable' }, 503);
