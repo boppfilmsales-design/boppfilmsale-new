@@ -128,7 +128,7 @@ module.exports = async function handler(req, res) {
     }
 
     if (req.method === 'GET') {
-      if (req.query && req.query.format === 'js') return await serveAsJs(p, res);
+      if (req.query && req.query.format === 'js') return await serveDynamicJs(p, res);
       const r = await p.query('SELECT data FROM admin_data WHERE id = 1');
       let d = r.rows.length > 0 ? r.rows[0].data : {};
       if (isCorrupted(d)) {
