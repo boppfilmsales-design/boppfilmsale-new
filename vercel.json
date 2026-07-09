@@ -60,6 +60,10 @@
       "dest": "/api/data?format=js"
     },
     {
+      "src": "/data/products-data\\.js",
+      "dest": "/data/products-data.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "/$1"
     }
