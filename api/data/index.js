@@ -20,9 +20,12 @@ function jsonResponse(res, data, status = 200) {
 let pool = null;
 function getPool() {
   if (pool) return pool;
-  const cs = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.SUPABASE_URL;
+  let cs = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.SUPABASE_URL;
   console.log('DB connecting... cs length:', cs ? cs.length : 0);
   if (!cs) throw new Error('No database connection string found in env');
+  // Strip ?sslmode=require — pg package doesn't understand it,
+  // we handle SSL via the ssl option below
+  cs = cs.replace(/\?sslmode=[^&]*&?/, '').replace(/&sslmode=[^&]*/, '').replace(/\?$/, '');
   pool = new Pool({ connectionString: cs, ssl: { rejectUnauthorized: false }, connectionTimeoutMillis: 10000 });
   return pool;
 }
