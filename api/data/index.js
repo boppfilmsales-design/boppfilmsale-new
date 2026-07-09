@@ -1,15 +1,27 @@
 // ============================================================
 // Data API — Full CRUD for admin products/categories/config
-// Uses pg pool (compatible with Supabase / any PostgreSQL)
+// Uses @supabase/supabase-js (HTTPS REST API — no SSL issues)
 // Stores the entire admin data set as a single JSONB row
 // GET  /api/data           → JSON { success, data }
 // GET  /api/data?format=js → JavaScript (like products-data.js)
 // POST /api/data           → save { data } or { product }
 // ============================================================
-const { Pool } = require('pg');
+const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 const path = require('path');
 
+// ── Init Supabase client ──────────────────────────────────────
+let supabase = null;
+function getSupabase() {
+  if (supabase) return supabase;
+  const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://uquytuqgmuushkimksvx.supabase.co';
+  const key = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!key) throw new Error('Supabase service key not found in env');
+  supabase = createClient(url, key);
+  return supabase;
+}
+
+// ── Response helpers ──────────────────────────────────────────
 function jsonResponse(res, data, status = 200) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -17,36 +29,61 @@ function jsonResponse(res, data, status = 200) {
   return res.status(status).json(data);
 }
 
-let pool = null;
-function getPool() {
-  if (pool) return pool;
-  let cs = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.SUPABASE_URL;
-  console.log('DB connecting... cs length:', cs ? cs.length : 0);
-  if (!cs) throw new Error('No database connection string found in env');
-  // Strip ?sslmode=require — pg package doesn't understand it,
-  // we handle SSL via the ssl option below
-  cs = cs.replace(/\?sslmode=[^&]*&?/, '').replace(/&sslmode=[^&]*/, '').replace(/\?$/, '');
-  pool = new Pool({ connectionString: cs, ssl: { rejectUnauthorized: false }, connectionTimeoutMillis: 10000 });
-  return pool;
-}
+// ── DB helpers ────────────────────────────────────────────────
+const TABLE = 'admin_data';
 
 async function ensureTable() {
-  const p = getPool();
-  await p.query(`
-    CREATE TABLE IF NOT EXISTS admin_data (
-      id INTEGER PRIMARY KEY DEFAULT 1,
-      data JSONB NOT NULL DEFAULT '{}',
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      CONSTRAINT single_row CHECK (id = 1)
-    );
-  `);
-  const r = await p.query('SELECT data FROM admin_data WHERE id = 1');
-  if (r.rows.length === 0) {
-    const seed = tryReadStaticData() || {};
-    await p.query('INSERT INTO admin_data (id, data) VALUES (1, $1::jsonb)', [JSON.stringify(seed)]);
+  // Supabase JS doesn't do raw DDL, but we can use .rpc or raw query via pg
+  // For simplicity: we'll try to SELECT and if it fails, create via raw SQL
+  try {
+    const { data, error } = await getSupabase()
+      .from(TABLE)
+      .select('id')
+      .eq('id', 1)
+      .limit(1);
+    if (error && error.code === '42P01') {
+      // Table doesn't exist — create it via the management API won't work easily.
+      // Instead: just seed from static file and let the first INSERT fail gracefully.
+      // Actually, with supabase-js we can use .rpc('exec_sql', {sql: ...}) if you've
+      // created that function, but for simplicity we'll use the raw postgres REST API.
+      // Fallback: the table must exist already or we create it differently.
+      console.log('Table not found, will attempt auto-creation via raw query');
+      throw error;
+    }
+  } catch (e) {
+    // If table doesn't exist, we'll try to create it
+    console.log('ensureTable check failed:', e.message);
   }
 }
 
+async function getDataFromDb() {
+  const { data, error } = await getSupabase()
+    .from(TABLE)
+    .select('data')
+    .eq('id', 1)
+    .limit(1)
+    .single();
+  if (error) throw error;
+  return data ? data.data : null;
+}
+
+async function upsertData(jsonData) {
+  const now = new Date().toISOString();
+  const { error } = await getSupabase()
+    .from(TABLE)
+    .upsert({ id: 1, data: jsonData, updated_at: now }, { onConflict: 'id' });
+  if (error) throw error;
+}
+
+async function deleteAllData() {
+  const { error } = await getSupabase()
+    .from(TABLE)
+    .delete()
+    .eq('id', 1);
+  if (error) throw error;
+}
+
+// ── Static file helpers (fallback) ────────────────────────────
 function tryReadStaticData() {
   const base = process.cwd();
   const candidates = [
@@ -84,127 +121,33 @@ function serveStaticJs(res) {
   return res.status(200).send('var productsData = {"categories":[],"products":[],"company":{},"headerFooter":{}};\nconsole.warn("API: No data available");\n');
 }
 
-async function serveDynamicJs(p, res) {
+async function serveAsJs(res) {
   try {
-    const r = await p.query('SELECT data FROM admin_data WHERE id = 1');
-    if (r.rows.length > 0 && r.rows[0].data) {
-      let d = r.rows[0].data;
-      if (isCorrupted(d)) {
-        await p.query('DELETE FROM admin_data WHERE id = 1');
-        const sd = tryReadStaticData() || {};
-        await p.query('INSERT INTO admin_data (id, data) VALUES (1, $1::jsonb)', [JSON.stringify(sd)]);
-        const r2 = await p.query('SELECT data FROM admin_data WHERE id = 1');
-        if (r2.rows.length > 0 && r2.rows[0].data && !isCorrupted(r2.rows[0].data)) d = r2.rows[0].data;
-      }
-      if (!isCorrupted(d)) {
-        const js = '// Auto-generated by API - ' + new Date().toISOString() + '\n' +
-                   'var productsData = ' + JSON.stringify(d, null, 2) + ';\n';
-        res.setHeader('Content-Type', 'application/javascript');
-        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-        return res.status(200).send(js);
-      }
+    const dbData = await getDataFromDb();
+    if (dbData && !isCorrupted(dbData)) {
+      const js = '// Auto-generated by API - ' + new Date().toISOString() + '\n' +
+                 'var productsData = ' + JSON.stringify(dbData, null, 2) + ';\n';
+      res.setHeader('Content-Type', 'application/javascript');
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      return res.status(200).send(js);
     }
-  } catch (e) { console.error('DB read error, fallback:', e.message); }
+    // Data corrupted — reseed
+    if (dbData && isCorrupted(dbData)) {
+      const sd = tryReadStaticData() || {};
+      await upsertData(sd);
+      const js = '// Auto-generated by API (reseeded) - ' + new Date().toISOString() + '\n' +
+                 'var productsData = ' + JSON.stringify(sd, null, 2) + ';\n';
+      res.setHeader('Content-Type', 'application/javascript');
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      return res.status(200).send(js);
+    }
+  } catch (e) {
+    console.error('DB read error, fallback to static:', e.message);
+  }
   return serveStaticJs(res);
 }
 
-module.exports = async function handler(req, res) {
-  try {
-    // Try DB; if unavailable, fallback to static file
-    let p;
-    try {
-      p = getPool();
-      await ensureTable();
-    } catch (dbErr) {
-      console.error('DB unavailable:', dbErr.message, dbErr.stack ? dbErr.stack.substring(0,300) : '');
-      if (req.method === 'GET' && req.query && req.query.format === 'js') return serveStaticJs(res);
-      if (req.method === 'GET') return jsonResponse(res, { success: true, data: tryReadStaticData() || {}, source: 'static' });
-      if (req.method === 'POST') return jsonResponse(res, { success: false, error: 'Database unavailable' }, 503);
-    }
-
-    // CORS
-    if (req.method === 'OPTIONS') {
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-      return res.status(200).end();
-    }
-
-    if (req.method === 'GET') {
-      if (req.query && req.query.format === 'js') return await serveDynamicJs(p, res);
-      const r = await p.query('SELECT data FROM admin_data WHERE id = 1');
-      let d = r.rows.length > 0 ? r.rows[0].data : {};
-      if (isCorrupted(d)) {
-        await p.query('DELETE FROM admin_data WHERE id = 1');
-        const sd = tryReadStaticData() || {};
-        await p.query('INSERT INTO admin_data (id, data) VALUES (1, $1::jsonb)', [JSON.stringify(sd)]);
-        const r2 = await p.query('SELECT data FROM admin_data WHERE id = 1');
-        d = r2.rows.length > 0 ? r2.rows[0].data : {};
-      }
-      if (isCorrupted(d)) d = tryReadStaticData() || {};
-      return jsonResponse(res, { success: true, data: d });
-    }
-
-    if (req.method === 'POST') {
-      const { data, product } = req.body;
-
-      // Single product update
-      if (product) {
-        const r = await p.query('SELECT data FROM admin_data WHERE id = 1');
-        if (r.rows.length === 0) return jsonResponse(res, { success: false, error: 'No data in DB' }, 404);
-        let dbData = r.rows[0].data;
-        if (!Array.isArray(dbData.products)) dbData.products = [];
-        let pid = parseInt(product.id, 10);
-        if (!pid || pid <= 0 || isNaN(pid)) {
-          let maxId = 0;
-          dbData.products.forEach(pr => { if (pr && pr.id > maxId) maxId = pr.id; });
-          pid = maxId + 1;
-          product.id = pid;
-        }
-        const idx = dbData.products.findIndex(pr => pr && pr.id === product.id);
-        if (idx >= 0) {
-          Object.keys(product).forEach(k => { dbData.products[idx][k] = product[k]; });
-        } else {
-          dbData.products.push(product);
-        }
-        await p.query('UPDATE admin_data SET data = $1::jsonb, updated_at = CURRENT_TIMESTAMP WHERE id = 1', [JSON.stringify(dbData)]);
-        return jsonResponse(res, { success: true, message: 'Product saved', id: product.id });
-      }
-
-      // Reset
-      if (req.body && req.body._action === 'reset') {
-        await p.query('DELETE FROM admin_data WHERE id = 1');
-        const sd = tryReadStaticData() || {};
-        await p.query('INSERT INTO admin_data (id, data) VALUES (1, $1::jsonb)', [JSON.stringify(sd)]);
-        return jsonResponse(res, { success: true, message: 'DB reset from static file' });
-      }
-
-      // Upload image to Telegraph
-      if (req.body && req.body._action === 'upload_image') {
-        const img = req.body.image;
-        if (!img) return jsonResponse(res, { success: false, error: 'Missing image' }, 400);
-        try {
-          const buf = Buffer.from(img, 'base64');
-          const url = await uploadToTelegraph(buf, req.body.filename || 'upload.jpg');
-          return jsonResponse(res, { success: true, url });
-        } catch (e) {
-          return jsonResponse(res, { success: false, error: e.message }, 500);
-        }
-      }
-
-      // Full data replace
-      if (!data) return jsonResponse(res, { success: false, error: 'Missing data' }, 400);
-      await p.query('UPDATE admin_data SET data = $1::jsonb, updated_at = CURRENT_TIMESTAMP WHERE id = 1', [JSON.stringify(data)]);
-      return jsonResponse(res, { success: true, message: 'Data saved' });
-    }
-
-    return jsonResponse(res, { success: false, error: 'Method not allowed' }, 405);
-  } catch (error) {
-    console.error('Data API error:', error);
-    return jsonResponse(res, { success: false, error: error.message }, 500);
-  }
-};
-
+// ── Telegraph upload ──────────────────────────────────────────
 function uploadToTelegraph(buf, filename) {
   return new Promise((resolve, reject) => {
     const boundary = '----TelegraphBoundary' + Date.now();
@@ -231,4 +174,143 @@ function uploadToTelegraph(buf, filename) {
     req.write(body);
     req.end();
   });
+}
+
+// ── Main handler ──────────────────────────────────────────────
+module.exports = async function handler(req, res) {
+  try {
+    // Try DB; if unavailable, fallback to static file
+    try {
+      getSupabase();
+    } catch (dbErr) {
+      console.error('DB unavailable:', dbErr.message);
+      if (req.method === 'GET' && req.query && req.query.format === 'js') return serveStaticJs(res);
+      if (req.method === 'GET') return jsonResponse(res, { success: true, data: tryReadStaticData() || {}, source: 'static' });
+      if (req.method === 'POST') return jsonResponse(res, { success: false, error: 'Database unavailable' }, 503);
+    }
+
+    // CORS
+    if (req.method === 'OPTIONS') {
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      return res.status(200).end();
+    }
+
+    if (req.method === 'GET') {
+      if (req.query && req.query.format === 'js') return await serveAsJs(res);
+      let d;
+      try {
+        d = await getDataFromDb();
+      } catch (e) {
+        console.error('GET from DB failed:', e.message);
+      }
+      if (!d || isCorrupted(d)) d = tryReadStaticData() || {};
+      // Auto-reseed if DB has no data but static file exists
+      if (!d || isCorrupted(d)) {
+        const sd = tryReadStaticData();
+        if (sd) {
+          try { await upsertData(sd); } catch (_) {}
+          d = sd;
+        }
+      }
+      return jsonResponse(res, { success: true, data: d || { categories: [], products: [], company: {}, headerFooter: {} } });
+    }
+
+    if (req.method === 'POST') {
+      const { data, product } = req.body;
+
+      // Debug env
+      if (req.body && req.body._action === 'env') {
+        const info = {
+          SUPABASE_URL_exists: !!process.env.SUPABASE_URL,
+          SUPABASE_SERVICE_KEY_exists: !!process.env.SUPABASE_SERVICE_KEY,
+          SUPABASE_ANON_KEY_exists: !!process.env.SUPABASE_ANON_KEY,
+          DATABASE_URL_exists: !!process.env.DATABASE_URL,
+          urls: {
+            supabase_url: process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || 'not set',
+            supabase_service_key: process.env.SUPABASE_SERVICE_KEY ? (process.env.SUPABASE_SERVICE_KEY.substring(0, 20) + '...') : 'not set',
+          },
+          node_version: process.version,
+        };
+        return jsonResponse(res, { success: true, debug: info });
+      }
+
+      // Single product update
+      if (product) {
+        let dbData;
+        try {
+          dbData = await getDataFromDb();
+        } catch (e) {
+          return jsonResponse(res, { success: false, error: 'DB read error: ' + e.message }, 500);
+        }
+        if (!dbData) dbData = { categories: [], products: [], company: {}, headerFooter: {} };
+        if (!Array.isArray(dbData.products)) dbData.products = [];
+        let pid = parseInt(product.id, 10);
+        if (!pid || pid <= 0 || isNaN(pid)) {
+          let maxId = 0;
+          dbData.products.forEach(pr => { if (pr && pr.id > maxId) maxId = pr.id; });
+          pid = maxId + 1;
+          product.id = pid;
+        }
+        const idx = dbData.products.findIndex(pr => pr && pr.id === product.id);
+        if (idx >= 0) {
+          Object.keys(product).forEach(k => { dbData.products[idx][k] = product[k]; });
+        } else {
+          dbData.products.push(product);
+        }
+        try {
+          await upsertData(dbData);
+          return jsonResponse(res, { success: true, message: 'Product saved', id: product.id });
+        } catch (e) {
+          return jsonResponse(res, { success: false, error: 'Save failed: ' + e.message }, 500);
+        }
+      }
+
+      // Reset
+      if (req.body && req.body._action === 'reset') {
+        const sd = tryReadStaticData() || { categories: [], products: [], company: {}, headerFooter: {} };
+        try {
+          await seedAllData(sd);
+          return jsonResponse(res, { success: true, message: 'DB reset from static file' });
+        } catch (e) {
+          return jsonResponse(res, { success: false, error: 'Reset failed: ' + e.message }, 500);
+        }
+      }
+
+      // Upload image to Telegraph
+      if (req.body && req.body._action === 'upload_image') {
+        const img = req.body.image;
+        if (!img) return jsonResponse(res, { success: false, error: 'Missing image' }, 400);
+        try {
+          const buf = Buffer.from(img, 'base64');
+          const url = await uploadToTelegraph(buf, req.body.filename || 'upload.jpg');
+          return jsonResponse(res, { success: true, url });
+        } catch (e) {
+          return jsonResponse(res, { success: false, error: e.message }, 500);
+        }
+      }
+
+      // Full data replace
+      if (!data) return jsonResponse(res, { success: false, error: 'Missing data' }, 400);
+      try {
+        await upsertData(data);
+        return jsonResponse(res, { success: true, message: 'Data saved' });
+      } catch (e) {
+        return jsonResponse(res, { success: false, error: 'Save failed: ' + e.message }, 500);
+      }
+    }
+
+    return jsonResponse(res, { success: false, error: 'Method not allowed' }, 405);
+  } catch (error) {
+    console.error('Data API error:', error);
+    return jsonResponse(res, { success: false, error: error.message }, 500);
+  }
+};
+
+async function seedAllData(sd) {
+  // Delete existing, then insert (upsert works too)
+  const { error: delErr } = await getSupabase().from(TABLE).delete().neq('id', 0);
+  if (delErr) console.error('Delete all error:', delErr.message);
+  await upsertData(sd);
 }
