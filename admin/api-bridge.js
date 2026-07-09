@@ -18,6 +18,8 @@
 
   console.log('[API Bridge] Online mode — using API for data operations');
 
+  window._cloudMode = true;
+
   var API_BASE = window.location.origin + '/api/data';
   var LOADED_FROM_API = false;
 
@@ -225,6 +227,23 @@
     var saveBtn = document.querySelector('.btn-save-all');
     if (saveBtn && saveBtn.parentNode) {
       saveBtn.parentNode.insertBefore(badge, saveBtn);
+    }
+
+    // ── Add backup buttons next to sync button ──────────────
+    var topBarActions = document.querySelector('.top-bar-actions');
+    if (topBarActions) {
+      // Check if backup buttons already exist (from index.html)
+      if (!topBarActions.querySelector('.btn-backup-top')) {
+        var backupBtn = document.createElement('button');
+        backupBtn.className = 'btn-preview btn-backup-top';
+        backupBtn.title = '一键下载备份到桌面';
+        backupBtn.innerHTML = '💾 一键备份到桌面';
+        backupBtn.onclick = function() {
+          if (typeof exportBackup === 'function') exportBackup();
+          else window.location.reload();
+        };
+        topBarActions.appendChild(backupBtn);
+      }
     }
   }
 

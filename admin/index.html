@@ -66,6 +66,9 @@
         <span class="status-indicator" id="statusIndicator">● 已同步</span>
         <button class="btn-preview" onclick="previewSite()" title="在新标签页打开前端 products.html">👁 预览产品页</button>
         <button class="btn-preview" onclick="previewOnlineSite()">🌐 查看线上网站</button>
+        <button class="btn-backup" onclick="exportBackup()" title="下载全部数据到本地备份">💾 导出备份</button>
+        <button class="btn-restore" onclick="document.getElementById('restoreInput').click()" title="从本地备份文件恢复数据">📂 恢复备份</button>
+        <input type="file" id="restoreInput" accept=".json" style="display:none" onchange="importBackup(event)">
       </div>
     </header>
 

@@ -2588,3 +2588,96 @@ function showDuplicatesPanel() {
   result.innerHTML = html;
   panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+
+// ============ 导出备份到桌面 ============
+async function exportBackup() {
+  try {
+    // 如果是云模式，从云端获取最新数据
+    let data = null;
+    if (window._cloudMode) {
+      showToast('⏳ 正在从云端拉取最新数据...');
+      const res = await fetch('https://boppfilmsale-new.vercel.app/api/data');
+      const json = await res.json();
+      if (json.success && json.data) data = json.data;
+    }
+    // 否则从内存中获取
+    if (!data) {
+      data = {
+        products: window.products || [],
+        categories: window.categories || [],
+        company: window.company || {},
+        headerFooter: window.headerFooter || {}
+      };
+    }
+
+    const backup = {
+      version: '1.0',
+      exportedAt: new Date().toISOString(),
+      source: window._cloudMode ? 'cloud' : 'local',
+      data: data
+    };
+
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const dateStr = new Date().toISOString().slice(0, 19).replace(/[:]/g, '-');
+    a.download = `bopp-backup-${dateStr}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('✅ 备份已下载到桌面！文件：' + a.download);
+  } catch (e) {
+    showToast('❌ 备份失败：' + e.message);
+  }
+}
+
+// ============ 从备份文件恢复 ============
+async function importBackup(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  try {
+    const text = await file.text();
+    const backup = JSON.parse(text);
+    if (!backup.data || !backup.data.products) {
+      showToast('❌ 无效的备份文件');
+      return;
+    }
+
+    if (!confirm('⚠️ 确定要恢复备份吗？\n\n当前所有数据将被备份文件覆盖！\n\n备份时间：' + (backup.exportedAt || '未知'))) {
+      return;
+    }
+
+    // 如果是云模式，写入云端
+    if (window._cloudMode) {
+      showToast('⏳ 正在恢复到云端...');
+      const res = await fetch('https://boppfilmsale-new.vercel.app/api/data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: backup.data })
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error || '恢复失败');
+      showToast('✅ 已恢复到云端！刷新页面查看效果');
+    } else {
+      // 本地模式 - 覆盖内存数据
+      window.products = backup.data.products || [];
+      window.categories = backup.data.categories || [];
+      window.company = backup.data.company || {};
+      window.headerFooter = backup.data.headerFooter || {};
+      showToast('✅ 备份已恢复到内存，请点击「保存所有更改」持久化');
+    }
+  } catch (e) {
+    showToast('❌ 恢复失败：' + e.message);
+  }
+
+  // 重置 input，允许重复选同一个文件
+  event.target.value = '';
+}
+
+// ============ 一键备份到桌面（云端快捷版） ============
+async function backupToDesktop() {
+  await exportBackup();
+}

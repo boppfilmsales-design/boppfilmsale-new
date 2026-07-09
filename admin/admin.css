@@ -91,3 +91,26 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
 .btn-remove-img:hover{background:#ff5252}
 @media(max-width:1200px){.dashboard-stats{grid-template-columns:repeat(2,1fr)}.action-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:768px){.sidebar{width:60px}.sidebar .nav-label,.sidebar .logo-sub{display:none}.sidebar .logo{font-size:14px;text-align:center}.main-content{margin-left:60px}.dashboard-stats{grid-template-columns:1fr}.action-grid{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}}
+
+/* ============ 备份按钮 ============ */
+.btn-backup, .btn-restore, .btn-backup-top {
+  padding:8px 16px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:var(--text2);
+  font-size:13px;
+  cursor:pointer;
+  transition:all .2s;
+  white-space:nowrap
+}
+.btn-backup:hover, .btn-backup-top:hover {
+  background:rgba(232,198,106,.12);
+  color:var(--gold);
+  border-color:rgba(232,198,106,.3)
+}
+.btn-restore:hover {
+  background:rgba(40,240,100,.12);
+  color:var(--green);
+  border-color:rgba(40,240,100,.3)
+}
