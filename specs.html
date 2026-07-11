@@ -8,6 +8,27 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
+<style>
+  /* Force all spec table cell content to use page theme colors */
+  .stbl td * { color: inherit !important; background-color: transparent !important; }
+  .stbl td span[style] { color: inherit !important; background-color: transparent !important; }
+  .stbl td b, .stbl td i, .stbl td u, .stbl td s { font-optical-sizing: auto; }
+  .stbl td img { max-width: 300px; border-radius: 4px; display: inline-block; vertical-align: middle; }
+  .spec-title { font-size: 1.4rem; font-weight: 700; margin: 0 0 0.5rem; color: var(--c-primary,#1a202c); }
+  .spec-info-title { font-size: 1.1rem; font-weight: 600; margin: 0.5rem 0 0.3rem; color: var(--c-primary,#1a202c); }
+  .spec-info { margin: 0.5rem 0 1rem; padding: 0.8rem; background: #f7fafc; border-radius: 6px; border-left: 3px solid var(--c-accent,#b8860b); }
+  .spec-info-item { margin: 0.2rem 0; font-size: 0.9rem; line-height: 1.5; }
+  .spec-info-item strong { font-weight: 600; }
+  .spec-notes { margin: 1rem 0 0.5rem; padding: 0.6rem; background: #fffbeb; border-radius: 4px; font-size: 0.85rem; line-height: 1.6; border-left: 3px solid #d69e2e; }
+  .spec-notes strong { font-weight: 600; }
+  .spec-disclaimer { margin: 0.5rem 0; padding: 0.5rem 0.6rem; font-size: 0.78rem; color: #718096; border-top: 1px solid #e2e8f0; line-height: 1.5; }
+  @media (prefers-color-scheme: dark) {
+    .spec-info { background: #2d3748; border-left-color: var(--c-accent,#b8860b); }
+    .spec-info-item strong { color: #e2e8f0; }
+    .spec-notes { background: #2d3748; border-left-color: #d69e2e; }
+    .spec-disclaimer { color: #a0aec0; border-top-color: #4a5568; }
+  }
+</style>
 </head>
 <body>
 
@@ -151,60 +172,152 @@
 <div class="container">
   <div class="sec-label">Technical Specifications · 技术规格</div><h2 class="sec-title">Film Specifications</h2>
   <div class="sec-zh">薄膜技术参数表</div><p class="sec-desc">Key technical parameters for our most popular film grades. Custom specifications available on request. 主要薄膜产品关键技术参数，可按客户要求定制。</p>
-  <div class="stabs">
-    <button class="stab active" onclick="showSpec(this,'sp1')">BOPP Plain</button>
-    <button class="stab" onclick="showSpec(this,'sp2')">BOPP Heat Seal</button>
-    <button class="stab" onclick="showSpec(this,'sp3')">BOPP Pearlized</button>
-    <button class="stab" onclick="showSpec(this,'sp4')">BOPET Clear</button>
-    <button class="stab" onclick="showSpec(this,'sp5')">CPP Film</button>
-  </div><div id="sp1" class="spec-panel active-panel"><table class="stbl"><thead><tr><th>Parameter · 参数</th><th>Unit</th><th>Value / Range</th><th>Standard</th></tr></thead><tbody>
-    <tr><td>Thickness · 厚度</td><td>μm</td><td>3 – 75</td><td>GB/T 13950</td></tr>
-    <tr><td>Tensile Strength MD · 纵向拉伸强度</td><td>N/15mm</td><td>≥ 10</td><td>GB/T 1040</td></tr>
-    <tr><td>Tensile Strength TD · 横向拉伸强度</td><td>N/15mm</td><td>≥ 8</td><td>GB/T 1040</td></tr>
-    <tr><td>Elongation at Break MD</td><td>%</td><td>50 – 200</td><td>GB/T 1040</td></tr>
-    <tr><td>Haze · 雾度</td><td>%</td><td>≤ 1.5</td><td>GB/T 2410</td></tr>
-    <tr><td>Gloss (45°) · 光泽度</td><td>GU</td><td>≥ 85</td><td>GB/T 8807</td></tr>
-    <tr><td>Surface Tension · 表面张力</td><td>mN/m</td><td>≥ 38</td><td>GB/T 14216</td></tr>
-    <tr><td>Width Range · 幅宽</td><td>mm</td><td>250 – 10,000</td><td>Custom</td></tr>
-    <tr><td>Core Diameter · 纸芯</td><td>inch</td><td>1″ 2″ 3″ 6″</td><td>Standard</td></tr>
-    <tr><td>Roll Length · 卷长</td><td>m</td><td>200 – 8,000</td><td>Custom</td></tr>
-  </tbody></table></div><div id="sp2" class="spec-panel"><table class="stbl"><thead><tr><th>Parameter · 参数</th><th>Unit</th><th>Value</th><th>Notes</th></tr></thead><tbody>
-    <tr><td>Thickness · 厚度</td><td>μm</td><td>15 – 40</td><td>Typical range</td></tr>
-    <tr><td>Heat Seal Temperature · 热封温度</td><td>°C</td><td>100 – 140</td><td>Grade dependent</td></tr>
-    <tr><td>Heat Seal Strength · 热封强度</td><td>N/15mm</td><td>≥ 3</td><td>120°C 0.3MPa 1s</td></tr>
-    <tr><td>Coefficient of Friction</td><td>—</td><td>0.1 – 0.3</td><td>Film to film</td></tr>
-    <tr><td>Haze · 雾度</td><td>%</td><td>≤ 2.5</td><td>GB/T 2410</td></tr>
-    <tr><td>MVTR · 水蒸气透过量</td><td>g/m²·24h</td><td>≤ 4</td><td>38°C 90% RH</td></tr>
-    <tr><td>Sealing Config · 封合形式</td><td>—</td><td>One/Two-side</td><td>As specified</td></tr>
-  </tbody></table></div><div id="sp3" class="spec-panel"><table class="stbl"><thead><tr><th>Parameter · 参数</th><th>Unit</th><th>Value</th><th>Notes</th></tr></thead><tbody>
-    <tr><td>Thickness · 厚度</td><td>μm</td><td>20 – 50</td><td>Standard range</td></tr>
-    <tr><td>Density · 密度</td><td>g/cm³</td><td>0.55 – 0.75</td><td>Lower than clear BOPP</td></tr>
-    <tr><td>Opacity · 不透明度</td><td>%</td><td>≥ 75</td><td>White opaque</td></tr>
-    <tr><td>Gloss (45°) · 光泽度</td><td>GU</td><td>60 – 110</td><td>Pearl luster</td></tr>
-    <tr><td>Corona Treatment</td><td>—</td><td>One side</td><td>≥ 38 mN/m</td></tr>
-    <tr><td>Heat Seal · 热封</td><td>—</td><td>Both sides</td><td>Heat sealable</td></tr>
-    <tr><td>Surface Resistance · 表面电阻</td><td>Ω</td><td>≤ 10¹¹</td><td>Antistatic</td></tr>
-  </tbody></table></div><div id="sp4" class="spec-panel"><table class="stbl"><thead><tr><th>Parameter · 参数</th><th>Unit</th><th>Value / Range</th><th>Standard</th></tr></thead><tbody>
-    <tr><td>Thickness · 厚度</td><td>μm</td><td>4.5 – 350</td><td>GB/T 16958</td></tr>
-    <tr><td>Tensile Strength MD</td><td>MPa</td><td>≥ 150</td><td>GB/T 1040</td></tr>
-    <tr><td>Tensile Strength TD</td><td>MPa</td><td>≥ 150</td><td>GB/T 1040</td></tr>
-    <tr><td>Haze · 雾度</td><td>%</td><td>≤ 3</td><td>GB/T 2410</td></tr>
-    <tr><td>Light Transmittance · 透光率</td><td>%</td><td>≥ 87</td><td>GB/T 2410</td></tr>
-    <tr><td>Thermal Shrinkage MD (150°C)</td><td>%</td><td>≤ 1.5</td><td>GB/T 12027</td></tr>
-    <tr><td>O₂ Transmission Rate</td><td>cm³/m²·24h·atm</td><td>50 – 150</td><td>Unfilled grade</td></tr>
-    <tr><td>Width Range · 幅宽</td><td>mm</td><td>250 – 5,000</td><td>Custom</td></tr>
-  </tbody></table></div><div id="sp5" class="spec-panel"><table class="stbl"><thead><tr><th>Parameter · 参数</th><th>Unit</th><th>Value / Range</th><th>Notes</th></tr></thead><tbody>
-    <tr><td>Thickness · 厚度</td><td>μm</td><td>20 – 80</td><td>Standard grades</td></tr>
-    <tr><td>Tensile Strength MD</td><td>N/15mm</td><td>≥ 20</td><td>GB/T 1040</td></tr>
-    <tr><td>Heat Seal Temperature</td><td>°C</td><td>120 – 160</td><td>Grade dependent</td></tr>
-    <tr><td>MVTR · 水蒸气阻隔</td><td>g/m²·24h</td><td>≤ 8</td><td>38°C 90% RH</td></tr>
-    <tr><td>Haze · 雾度</td><td>%</td><td>≤ 5</td><td>GB/T 2410</td></tr>
-    <tr><td>Retort Grade · 蒸煮级</td><td>—</td><td>Available · 可供</td><td>121°C retort</td></tr>
-    <tr><td>Width Range · 幅宽</td><td>mm</td><td>200 – 6,000</td><td>Custom</td></tr>
-  </tbody></table></div></div></section>
+  <div class="stabs" id="specTabs"></div>
+  <div id="specPanels"></div>
+</div></section>
 
 <!-- CONTACT STRIP -->
 <div class="contact-strip"><div class="contact-inner"><div class="contact-text">Need custom specifications? <b>Contact us</b> for technical data sheets.</div><div class="contact-links"><a href="mailto:sale@boppfilmsale.com">Email</a><a href="tel:+8618919659471">Phone</a><a href="contact.html">Contact Page →</a></div></div></div>
+
+<script>
+// ── Load specs data dynamically (bypass Vercel CDN cache) ─────
+async function loadSpecs() {
+  try {
+    var url = '/api/data?format=specs-js&_=' + Date.now();
+    var res = await fetch(url);
+    var text = await res.text();
+    var m = text.match(/var specsData = (\[[\s\S]*\]);/);
+    if (!m) { console.error('Failed to parse specs data'); return null; }
+    return JSON.parse(m[1]);
+  } catch(e) {
+    console.error('Failed to load specs:', e);
+    try {
+      var fallback = typeof specsData !== 'undefined' ? specsData : [];
+      return fallback;
+    } catch(e2) { return null; }
+  }
+}
+
+function showSpec(el, id) {
+  document.querySelectorAll('.stab').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.spec-panel').forEach(function(p){p.classList.remove('active-panel');});
+  el.classList.add('active');
+  var panel = document.getElementById(id);
+  if (panel) panel.classList.add('active-panel');
+}
+
+// Render specs from dynamically loaded data
+document.addEventListener('DOMContentLoaded', function() {
+  loadSpecs().then(function(data) {
+    if (!data || data.length === 0) data = typeof specsData !== 'undefined' ? specsData : [];
+    var tabsEl = document.getElementById('specTabs');
+    var panelsEl = document.getElementById('specPanels');
+    data.forEach(function(spec, idx) {
+      var btn = document.createElement('button');
+      btn.className = 'stab' + (idx === 0 ? ' active' : '');
+      // Use nameZh if available, else name; always show a distinguishing label
+      btn.textContent = (spec.nameZh || spec.name || 'Unnamed') + ' / ' + (spec.name || '');
+      btn.onclick = function(){ showSpec(this, spec.id); };
+      tabsEl.appendChild(btn);
+      var panel = document.createElement('div');
+      panel.id = spec.id;
+      panel.className = 'spec-panel' + (idx === 0 ? ' active-panel' : '');
+      // ── Title ──
+      if (spec.title) {
+        var titleEl = document.createElement('h3');
+        titleEl.className = 'spec-title';
+        titleEl.textContent = spec.title;
+        panel.appendChild(titleEl);
+      }
+      // ── Info section ──
+      if (spec.infoTitle) {
+        var infoTitleEl = document.createElement('h4');
+        infoTitleEl.className = 'spec-info-title';
+        infoTitleEl.textContent = spec.infoTitle;
+        panel.appendChild(infoTitleEl);
+      }
+      if (spec.info && spec.info.length) {
+        var infoDiv = document.createElement('div');
+        infoDiv.className = 'spec-info';
+        spec.info.forEach(function(item) {
+          var p = document.createElement('p');
+          p.className = 'spec-info-item';
+          p.innerHTML = '<strong>' + renderMath(item.label) + ':</strong> ' + renderMath(item.value || '');
+          infoDiv.appendChild(p);
+        });
+        panel.appendChild(infoDiv);
+      }
+      var table = document.createElement('table');
+      table.className = 'stbl';
+      // Pre-process cell content: convert common math expressions to HTML
+      function renderMath(str) {
+        if (!str) return '';
+        var s = String(str);
+        // Convert common LaTeX-style math patterns
+        s = s.replace(/\$\\(text\\)?\{(.*?)\}\$/g, function(m, p1, p2) { return p2; });
+        s = s.replace(/\$\\ge\$/g, '&ge;');
+        s = s.replace(/\$\\le\$/g, '&le;');
+        s = s.replace(/\$\\circ\$/g, '&deg;');
+        s = s.replace(/\$180\\circ\$/g, '180&deg;');
+        s = s.replace(/\$\\text\{([^}]*)\}\$/g, '$1');
+        s = s.replace(/\$\{(.*?)\}\$/g, '$1');
+        s = s.replace(/\$([\d\.]+)\\text\{m\}\^2\/\\text\{kg\}\$/g, '$1&nbsp;m&sup2;/kg');
+        s = s.replace(/\\text\{m\}\^2\/\\text\{kg\}/g, 'm&sup2;/kg');
+        s = s.replace(/\\ge/g, '&ge;');
+        s = s.replace(/\\le/g, '&le;');
+        s = s.replace(/\\circ/g, '&deg;');
+        // Generic: remove $...$ wrapping that wasn't handled above
+        s = s.replace(/\$(.*?)\$/g, '$1');
+        return s;
+      }
+      // Support colspan/rowspan: if cell is object with text/colspan/rowspan
+      function makeCell(tag, content) {
+        var el = document.createElement(tag);
+        if (typeof content === 'object' && content !== null) {
+          el.innerHTML = renderMath(content.text || '');
+          if (content.colspan) el.setAttribute('colspan', content.colspan);
+          if (content.rowspan) el.setAttribute('rowspan', content.rowspan);
+        } else {
+          el.innerHTML = renderMath(content);
+        }
+        return el;
+      }
+      var thead = document.createElement('thead');
+      var tr = document.createElement('tr');
+      (spec.headers || []).forEach(function(h) {
+        tr.appendChild(makeCell('th', h));
+      });
+      thead.appendChild(tr);
+      table.appendChild(thead);
+      var tbody = document.createElement('tbody');
+      (spec.rows || []).forEach(function(row) {
+        var tr2 = document.createElement('tr');
+        row.forEach(function(cell) {
+          tr2.appendChild(makeCell('td', cell));
+        });
+        tbody.appendChild(tr2);
+      });
+      table.appendChild(tbody);
+      panel.appendChild(table);
+      // ── Notes ──
+      if (spec.notes) {
+        var notesEl = document.createElement('div');
+        notesEl.className = 'spec-notes';
+        notesEl.innerHTML = '<strong>补充说明 / Notes:</strong> ' + renderMath(spec.notes);
+        panel.appendChild(notesEl);
+      }
+      // ── Disclaimer ──
+      if (spec.disclaimer) {
+        var disclaimerEl = document.createElement('div');
+        disclaimerEl.className = 'spec-disclaimer';
+        disclaimerEl.innerHTML = renderMath(spec.disclaimer);
+        panel.appendChild(disclaimerEl);
+      }
+      panelsEl.appendChild(panel);
+    });
+  });
+});
+</script>
 
 <!-- FOOTER -->
 
