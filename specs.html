@@ -19,12 +19,14 @@
   .spec-info { margin: 0.5rem 0 1rem; padding: 0.8rem; background: #f7fafc; border-radius: 6px; border-left: 3px solid var(--c-accent,#b8860b); }
   .spec-info-item { margin: 0.2rem 0; font-size: 0.9rem; line-height: 1.5; }
   .spec-info-item strong { font-weight: 600; }
+  .spec-table-caption { font-size: 1rem; font-weight: 600; margin: 1.5rem 0 0.5rem; padding: 0.4rem 0.6rem; background: #edf2f7; border-radius: 4px; color: var(--c-primary,#1a202c); }
   .spec-notes { margin: 1rem 0 0.5rem; padding: 0.6rem; background: #fffbeb; border-radius: 4px; font-size: 0.85rem; line-height: 1.6; border-left: 3px solid #d69e2e; }
   .spec-notes strong { font-weight: 600; }
   .spec-disclaimer { margin: 0.5rem 0; padding: 0.5rem 0.6rem; font-size: 0.78rem; color: #718096; border-top: 1px solid #e2e8f0; line-height: 1.5; }
   @media (prefers-color-scheme: dark) {
     .spec-info { background: #2d3748; border-left-color: var(--c-accent,#b8860b); }
     .spec-info-item strong { color: #e2e8f0; }
+    .spec-table-caption { background: #2d3748; color: #e2e8f0; }
     .spec-notes { background: #2d3748; border-left-color: #d69e2e; }
     .spec-disclaimer { color: #a0aec0; border-top-color: #4a5568; }
   }
@@ -216,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
       var btn = document.createElement('button');
       btn.className = 'stab' + (idx === 0 ? ' active' : '');
       // Use nameZh if available, else name; always show a distinguishing label
-      btn.textContent = (spec.nameZh || spec.name || 'Unnamed') + ' / ' + (spec.name || '');
+      btn.textContent = (spec.name || '') + ' / ' + (spec.nameZh || '');
       btn.onclick = function(){ showSpec(this, spec.id); };
       tabsEl.appendChild(btn);
       var panel = document.createElement('div');
@@ -298,7 +300,44 @@ document.addEventListener('DOMContentLoaded', function() {
         tbody.appendChild(tr2);
       });
       table.appendChild(tbody);
+      // ── Table caption ──
+      if (spec.tableCaption) {
+        var capEl = document.createElement('div');
+        capEl.className = 'spec-table-caption';
+        capEl.textContent = spec.tableCaption;
+        panel.appendChild(capEl);
+      }
       panel.appendChild(table);
+      // ── Extra tables ──
+      if (spec.tablesExtra && spec.tablesExtra.length) {
+        spec.tablesExtra.forEach(function(xt) {
+          if (xt.caption) {
+            var capEl2 = document.createElement('div');
+            capEl2.className = 'spec-table-caption';
+            capEl2.textContent = xt.caption;
+            panel.appendChild(capEl2);
+          }
+          var xtable = document.createElement('table');
+          xtable.className = 'stbl';
+          var xhead = document.createElement('thead');
+          var xrow = document.createElement('tr');
+          (xt.headers || []).forEach(function(h) {
+            xrow.appendChild(makeCell('th', h));
+          });
+          xhead.appendChild(xrow);
+          xtable.appendChild(xhead);
+          var xbody = document.createElement('tbody');
+          (xt.rows || []).forEach(function(row) {
+            var xr = document.createElement('tr');
+            row.forEach(function(cell) {
+              xr.appendChild(makeCell('td', cell));
+            });
+            xbody.appendChild(xr);
+          });
+          xtable.appendChild(xbody);
+          panel.appendChild(xtable);
+        });
+      }
       // ── Notes ──
       if (spec.notes) {
         var notesEl = document.createElement('div');
