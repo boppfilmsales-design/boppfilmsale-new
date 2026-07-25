@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>规格管理 · 后台 · AEC GROUP</title>
+<style>
+  :root {
+    --bg: #0f1629; --bg2: #1a2238; --text: #e2e8f0; --text2: #94a3b8;
+    --border: #2d3748; --green: #28f064; --gold: #e8c46a; --red: #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Inter, -apple-system, sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
+  .header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .header h1 { font-size: 20px; font-weight: 600; }
+  .header a { color: var(--gold); text-decoration: none; font-size: 13px; }
+  .header a:hover { text-decoration: underline; }
+
+  /* Spec tabs */
+  .spec-tabs { display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
+  .spec-tab {
+    padding: 8px 16px; background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 6px; color: var(--text2); cursor: pointer; font-size: 13px;
+    transition: all .15s;
+  }
+  .spec-tab:hover { border-color: var(--gold); color: var(--text); }
+  .spec-tab.active { background: rgba(232,196,106,.12); border-color: var(--gold); color: var(--gold); }
+
+  /* Spec panels */
+  .spec-panel { display: none; padding: 16px; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 16px; }
+  .spec-panel.active { display: block; }
+  .spec-panel-header { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+  .spec-panel-header input {
+    padding: 6px 10px; background: rgba(255,255,255,.06); border: 1px solid var(--border);
+    border-radius: 4px; color: var(--text); font-size: 14px;
+  }
+  .spec-panel-header input:focus { border-color: var(--green); outline: none; }
+
+  /* Rich editable table */
+  .rich-table-wrap {
+    background: rgba(255,255,255,.03); border: 1px solid var(--border); border-radius: 6px;
+    padding: 12px; min-height: 200px;
+  }
+  .rich-table-wrap:focus-within { border-color: var(--green); box-shadow: 0 0 0 2px rgba(40,240,100,.1); }
+  .rich-table-wrap table {
+    width: 100%; border-collapse: collapse; font-size: 13px;
+  }
+  .rich-table-wrap th, .rich-table-wrap td {
+    border: 1px solid var(--border); padding: 8px 12px; text-align: left; min-width: 60px;
+    outline: none; cursor: text;
+  }
+  .rich-table-wrap th {
+    background: rgba(232,196,106,.08); color: var(--gold); font-weight: 600;
+  }
+  .rich-table-wrap td { background: rgba(255,255,255,.02); color: var(--text) !important; line-height: 1.5; }
+  .rich-table-wrap td:focus, .rich-table-wrap th:focus {
+    background: rgba(40,240,100,.06); box-shadow: inset 0 0 0 1px var(--green);
+  }
+  .rich-table-wrap th:empty:before, .rich-table-wrap td:empty:before {
+    content: 'Type here...'; color: var(--text2); font-style: italic;
+  }
+  /* Font color fix for pasted content */
+  .rich-table-wrap span, .rich-table-wrap font { color: inherit !important; }
+
+  /* Toolbar */
+  .tb {
+    display: flex; gap: 4px; align-items: center; margin-bottom: 8px; flex-wrap: wrap;
+    padding: 6px 8px; background: rgba(255,255,255,.04); border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .tb button {
+    padding: 4px 10px; background: rgba(255,255,255,.06); border: 1px solid transparent;
+    border-radius: 4px; color: var(--text); cursor: pointer; font-size: 12px;
+    transition: all .1s; white-space: nowrap;
+  }
+  .tb button:hover { background: rgba(255,255,255,.12); border-color: var(--border); }
+  .tb .sep { width: 1px; height: 20px; background: var(--border); margin: 0 4px; }
+  .tb select {
+    padding: 2px 4px; background: rgba(255,255,255,.06); border: 1px solid var(--border);
+    border-radius: 4px; color: var(--text); font-size: 11px; cursor: pointer;
+    max-width: 90px;
+  }
+  .tb .color-btn {
+    position: relative; display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 24px; border: 1px solid var(--border); border-radius: 4px;
+    cursor: pointer; font-size: 12px; overflow: hidden;
+  }
+  .tb .color-btn input[type="color"] {
+    position: absolute; top: -4px; left: -4px; width: calc(100% + 8px); height: calc(100% + 8px);
+    border: none; padding: 0; cursor: pointer; opacity: 0;
+  }
+
+  /* Rich table inner element styles */
+  .rich-table-wrap h1 { font-size: 1.5rem; font-weight: 700; margin: 8px 0; color: var(--gold); }
+  .rich-table-wrap h2 { font-size: 1.3rem; font-weight: 600; margin: 6px 0; color: var(--gold); }
+  .rich-table-wrap h3 { font-size: 1.1rem; font-weight: 600; margin: 4px 0; color: var(--green); }
+  .rich-table-wrap h4 { font-size: 1rem; font-weight: 600; margin: 4px 0; }
+  .rich-table-wrap a { color: var(--gold); text-decoration: underline; }
+  .rich-table-wrap img { max-width: 100%; border-radius: 4px; margin: 4px 0; }
+  .rich-table-wrap hr { border: none; border-top: 1px solid var(--border); margin: 8px 0; }
+  .rich-table-wrap sub { font-size: 0.75em; vertical-align: sub; }
+  .rich-table-wrap sup { font-size: 0.75em; vertical-align: super; }
+
+  /* Actions */
+  .actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+  .btn { padding: 8px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; }
+  .btn-primary { background: var(--green); color: #000; }
+  .btn-primary:hover { opacity: .9; }
+  .btn-secondary { background: var(--bg2); border: 1px solid var(--border); color: var(--text); }
+  .btn-secondary:hover { border-color: var(--gold); }
+  .btn-danger { background: var(--red); color: #fff; }
+
+  .toast {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    padding: 10px 24px; border-radius: 8px; font-size: 14px; z-index: 999;
+    display: none; background: var(--green); color: #000;
+  }
+  .toast.error { background: var(--red); color: #fff; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>📋 规格管理 · Specs Manager</h1>
+  <a href="index.html">← 返回后台首页</a>
+</div>
+
+<div class="spec-tabs" id="specTabs"></div>
+
+<div id="specPanels"></div>
+
+<div class="actions">
+  <button class="btn btn-primary" onclick="saveAllSpecs()">💾 保存所有规格到数据库</button>
+  <button class="btn btn-secondary" onclick="addNewSpec()">➕ 新增规格表</button>
+  <button class="btn btn-secondary" onclick="cleanAllCells()">🧹 清理所有单元格垃圾标签</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Load specs directly from API (bypass Vercel CDN cache) ──
+var specsData = [];
+var currentTab = 0;
+
+async function loadSpecsFromApi() {
+  try {
+    var url = '/api/data?format=specs-js&_=' + Date.now();
+    var res = await fetch(url);
+    var text = await res.text();
+    var m = text.match(/var specsData = (\[[\s\S]*\]);/);
+    if (m) { specsData = JSON.parse(m[1]); }
+    return specsData;
+  } catch(e) {
+    console.error('Failed to load specs from API', e);
+    return [];
+  }
+}
+
+function toast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast' + (type ? ' ' + type : '');
+  t.style.display = 'block'; setTimeout(function(){ t.style.display = 'none'; }, 3000);
+}
+
+// ── Render all specs as rich editable tables ──
+function renderAll() {
+  var tabsEl = document.getElementById('specTabs');
+  var panelsEl = document.getElementById('specPanels');
+  tabsEl.innerHTML = '';
+  panelsEl.innerHTML = '';
+
+  specsData.forEach(function(spec, idx) {
+    // Tab button
+    var btn = document.createElement('button');
+    btn.className = 'spec-tab' + (idx === currentTab ? ' active' : '');
+    btn.textContent = spec.name || spec.id;
+    btn.onclick = function(){ switchTab(idx); };
+    tabsEl.appendChild(btn);
+
+    // Panel
+    var panel = document.createElement('div');
+    panel.className = 'spec-panel' + (idx === currentTab ? ' active' : '');
+    panel.id = 'panel-' + idx;
+
+    // Header: name + nameZh + delete
+    var hdr = document.createElement('div');
+    hdr.className = 'spec-panel-header';
+    hdr.innerHTML =
+      '<input value="' + (spec.name||'') + '" placeholder="英文名称" onchange="specsData['+idx+'].name=this.value;updateTabName('+idx+')" style="flex:1">' +
+      '<input value="' + (spec.nameZh||'') + '" placeholder="中文名称" onchange="specsData['+idx+'].nameZh=this.value" style="flex:1">' +
+      '<button class="btn btn-danger" onclick="deleteSpec('+idx+')" style="padding:4px 12px;font-size:12px">🗑 删除</button>';
+    panel.appendChild(hdr);
+
+    // ── Report fields: title, infoTitle, info, notes, disclaimer ──
+    var reportFields = document.createElement('div');
+    reportFields.style.marginBottom = '12px';
+    reportFields.style.padding = '12px';
+    reportFields.style.background = 'rgba(255,255,255,.03)';
+    reportFields.style.border = '1px solid var(--border)';
+    reportFields.style.borderRadius = '6px';
+    reportFields.innerHTML =
+      '<h4 style="margin:0 0 8px;color:var(--gold);font-size:14px">📄 报告页配置（前端 specs.html 显示用）</h4>' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">' +
+        '<input id="title-' + idx + '" value="' + (spec.title || '').replace(/"/g, '"') + '" placeholder="报告标题" style="flex:1;min-width:200px;padding:6px 10px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:13px" onchange="specsData['+idx+'].title=this.value">' +
+        '<input id="infoTitle-' + idx + '" value="' + (spec.infoTitle || '').replace(/"/g, '"') + '" placeholder="基础信息节标题" style="flex:1;min-width:200px;padding:6px 10px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:13px" onchange="specsData['+idx+'].infoTitle=this.value">' +
+      '</div>' +
+      '<div style="margin-bottom:8px">' +
+        '<label style="display:block;margin-bottom:4px;font-size:12px;color:var(--text2)">基础信息项（键值对，每行一项，格式：键|值）</label>' +
+        '<textarea id="info-' + idx + '" placeholder="执行标准|QB/100&#10;商品编码|39206290000&#10;型号规格|光膜 PET 4.5µm" style="width:100%;height:80px;padding:8px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:12px;font-family:monospace;line-height:1.5" onchange="parseInfo(this.value, ' + idx + ')">' + (spec.info ? spec.info.map(function(item){ return item.label + '|' + item.value; }).join('\n') : '') + '</textarea>' +
+      '</div>' +
+      '<div style="margin-bottom:8px">' +
+        '<label style="display:block;margin-bottom:4px;font-size:12px;color:var(--text2)">补充说明</label>' +
+        '<textarea id="notes-' + idx + '" placeholder="MD (Machine Direction)： 纵向（机械方向）&#10;TD (Transverse Direction)： 横向（横断方向）" style="width:100%;height:60px;padding:8px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:12px" onchange="specsData['+idx+'].notes=this.value">' + (spec.notes || '') + '</textarea>' +
+      '</div>' +
+      '<div>' +
+        '<label style="display:block;margin-bottom:4px;font-size:12px;color:var(--text2)">免责声明</label>' +
+        '<textarea id="disclaimer-' + idx + '" placeholder="此信息代表我们对所做工作的最佳判断，但公司对使用本文所含信息或结论不承担任何责任。" style="width:100%;height:60px;padding:8px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:12px" onchange="specsData['+idx+'].disclaimer=this.value">' + (spec.disclaimer || '') + '</textarea>' +
+      '</div>';
+    panel.appendChild(reportFields);
+
+    // Toolbar — Word-like
+    var tb = document.createElement('div');
+    tb.className = 'tb';
+    tb.innerHTML =
+      '<select onchange="execCmd('+idx+',\'fontName\',this.value);this.value=\'\'" title="字体">' +
+        '<option value="">字体</option>' +
+        '<option value="Arial">Arial</option>' +
+        '<option value="Times New Roman">Times New Roman</option>' +
+        '<option value="Microsoft YaHei">微软雅黑</option>' +
+        '<option value="SimSun">宋体</option>' +
+      '</select>' +
+      '<select onchange="execCmd('+idx+',\'fontSize\',this.value);this.value=\'\'" title="字号">' +
+        '<option value="">字号</option>' +
+        '<option value="1">8</option>' +
+        '<option value="2">10</option>' +
+        '<option value="3">12</option>' +
+        '<option value="4">14</option>' +
+        '<option value="5">18</option>' +
+        '<option value="6">24</option>' +
+        '<option value="7">36</option>' +
+      '</select>' +
+      '<span class="sep"></span>' +
+      '<button onclick="execCmd('+idx+',\'bold\')" title="加粗"><b>B</b></button>' +
+      '<button onclick="execCmd('+idx+',\'italic\')" title="斜体"><i>I</i></button>' +
+      '<button onclick="execCmd('+idx+',\'underline\')" title="下划线"><u>U</u></button>' +
+      '<button onclick="execCmd('+idx+',\'strikeThrough\')" title="删除线"><s>S</s></button>' +
+      '<span class="sep"></span>' +
+      '<span class="color-btn" title="字体颜色">A<span style="display:block;position:absolute;bottom:2px;left:2px;right:2px;height:3px;background:red;border-radius:1px"></span>' +
+        '<input type="color" value="#ff0000" onchange="execCmd('+idx+',\'foreColor\',this.value)">' +
+      '</span>' +
+      '<span class="color-btn" title="高亮颜色">A<span style="display:block;position:absolute;bottom:2px;left:2px;right:2px;height:3px;background:yellow;border-radius:1px"></span>' +
+        '<input type="color" value="#ffff00" onchange="execCmd('+idx+',\'hiliteColor\',this.value)">' +
+      '</span>' +
+      '<span class="sep"></span>' +
+      '<button onclick="execCmd('+idx+',\'justifyLeft\')" title="左对齐">≡</button>' +
+      '<button onclick="execCmd('+idx+',\'justifyCenter\')" title="居中">≡</button>' +
+      '<button onclick="execCmd('+idx+',\'justifyRight\')" title="右对齐">≡</button>' +
+      '<span class="sep"></span>' +
+      '<button onclick="addTableRow('+idx+')" title="插入行">➕ 行</button>' +
+      '<button onclick="deleteTableRow('+idx+')" title="删除行">➖ 行</button>' +
+      '<button onclick="addTableCol('+idx+')" title="插入列">➕ 列</button>' +
+      '<button onclick="deleteTableCol('+idx+')" title="删除列">➖ 列</button>' +
+      '<span class="sep"></span>' +
+      '<button onclick="execCmd('+idx+',\'insertUnorderedList\')" title="无序列表">•</button>' +
+      '<button onclick="execCmd('+idx+',\'insertOrderedList\')" title="有序列表">①</button>' +
+      '<span class="sep"></span>' +
+      '<button onclick="execCmd('+idx+',\'removeFormat\')" title="清除格式">✕</button>' +
+      '<span class="sep"></span>' +
+      '<button onclick="execCmd('+idx+',\'undo\')" title="撤销">↩</button>' +
+      '<button onclick="execCmd('+idx+',\'redo\')" title="重做">↪</button>' +
+      '<span class="sep"></span>' +
+      '<select onchange="execCmd('+idx+',\'formatBlock\',this.value);this.value=\'\'" title="段落">' +
+        '<option value="">段落</option><option value="h1">H1</option><option value="h2">H2</option><option value="h3">H3</option><option value="h4">H4</option><option value="p">正文</option>' +
+      '</select>' +
+      '<span class="sep"></span>' +
+      '<button onclick="execCmd('+idx+',\'subscript\')" title="下标">x₂</button>' +
+      '<button onclick="execCmd('+idx+',\'superscript\')" title="上标">x²</button>' +
+      '<span class="sep"></span>' +
+      '<button onclick="insertRichTable('+idx+')" title="插入表格">⊞ 表格</button>' +
+      '<button onclick="insertRichLink('+idx+')" title="插入链接">🔗</button>' +
+      '<button onclick="insertRichImage('+idx+')" title="插入图片（Telegraph）">🖼 图片</button>' +
+      '<button onclick="insertRichHRule('+idx+')" title="插入水平线">─</button>' +
+      '<span class="sep"></span>' +
+      '<button onclick="pasteAsText('+idx+')" title="粘贴为纯文本">📋</button>' +
+      '<button onclick="cleanCellHtml('+idx+')" title="清理当前单元格垃圾标签">🧹</button>';
+    panel.appendChild(tb);
+
+    // Rich editable table
+    var wrap = document.createElement('div');
+    wrap.className = 'rich-table-wrap';
+    wrap.contentEditable = 'true';
+    wrap.id = 'rich-' + idx;
+    // Build HTML table from data
+    var html = '<table><thead><tr>';
+    (spec.headers || []).forEach(function(h) { html += '<th>' + h + '</th>'; });
+    html += '</tr></thead><tbody>';
+    (spec.rows || []).forEach(function(row) {
+      html += '<tr>';
+      row.forEach(function(cell) { html += '<td>' + (cell || '') + '</td>'; });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    wrap.innerHTML = html;
+    panel.appendChild(wrap);
+
+    // Paste: let the browser handle natively to preserve Google Sheets/Excel formatting
+    // Use 📋 button for plain-text paste, 🧹 for cleaning junk
+
+    // Keyboard shortcut: Tab to navigate cells
+    wrap.addEventListener('keydown', function(e) {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        var sel = window.getSelection();
+        if (!sel.rangeCount) return;
+        var node = sel.getRangeAt(0).startContainer;
+        var td = node.nodeType === 3 ? node.parentNode : node;
+        while (td && td.tagName !== 'TD' && td.tagName !== 'TH') td = td.parentNode;
+        if (!td) return;
+        var table = td.closest('table');
+        if (!table) return;
+        var allCells = table.querySelectorAll('td, th');
+        var idx2 = Array.prototype.indexOf.call(allCells, td);
+        var next = e.shiftKey ? (idx2 > 0 ? allCells[idx2 - 1] : null) : (idx2 < allCells.length - 1 ? allCells[idx2 + 1] : null);
+        if (next) { next.focus(); var r = document.createRange(); r.selectNodeContents(next); r.collapse(false); sel.removeAllRanges(); sel.addRange(r); }
+      }
+    });
+
+    panelsEl.appendChild(panel);
+  });
+}
+
+function switchTab(idx) {
+  currentTab = idx;
+  document.querySelectorAll('.spec-tab').forEach(function(t,i){t.classList.toggle('active',i===idx);});
+  document.querySelectorAll('.spec-panel').forEach(function(p,i){p.classList.toggle('active',i===idx);});
+}
+
+function updateTabName(idx) {
+  var tabs = document.querySelectorAll('.spec-tab');
+  if (tabs[idx]) tabs[idx].textContent = specsData[idx].name || specsData[idx].id;
+}
+
+function execCmd(idx, cmd, val) {
+  var wrap = document.getElementById('rich-' + idx);
+  if (!wrap) return;
+  wrap.focus();
+  document.execCommand(cmd, false, val || null);
+}
+
+// ── Table operations ──
+function getTable(idx) {
+  var wrap = document.getElementById('rich-' + idx);
+  if (!wrap) return null;
+  return wrap.querySelector('table');
+}
+
+function addTableRow(idx) {
+  var table = getTable(idx);
+  if (!table) return;
+  var cols = table.querySelectorAll('tr')[0] ? table.querySelectorAll('tr')[0].cells.length : 1;
+  var tr = document.createElement('tr');
+  for (var i = 0; i < cols; i++) { tr.innerHTML += '<td> </td>'; }
+  table.querySelector('tbody') ? table.querySelector('tbody').appendChild(tr) : table.appendChild(tr);
+  // Place cursor in new row's first cell
+  var firstTd = tr.querySelector('td');
+  if (firstTd) { firstTd.focus(); var r = document.createRange(); r.selectNodeContents(firstTd); r.collapse(false); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
+}
+
+function deleteTableRow(idx) {
+  var table = getTable(idx);
+  if (!table) return;
+  var sel = window.getSelection(); if (!sel.rangeCount) return;
+  var node = sel.getRangeAt(0).startContainer;
+  var td = node.nodeType === 3 ? node.parentNode : node;
+  while (td && td.tagName !== 'TD' && td.tagName !== 'TH') td = td.parentNode;
+  if (!td) return;
+  var tr = td.closest('tr');
+  if (!tr || tr.parentNode === table.querySelector('thead')) return; // can't delete header
+  if (table.querySelectorAll('tbody tr').length <= 1) { toast('至少保留一行', 'error'); return; }
+  tr.parentNode.removeChild(tr);
+}
+
+function addTableCol(idx) {
+  var table = getTable(idx);
+  if (!table) return;
+  table.querySelectorAll('tr').forEach(function(tr) {
+    var cell = document.createElement(tr.parentNode.tagName === 'THEAD' ? 'th' : 'td');
+    cell.textContent = ' ';
+    tr.appendChild(cell);
+  });
+}
+
+function deleteTableCol(idx) {
+  var table = getTable(idx);
+  if (!table) return;
+  if (!table.rows[0] || table.rows[0].cells.length <= 1) { toast('至少保留一列', 'error'); return; }
+  var colIdx = -1;
+  var sel = window.getSelection(); if (!sel.rangeCount) return;
+  var node = sel.getRangeAt(0).startContainer;
+  var cell = node.nodeType === 3 ? node.parentNode : node;
+  while (cell && cell.tagName !== 'TD' && cell.tagName !== 'TH') cell = cell.parentNode;
+  if (!cell) return;
+  colIdx = cell.cellIndex;
+  if (colIdx < 0) return;
+  for (var r = 0; r < table.rows.length; r++) {
+    if (table.rows[r].cells[colIdx]) table.rows[r].deleteCell(colIdx);
+  }
+}
+
+// ── Paste as text: strip all junk HTML ──
+function pasteAsText(idx) {
+  var text = prompt('Paste your text below (all HTML will be stripped):');
+  if (text === null || text === '') return;
+  var wrap = document.getElementById('rich-' + idx);
+  if (!wrap) return;
+  wrap.focus();
+  document.execCommand('insertText', false, text);
+}
+
+// ── Clean junk HTML from the current cell ──
+function cleanCellHtml(idx) {
+  var wrap = document.getElementById('rich-' + idx);
+  if (!wrap) return;
+  var sel = window.getSelection();
+  if (!sel.rangeCount) return;
+  var node = sel.getRangeAt(0).startContainer;
+  var td = node.nodeType === 3 ? node.parentNode : node;
+  while (td && td.tagName !== 'TD' && td.tagName !== 'TH') td = td.parentNode;
+  if (!td) return;
+  // Strip all attributes from all inner elements, keep only text formatting
+  var cleanText = td.innerText;
+  td.innerHTML = cleanText;
+  toast('✅ 当前单元格已清理');
+}
+
+// ── Sanitize: strip junk HTML attributes, keep formatting ──
+function sanitize(html) {
+  if (!html || typeof html !== 'string') return html || '';
+  if (html.indexOf('<') === -1) return html; // plain text, no HTML
+  var d = document.createElement('div');
+  d.innerHTML = html;
+  var all = d.querySelectorAll('*');
+  for (var i = 0; i < all.length; i++) {
+    var el = all[i];
+    var attrs = el.attributes;
+    var remove = [];
+    for (var j = 0; j < attrs.length; j++) {
+      var a = attrs[j];
+      if (a.name.startsWith('data-') || a.name.startsWith('on') ||
+          a.name === 'id' || a.name === 'class' ||
+          a.name.indexOf('path-to-node') >= 0 ||
+          a.name.indexOf('index-in-node') >= 0 ||
+          a.name === 'xmlns' || a.name === 'version') {
+        remove.push(a.name);
+      }
+    }
+    for (var k = 0; k < remove.length; k++) {
+      el.removeAttribute(remove[k]);
+    }
+    // Clean style: keep only formatting, remove animation/appearance junk
+    if (el.style && el.style.cssText) {
+      var allowed = ['font-weight','font-style','text-decoration','text-align','font-family'];
+      // Keep font-size and color ONLY if not default/black/dark
+      try {
+        var fs = el.style.fontSize;
+        if (fs && fs !== '') allowed.push('font-size');
+      } catch(e){}
+      // Keep color only if it's NOT dark (would be invisible on dark bg)
+      try {
+        var c = el.style.color;
+        if (c && c !== '') {
+          // Detect dark colors (rgb where all channels < 128)
+          var isDark = false;
+          var m = c.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+          if (m) {
+            var r = parseInt(m[1]), g = parseInt(m[2]), b = parseInt(m[3]);
+            if (r < 128 && g < 128 && b < 128) isDark = true;
+          }
+          // Also check hex colors
+          var h = c.replace('#','').match(/^([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+          if (h) {
+            var rh = parseInt(h[1],16), gh = parseInt(h[2],16), bh = parseInt(h[3],16);
+            if (rh < 128 && gh < 128 && bh < 128) isDark = true;
+          }
+          if (!isDark) allowed.push('color');
+        }
+      } catch(e){}
+      // Keep background-color only if it's visible (not fully transparent)
+      try {
+        var bg = el.style.backgroundColor;
+        if (bg && bg !== '') {
+          if (bg === 'rgba(0, 0, 0, 0)' || bg === 'transparent') {
+            // skip — transparent is useless
+          } else {
+            allowed.push('background-color');
+          }
+        }
+      } catch(e){}
+      var keep = {};
+      for (var m = 0; m < allowed.length; m++) {
+        try {
+          var v = el.style[allowed[m]];
+          if (v && v !== '') keep[allowed[m]] = v;
+        } catch(e){}
+      }
+      el.style.cssText = '';
+      for (var p in keep) {
+        try { el.style[p] = keep[p]; } catch(e){}
+      }
+    }
+  }
+  // Unwrap meaningless single-child spans
+  function unwrapSpans(node) {
+    var children = Array.from(node.children);
+    for (var i = 0; i < children.length; i++) {
+      unwrapSpans(children[i]);
+    }
+    // Check if this is a span with no useful attributes and only one child
+    if (node.tagName === 'SPAN' && node.children.length === 1 && !node.textContent.trim()) {
+      // empty span wrapper around a single child
+      var child = node.children[0];
+      if (child.tagName === 'SPAN' || child.tagName === 'B' || child.tagName === 'I' || child.tagName === 'U' || child.tagName === 'S') {
+        // Move child's children into parent span
+        while (child.firstChild) {
+          node.insertBefore(child.firstChild, child);
+        }
+        node.removeChild(child);
+      }
+    }
+    // Remove span that wraps everything and has no useful style after cleaning
+    if (node.tagName === 'SPAN' && !node.getAttribute('style') && !node.className && !node.id) {
+      var pNode = node.parentNode;
+      if (pNode) {
+        while (node.firstChild) {
+          pNode.insertBefore(node.firstChild, node);
+        }
+        pNode.removeChild(node);
+      }
+    }
+  }
+  unwrapSpans(d);
+  // Remove empty spans
+  var all2 = d.querySelectorAll('span');
+  for (var i = all2.length - 1; i >= 0; i--) {
+    var sp = all2[i];
+    if (!sp.getAttribute('style') && !sp.className && !sp.id) {
+      var txt = sp.textContent.trim();
+      if (sp.children.length === 0 && !txt) {
+        sp.parentNode.removeChild(sp);
+      }
+    }
+  }
+  return d.innerHTML;
+}
+
+// ── Parse rich table back to JSON ──
+function parseTableToJSON(idx) {
+  var wrap = document.getElementById('rich-' + idx);
+  if (!wrap) return null;
+  var table = wrap.querySelector('table');
+  if (!table) return null;
+  var headers = [];
+  var rows = [];
+  var headerRow = table.querySelector('thead tr') || table.rows[0];
+  if (headerRow) {
+    for (var i = 0; i < headerRow.cells.length; i++) {
+      headers.push(headerRow.cells[i].textContent.trim());
+    }
+  }
+  var bodyRows = table.querySelectorAll('tbody tr') || (table.rows.length > 1 ? Array.prototype.slice.call(table.rows, 1) : []);
+  bodyRows.forEach(function(tr) {
+    var row = [];
+    for (var i = 0; i < tr.cells.length; i++) {
+      row.push(sanitize(tr.cells[i].innerHTML));
+    }
+    rows.push(row);
+  });
+  return { headers: headers, rows: rows };
+}
+
+// ── Rich text helpers (insert into current cell cursor) ──
+function getRichWrap(idx) {
+  return document.getElementById('rich-' + idx);
+}
+function insertRichTable(idx) {
+  var rows = parseInt(prompt('表格行数（含标题行）：', '3') || '0');
+  var cols = parseInt(prompt('表格列数：', '3') || '0');
+  if (!rows || !cols) return;
+  var html = '<table style="width:100%;border-collapse:collapse"><thead><tr>';
+  for (var c = 0; c < cols; c++) html += '<th style="border:1px solid #444;padding:4px 8px;background:rgba(255,255,255,.06)">标题' + (c+1) + '</th>';
+  html += '</tr></thead><tbody>';
+  for (var r = 1; r < rows; r++) {
+    html += '<tr>';
+    for (var c = 0; c < cols; c++) html += '<td style="border:1px solid #444;padding:4px 8px">&nbsp;</td>';
+    html += '</tr>';
+  }
+  html += '</tbody></table><br>';
+  var wrap = getRichWrap(idx);
+  if (wrap) { wrap.focus(); document.execCommand('insertHTML', false, html); }
+}
+function insertRichLink(idx) {
+  var url = prompt('链接地址：', 'https://');
+  if (!url) return;
+  var text = prompt('显示文字：', url) || url;
+  var wrap = getRichWrap(idx);
+  if (wrap) { wrap.focus(); document.execCommand('insertHTML', false, '<a href="' + url + '" target="_blank">' + text + '</a>'); }
+}
+function insertRichImage(idx) {
+  var choice = confirm('确定要插入图片吗？\n\n「确定」→ Telegraph 上传图片\n「取消」→ 手动输入链接');
+  if (choice) {
+    var input = document.createElement('input');
+    input.type = 'file'; input.accept = 'image/*';
+    input.onchange = async function(e) {
+      var file = e.target.files[0]; if (!file) return;
+      try {
+        var reader = new FileReader();
+        reader.onload = async function(ev) {
+          var base64 = ev.target.result.split(',')[1];
+          var resp = await fetch('/api/data', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ _action: 'upload_image', image: base64, filename: file.name })
+          });
+          var j = await resp.json();
+          if (j.success && j.url) {
+            var wrap = getRichWrap(idx);
+            if (wrap) { wrap.focus(); document.execCommand('insertHTML', false, '<img src="'+j.url+'" style="max-width:100%;border-radius:4px;margin:4px 0" alt="specs image">'); }
+          } else alert('上传失败: '+(j.error||'未知错误'));
+        };
+        reader.readAsDataURL(file);
+      } catch(e) { alert('上传失败: '+e.message); }
+    };
+    input.click();
+  } else {
+    var url = prompt('图片链接：', 'https://');
+    if (url) {
+      var wrap = getRichWrap(idx);
+      if (wrap) { wrap.focus(); document.execCommand('insertHTML', false, '<img src="'+url+'" style="max-width:100%;border-radius:4px;margin:4px 0" alt="specs image">'); }
+    }
+  }
+}
+function insertRichHRule(idx) {
+  var wrap = getRichWrap(idx);
+  if (wrap) { wrap.focus(); document.execCommand('insertHTML', false, '<hr><br>'); }
+}
+
+// ── Save ──
+async function saveAllSpecs() {
+  // First parse all rich tables back to structured data
+  specsData.forEach(function(spec, idx) {
+    var parsed = parseTableToJSON(idx);
+    if (parsed) {
+      spec.headers = parsed.headers;
+      spec.rows = parsed.rows;
+    }
+  });
+
+  toast('⏳ 保存到数据库...');
+  try {
+    var resp = await fetch('/api/data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: { specs: specsData } })
+    });
+    var j = await resp.json();
+    if (j.success) {
+      toast('✅ 规格已保存！前端 specs 页面刷新即可看到');
+    } else {
+      toast('❌ 保存失败：' + (j.error || '未知错误'), 'error');
+    }
+  } catch(e) {
+    toast('❌ 保存失败：' + e.message, 'error');
+  }
+}
+
+function addNewSpec() {
+  var id = 'sp' + (specsData.length + 1);
+  specsData.push({
+    id: id, name: 'New Spec', nameZh: '新规格',
+    headers: ['Parameter · 参数', 'Value · 数值', 'Notes · 备注'],
+    rows: [['New parameter', 'Value', 'Notes']]
+  });
+  renderAll();
+  switchTab(specsData.length - 1);
+}
+
+function cleanAllCells() {
+  if (!confirm('将清理所有规格表中所有单元格的垃圾HTML标签（data-*属性、内联样式等），只保留纯文本。继续吗？')) return;
+  var count = 0;
+  specsData.forEach(function(spec, idx) {
+    var wrap = document.getElementById('rich-' + idx);
+    if (!wrap) return;
+    var allCells = wrap.querySelectorAll('td, th');
+    allCells.forEach(function(cell) {
+      var cleanText = cell.innerText.trim();
+      if (cell.innerHTML !== cleanText) { cell.innerHTML = cleanText; count++; }
+    });
+  });
+  toast('✅ 已清理 ' + count + ' 个单元格');
+}
+
+// Parse info textarea (key|value per line) to array of objects
+function parseInfo(text, idx) {
+  if (!text) { specsData[idx].info = []; return; }
+  var arr = [];
+  text.split('\n').forEach(function(line) {
+    line = line.trim();
+    if (!line) return;
+    var parts = line.split('|');
+    if (parts.length >= 2) {
+      arr.push({ label: parts[0].trim(), value: parts.slice(1).join('|').trim() });
+    }
+  });
+  specsData[idx].info = arr;
+}
+
+function deleteSpec(idx) {
+  if (!confirm('确定删除 "' + (specsData[idx].name||'') + '" ？此操作不可撤销！')) return;
+  specsData.splice(idx, 1);
+  if (currentTab >= specsData.length) currentTab = specsData.length - 1;
+  if (currentTab < 0) currentTab = 0;
+  renderAll();
+  switchTab(currentTab);
+}
+
+// ── Init ──
+document.addEventListener('DOMContentLoaded', async function() {
+  await loadSpecsFromApi();
+  renderAll();
+});
+</script>
+</body>
+</html>
