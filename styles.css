@@ -55,8 +55,9 @@ nav{display:flex;align-items:center;gap:0px;flex:1;overflow:visible;flex-wrap:no
   z-index:300;
   box-shadow:0 12px 40px rgba(0,0,0,0.12);
 }
-.nav-item:hover > .nav-dropdown{
-  display:block!important;
+.nav-item:hover > .nav-dropdown,
+.nav-item:focus-within > .nav-dropdown,
+.nav-item.is-open > .nav-dropdown{
   opacity:1;
   visibility:visible;
   transform:translateY(0);
