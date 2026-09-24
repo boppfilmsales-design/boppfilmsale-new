@@ -503,7 +503,16 @@ function applyShowMoreToggle() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', renderProductCatalog);
+// Let the header and hero paint before building the large catalogue DOM.
+// This keeps navigation responsive without changing the rendered catalogue.
+document.addEventListener('DOMContentLoaded', function() {
+  var schedule = window.requestIdleCallback
+    ? window.requestIdleCallback.bind(window)
+    : function(callback) {
+    return window.setTimeout(callback, 0);
+    };
+  schedule(renderProductCatalog, { timeout: 1000 });
+});
 
 // ── 三级分类分组层样式 ────────────────────────────────────────
 (function injectGroupStyles() {
